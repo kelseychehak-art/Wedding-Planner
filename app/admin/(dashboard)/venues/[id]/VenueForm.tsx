@@ -69,6 +69,29 @@ export type CommunicationEntry = {
   entry_date: string;
 };
 
+export type DocumentEntry = {
+  id: string;
+  display_name: string;
+  file_type: string;
+  storage_path: string;
+  notes: string | null;
+  uploaded_at: string;
+};
+
+const DOCUMENT_CATEGORIES = [
+  "Brochure",
+  "Pricing Guide",
+  "Proposal",
+  "Contract",
+  "Menu",
+  "Floor Plan",
+  "Sample Itinerary",
+  "Invoice",
+  "Payment Schedule",
+  "Photo",
+  "Other",
+];
+
 function emptyVenue(): VenueRecord {
   return {
     name: "",
@@ -107,9 +130,11 @@ function emptyVenue(): VenueRecord {
 export default function VenueForm({
   initialVenue,
   initialCommunications,
+  initialDocuments,
 }: {
   initialVenue: VenueRecord | null;
   initialCommunications: CommunicationEntry[];
+  initialDocuments: DocumentEntry[];
 }) {
   const router = useRouter();
   const isNew = !initialVenue;
@@ -120,6 +145,12 @@ export default function VenueForm({
   const [commType, setCommType] = useState(COMM_TYPES[0]);
   const [commSummary, setCommSummary] = useState("");
   const [addingComm, setAddingComm] = useState(false);
+  const [documents, setDocuments] = useState(initialDocuments);
+  const [uploadCategory, setUploadCategory] = useState(DOCUMENT_CATEGORIES[0]);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   function update<K extends keyof VenueRecord>(key: K, value: VenueRecord[K]) {
     setVenue((v) => ({ ...v, [key]: value }));
@@ -176,6 +207,53 @@ export default function VenueForm({
       }
     } finally {
       setAddingComm(false);
+    }
+  }
+
+  async function handleUpload() {
+    if (!venue.id || !uploadFile) return;
+    setUploading(true);
+    setUploadMessage(null);
+    try {
+      const body = new FormData();
+      body.append("file", uploadFile);
+      body.append("category", uploadCategory);
+      const res = await fetch(`/api/admin/venues/${venue.id}/documents`, {
+        method: "POST",
+        body,
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setUploadMessage(payload.error ?? "Upload failed. Try again.");
+        return;
+      }
+      setDocuments((prev) => [payload.document, ...prev]);
+      setUploadFile(null);
+      setFileInputKey((k) => k + 1);
+      setUploadMessage("Uploaded.");
+    } catch {
+      setUploadMessage("Upload failed. Try again.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function handleViewDocument(docId: string) {
+    if (!venue.id) return;
+    const res = await fetch(`/api/admin/venues/${venue.id}/documents/${docId}`);
+    if (!res.ok) return;
+    const { url } = await res.json();
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  async function handleDeleteDocument(doc: DocumentEntry) {
+    if (!venue.id) return;
+    if (!confirm(`Delete "${doc.display_name}"? This can't be undone.`)) return;
+    const res = await fetch(`/api/admin/venues/${venue.id}/documents/${doc.id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      setDocuments((prev) => prev.filter((d) => d.id !== doc.id));
     }
   }
 
@@ -528,6 +606,67 @@ export default function VenueForm({
             >
               {addingComm ? "Adding…" : "Add"}
             </button>
+          </div>
+        </section>
+      )}
+
+      {!isNew && (
+        <section className={styles.section}>
+          <p className={styles.sectionTitle}>Documents</p>
+          {documents.length === 0 ? (
+            <p className={styles.timelineSummary}>No documents yet.</p>
+          ) : (
+            documents.map((d) => (
+              <div className={styles.documentRow} key={d.id}>
+                <div className={styles.documentInfo}>
+                  <span className={styles.documentName}>{d.display_name}</span>
+                  <span className={styles.documentMeta}>
+                    {d.file_type} &middot; {new Date(d.uploaded_at).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className={styles.documentActions}>
+                  <button type="button" onClick={() => handleViewDocument(d.id)}>
+                    View
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.documentDelete}
+                    onClick={() => handleDeleteDocument(d)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+          <div className={styles.uploadRow}>
+            <select
+              className={styles.select}
+              value={uploadCategory}
+              onChange={(e) => setUploadCategory(e.target.value)}
+            >
+              {DOCUMENT_CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+            <input
+              key={fileInputKey}
+              className={styles.input}
+              type="file"
+              accept=".pdf,.docx,.xlsx,.csv,.jpg,.jpeg,.png,.webp"
+              onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+            />
+            <button
+              type="button"
+              className="btn-outline"
+              onClick={handleUpload}
+              disabled={uploading || !uploadFile}
+            >
+              {uploading ? "Uploading…" : "Upload"}
+            </button>
+            {uploadMessage && <span className={styles.uploadStatus}>{uploadMessage}</span>}
           </div>
         </section>
       )}

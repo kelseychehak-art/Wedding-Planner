@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation";
 import { getAdminToken } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
-import VenueForm, { type CommunicationEntry, type VenueRecord } from "./VenueForm";
+import VenueForm, {
+  type CommunicationEntry,
+  type DocumentEntry,
+  type VenueRecord,
+} from "./VenueForm";
 
 function toFormVenue(row: Record<string, unknown>): VenueRecord {
   const str = (k: string) => (row[k] == null ? "" : String(row[k]));
@@ -48,7 +52,9 @@ export default async function VenueDetailPage({
   const { id } = await params;
 
   if (id === "new") {
-    return <VenueForm initialVenue={null} initialCommunications={[]} />;
+    return (
+      <VenueForm initialVenue={null} initialCommunications={[]} initialDocuments={[]} />
+    );
   }
 
   const token = await getAdminToken();
@@ -60,6 +66,13 @@ export default async function VenueDetailPage({
 
   const venue = toFormVenue(data.venue);
   const communications = (data.communications ?? []) as CommunicationEntry[];
+  const documents = (data.documents ?? []) as DocumentEntry[];
 
-  return <VenueForm initialVenue={venue} initialCommunications={communications} />;
+  return (
+    <VenueForm
+      initialVenue={venue}
+      initialCommunications={communications}
+      initialDocuments={documents}
+    />
+  );
 }
