@@ -1,0 +1,23 @@
+:root {
+  --page-bg: #f4efe6;
+  --surface: #fbf8f1;
+  --surface-soft: #f7f1e7;
+  --ink: #20261e;
+  --olive: #425333;
+  --olive-dark: #34432a;
+  --olive-muted: #77785a;
+  --terracotta: #bd5437;
+  --terracotta-dark: #a7442e;
+  --citrus: #d6a326;
+  --blue: #315d91;
+  --blue-soft: #5279a8;
+  --border: #ded5c7;
+  --border-soft: #e7dfd3;
+  --shadow: 0 3px 14px rgba(51, 42, 29, 0.08);
+  --radius-card: 2px;
+  --radius-button: 2px;
+
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-script: var(--font-allura), "Parisienne", cursive;
+  --font-sans: var(--font-dm-sans), Arial, sans-serif;
+}

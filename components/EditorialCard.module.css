@@ -1,0 +1,145 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-card);
+  padding: 30px 32px;
+  position: relative;
+  min-width: 0;
+  min-height: 268px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 767px) {
+  .card {
+    padding: 24px 24px;
+    min-height: 0;
+  }
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+}
+
+.headingRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.scriptHeading {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: 38px;
+  color: var(--olive);
+  line-height: 1;
+}
+
+.heart {
+  width: 18px;
+  height: auto;
+  margin-top: 4px;
+}
+
+.plainHeading {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--olive-dark);
+}
+
+.body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin-top: 14px;
+  max-width: 220px;
+  position: relative;
+  z-index: 2;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.linkCta {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--olive-dark);
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  border-bottom: 1px solid var(--olive-muted);
+  padding-bottom: 2px;
+  transition: color 180ms ease, border-color 180ms ease;
+}
+
+.linkCta:hover {
+  color: var(--terracotta-dark);
+  border-color: var(--terracotta);
+}
+
+.outlineCta {
+  margin-top: 20px;
+  width: fit-content;
+}
+
+/* ---- Illustration slots, one per card variant ---- */
+
+.illustration {
+  position: absolute;
+  pointer-events: none;
+}
+
+.weekLemon {
+  top: 26px;
+  right: 28px;
+  width: 60px;
+  height: auto;
+}
+
+.weekWine {
+  bottom: 22px;
+  right: 34px;
+  width: 46px;
+  height: auto;
+}
+
+.travelIllustration {
+  bottom: 20px;
+  right: 24px;
+  width: 84px;
+  height: auto;
+  opacity: 0.9;
+}
+
+.stayIllustration {
+  bottom: 30px;
+  right: 26px;
+  width: 92px;
+  height: auto;
+  opacity: 0.9;
+}
+
+.bicycleIllustration {
+  bottom: 0;
+  right: 0;
+  width: 46%;
+  height: auto;
+  opacity: 0.95;
+}

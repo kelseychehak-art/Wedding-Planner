@@ -1,0 +1,167 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  margin-top: 18px;
+  height: 520px;
+  isolation: isolate;
+}
+
+@media (max-width: 1599px) and (min-width: 1200px) {
+  .hero {
+    height: 500px;
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  .hero {
+    height: 460px;
+  }
+}
+
+.image {
+  object-fit: cover;
+  object-position: center 55%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(249, 245, 236, 0.72) 0%,
+    rgba(249, 245, 236, 0.47) 42%,
+    rgba(249, 245, 236, 0.05) 76%,
+    rgba(30, 34, 23, 0.08) 100%
+  );
+}
+
+.content {
+  position: absolute;
+  z-index: 2;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -38%);
+  width: 100%;
+  max-width: 720px;
+  padding: 0 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--olive-dark);
+}
+
+.italy {
+  display: block;
+  font-family: var(--font-script);
+  font-size: 92px;
+  line-height: 0.9;
+  color: var(--olive);
+  margin-top: 6px;
+}
+
+.coupleTitle {
+  display: block;
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: 54px;
+  line-height: 0.95;
+  color: var(--olive);
+  max-width: 600px;
+  margin: 8px auto 0;
+}
+
+.dateLocation {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  line-height: 1.55;
+  color: var(--ink);
+  margin-top: 18px;
+}
+
+.cta {
+  margin-top: 24px;
+  min-width: 190px;
+}
+
+.decoration {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.lemon {
+  top: 40px;
+  left: 6%;
+  width: 190px;
+  height: auto;
+}
+
+.stamp {
+  top: 56px;
+  right: 8%;
+  width: 96px;
+  height: auto;
+}
+
+@media (max-width: 767px) {
+  .hero {
+    height: 660px;
+    border-radius: 2px;
+    margin-top: 0;
+  }
+
+  .content {
+    top: 42%;
+    max-width: 92%;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+
+  .italy {
+    font-size: 62px;
+  }
+
+  .coupleTitle {
+    font-size: 40px;
+    max-width: 320px;
+  }
+
+  .dateLocation {
+    font-size: 11px;
+    margin-top: 14px;
+  }
+
+  .cta {
+    margin-top: 20px;
+    min-width: 170px;
+  }
+
+  .lemon {
+    width: 112px;
+    top: 24px;
+    left: 4%;
+  }
+
+  .stamp {
+    width: 66px;
+    top: 32px;
+    right: 6%;
+  }
+}
