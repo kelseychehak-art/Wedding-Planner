@@ -5,6 +5,7 @@ import LogoutButton from "./LogoutButton";
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/admin" },
   { label: "Venues", href: "/admin/venues" },
+  { label: "Budget", href: "/admin/budget" },
 ];
 
 export default function AdminDashboardLayout({
