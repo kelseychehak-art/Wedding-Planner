@@ -8,6 +8,8 @@ const NAV_ITEMS = [
   { label: "Venues", href: "/admin/venues" },
   { label: "Vendors", href: "/admin/vendors" },
   { label: "Budget", href: "/admin/budget" },
+  { label: "Timeline", href: "/admin/timeline" },
+  { label: "Decisions", href: "/admin/decisions" },
 ];
 
 export default function AdminDashboardLayout({
