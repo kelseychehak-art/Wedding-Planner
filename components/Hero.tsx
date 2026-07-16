@@ -11,8 +11,8 @@ export default function Hero() {
     <section id="top" className="page-shell">
       <div className={styles.hero}>
         <Image
-          src="/assets/hero/villa-hero.jpg"
-          alt="Golden-hour view of the Italian countryside — cypress trees over rolling hills"
+          src="/assets/hero/villa-estate.jpg"
+          alt="A Tuscan villa estate framed by cypress trees and olive groves, with hills beyond"
           fill
           priority
           sizes="(max-width: 899px) 100vw, 1440px"
