@@ -1,10 +1,15 @@
 .hero {
   position: relative;
   overflow: hidden;
-  border-radius: 6px;
-  margin-top: 20px;
+  border-radius: 8px;
+  margin-top: 24px;
+  margin-bottom: 12px;
   height: 660px;
   isolation: isolate;
+  /* Reads as a placed, framed photograph on the page */
+  border: 1px solid rgba(48, 52, 45, 0.16);
+  box-shadow: 0 26px 50px -26px rgba(48, 52, 45, 0.55),
+    0 4px 14px rgba(48, 52, 45, 0.08);
 }
 
 @media (max-width: 1599px) and (min-width: 1200px) {
@@ -28,13 +33,19 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    180deg,
-    rgba(250, 247, 242, 0.7) 0%,
-    rgba(250, 247, 242, 0.42) 44%,
-    rgba(250, 247, 242, 0.04) 78%,
-    rgba(48, 52, 45, 0.06) 100%
-  );
+  /* Keep the photo crisp to the edges; only a soft halo behind the title
+     for legibility, plus a touch of depth at the base. */
+  background: radial-gradient(
+      100% 68% at 50% 46%,
+      rgba(250, 247, 242, 0.42) 0%,
+      rgba(250, 247, 242, 0.14) 40%,
+      rgba(250, 247, 242, 0) 68%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(48, 52, 45, 0) 55%,
+      rgba(48, 52, 45, 0.16) 100%
+    );
 }
 
 .content {
