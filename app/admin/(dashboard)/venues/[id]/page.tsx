@@ -29,6 +29,8 @@ function toFormVenue(row: Record<string, unknown>): VenueRecord {
     minimum_nights: str("minimum_nights"),
     estimated_total_price: str("estimated_total_price"),
     currency: str("currency") || "EUR",
+    accommodation_cost_note: str("accommodation_cost_note"),
+    wedding_day_cost_note: str("wedding_day_cost_note"),
     airport_distance: str("airport_distance"),
     curfew: str("curfew"),
     noise_restrictions: str("noise_restrictions"),

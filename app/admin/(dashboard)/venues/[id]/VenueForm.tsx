@@ -48,6 +48,8 @@ export type VenueRecord = {
   minimum_nights: string;
   estimated_total_price: string;
   currency: string;
+  accommodation_cost_note: string;
+  wedding_day_cost_note: string;
   airport_distance: string;
   curfew: string;
   noise_restrictions: string;
@@ -112,6 +114,8 @@ function emptyVenue(): VenueRecord {
     minimum_nights: "",
     estimated_total_price: "",
     currency: "EUR",
+    accommodation_cost_note: "",
+    wedding_day_cost_note: "",
     airport_distance: "",
     curfew: "",
     noise_restrictions: "",
@@ -483,6 +487,28 @@ export default function VenueForm({
               className={styles.input}
               value={venue.currency}
               onChange={(e) => update("currency", e.target.value)}
+            />
+          </div>
+          <div className={`${styles.field} ${styles.fieldWide}`}>
+            <label className={styles.label}>
+              Guest-Payable Accommodation Cost
+            </label>
+            <textarea
+              className={styles.textarea}
+              value={venue.accommodation_cost_note}
+              onChange={(e) => update("accommodation_cost_note", e.target.value)}
+              placeholder="Room/lodging cost guests would cover themselves, like a hotel bill"
+            />
+          </div>
+          <div className={`${styles.field} ${styles.fieldWide}`}>
+            <label className={styles.label}>
+              Couple&rsquo;s Wedding-Day Cost
+            </label>
+            <textarea
+              className={styles.textarea}
+              value={venue.wedding_day_cost_note}
+              onChange={(e) => update("wedding_day_cost_note", e.target.value)}
+              placeholder="What actually counts against your budget — venue fee, catering, etc."
             />
           </div>
         </div>

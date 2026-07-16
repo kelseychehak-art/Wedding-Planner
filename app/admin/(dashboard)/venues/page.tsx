@@ -48,9 +48,14 @@ export default async function AdminVenuesPage({
           <h1 className={styles.heading}>Venues</h1>
           <p className={styles.subheading}>{venues.length} in the pipeline</p>
         </div>
-        <Link href="/admin/venues/new" className="btn-primary">
-          Add Venue
-        </Link>
+        <div className={styles.headerActions}>
+          <Link href="/admin/venues/compare" className="btn-outline">
+            Compare
+          </Link>
+          <Link href="/admin/venues/new" className="btn-primary">
+            Add Venue
+          </Link>
+        </div>
       </div>
 
       <div className={styles.stageFilters}>
