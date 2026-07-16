@@ -27,7 +27,7 @@ const FAQS: FaqItem[] = [
     question: "How do I RSVP?",
     answer: (
       <p>
-        You can <a href="/#rsvp">RSVP right here on the site</a> — just look up your
+        You can <a href="/rsvp">RSVP right here on the site</a> — just look up your
         invitation with your name and email. If you're having any trouble finding your
         party or need to make a change, reach out to us and we'll take care of it.
       </p>
@@ -142,7 +142,7 @@ export default function FaqPage() {
 
           <div className={styles.ctaBand}>
             <span className={styles.ctaText}>All set? We can&rsquo;t wait to see you.</span>
-            <a href="/#rsvp" className="btn-primary">
+            <a href="/rsvp" className="btn-primary">
               RSVP
             </a>
           </div>

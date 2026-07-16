@@ -85,7 +85,7 @@ export default function ThingsToDoPage() {
 
           <div className={styles.ctaBand}>
             <span className={styles.ctaText}>Come make memories with us.</span>
-            <a href="/#rsvp" className="btn-primary">
+            <a href="/rsvp" className="btn-primary">
               RSVP
             </a>
           </div>

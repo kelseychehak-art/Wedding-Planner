@@ -3,7 +3,7 @@
 import styles from "./MobileMenu.module.css";
 
 const NAV_ITEMS = [
-  { label: "Our Weekend", href: "/#our-weekend" },
+  { label: "Our Weekend", href: "/our-weekend" },
   { label: "Travel", href: "/travel" },
   { label: "Stay", href: "/stay" },
   { label: "Things to Do", href: "/things-to-do" },
@@ -33,7 +33,7 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
           </li>
         ))}
       </ul>
-      <a href="/#rsvp" className={`btn-primary ${styles.rsvp}`} onClick={onClose}>
+      <a href="/rsvp" className={`btn-primary ${styles.rsvp}`} onClick={onClose}>
         RSVP
       </a>
     </div>

@@ -87,7 +87,7 @@ export default function TravelPage() {
 
           <div className={styles.ctaBand}>
             <span className={styles.ctaText}>Ready to celebrate with us?</span>
-            <a href="/#rsvp" className="btn-primary">
+            <a href="/rsvp" className="btn-primary">
               RSVP
             </a>
           </div>

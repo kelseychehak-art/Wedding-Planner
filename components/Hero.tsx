@@ -45,7 +45,7 @@ export default function Hero() {
             <br />
             Venue TBD, Italy
           </p>
-          <a href="#our-weekend" className={`btn-primary ${styles.cta}`}>
+          <a href="/our-weekend" className={`btn-primary ${styles.cta}`}>
             View Our Weekend
           </a>
         </div>

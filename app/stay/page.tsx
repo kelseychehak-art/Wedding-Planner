@@ -88,7 +88,7 @@ export default function StayPage() {
 
           <div className={styles.ctaBand}>
             <span className={styles.ctaText}>Let us know you're coming.</span>
-            <a href="/#rsvp" className="btn-primary">
+            <a href="/rsvp" className="btn-primary">
               RSVP
             </a>
           </div>

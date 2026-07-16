@@ -162,6 +162,13 @@
   vertical-align: middle;
 }
 
+/* ---------- Schedule card wrapper ---------- */
+
+.scheduleWrap {
+  max-width: 440px;
+  margin-top: 26px;
+}
+
 /* ---------- Back / RSVP footer band ---------- */
 
 .ctaBand {

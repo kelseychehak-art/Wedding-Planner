@@ -33,7 +33,7 @@ const ROWS = [
   },
 ];
 
-export default function ScheduleCard() {
+export default function ScheduleCard({ showButton = true }: { showButton?: boolean }) {
   const [activeDate, setActiveDate] = useState("sat");
 
   return (
@@ -68,9 +68,11 @@ export default function ScheduleCard() {
         ))}
       </div>
 
-      <a href="#our-weekend" className={`btn-outline ${styles.button}`}>
-        View Full Schedule
-      </a>
+      {showButton && (
+        <a href="#our-weekend" className={`btn-outline ${styles.button}`}>
+          View Full Schedule
+        </a>
+      )}
     </div>
   );
 }
