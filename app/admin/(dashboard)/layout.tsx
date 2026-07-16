@@ -4,6 +4,7 @@ import LogoutButton from "./LogoutButton";
 
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/admin" },
+  { label: "Guests", href: "/admin/guests" },
   { label: "Venues", href: "/admin/venues" },
   { label: "Budget", href: "/admin/budget" },
 ];
