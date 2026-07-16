@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
+import Illustration, { type IllustrationName } from "@/components/Illustration";
+import PostageStamp from "@/components/PostageStamp";
 import styles from "@/components/ContentPage.module.css";
 
 export const metadata: Metadata = {
@@ -9,24 +11,24 @@ export const metadata: Metadata = {
   description: "What to do in Italy during Kelsey & Andrew's wedding week — food, wine, exploring, and relaxing.",
 };
 
-const IDEAS = [
+const IDEAS: { icon: IllustrationName; title: string; body: string }[] = [
   {
-    icon: "/assets/illustrations/wine-glass.svg",
+    icon: "wineGlass",
     title: "Food & Wine",
     body: "This is Italy — come hungry. Linger over long lunches, seek out a local trattoria, and taste your way through the regional wines. We'll share a few of our favorite spots as we discover them.",
   },
   {
-    icon: "/assets/illustrations/bicycle.svg",
+    icon: "bicycle",
     title: "Explore the Countryside",
     body: "Wander medieval hill towns, browse a morning market, or simply take a slow drive past olive groves and vineyards. Half the joy is getting delightfully lost.",
   },
   {
-    icon: "/assets/illustrations/cocktail.svg",
+    icon: "espresso",
     title: "Slow Down & Relax",
     body: "You don't have to fill every hour. Poolside afternoons, an aperitivo at golden hour, and unhurried mornings are very much part of the plan.",
   },
   {
-    icon: "/assets/illustrations/church.svg",
+    icon: "arch",
     title: "History & Art",
     body: "From centuries-old churches to world-class museums, Italy rewards the curious. If you're extending your trip, a day in a nearby city is well worth the detour.",
   },
@@ -41,7 +43,7 @@ export default function ThingsToDoPage() {
           eyebrow="While You're Here"
           title="Things to Do"
           intro="Beyond the celebration, there's a whole region waiting to be explored. Here's a little inspiration for filling the hours between festivities."
-          illustration="/assets/illustrations/bicycle.svg"
+          illustration={<PostageStamp variant="bicycle" size={128} rotate={-4} />}
         />
 
         <div className={`page-shell ${styles.page}`}>
@@ -51,7 +53,7 @@ export default function ThingsToDoPage() {
             <div className={styles.grid}>
               {IDEAS.map((item) => (
                 <div className={styles.card} key={item.title}>
-                  <img src={item.icon} alt="" className={styles.cardIcon} />
+                  <Illustration name={item.icon} size={38} className={styles.cardIcon} />
                   <h3 className={styles.cardTitle}>{item.title}</h3>
                   <p className={styles.cardBody}>{item.body}</p>
                 </div>

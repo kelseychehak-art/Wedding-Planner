@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
 import ScheduleCard from "@/components/ScheduleCard";
+import PostageStamp from "@/components/PostageStamp";
 import styles from "@/components/ContentPage.module.css";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function OurWeekendPage() {
           eyebrow="Our Weekend"
           title="A Week in Italy"
           intro="We're not doing a single day — we're doing a whole week. Good food, great people, and a place we love, with plenty of time to slow down and enjoy every bit of it together."
-          illustration="/assets/illustrations/lemon-sprig.svg"
+          illustration={<PostageStamp variant="cypress" size={128} rotate={-4} />}
         />
 
         <div className={`page-shell ${styles.page}`}>

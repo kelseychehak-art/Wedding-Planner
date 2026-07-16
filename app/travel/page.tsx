@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
+import Illustration, { type IllustrationName } from "@/components/Illustration";
+import PostageStamp from "@/components/PostageStamp";
 import styles from "@/components/ContentPage.module.css";
 
 export const metadata: Metadata = {
@@ -9,19 +11,19 @@ export const metadata: Metadata = {
   description: "How to get to Italy for Kelsey & Andrew's wedding week — airports, flights, and getting to the villa.",
 };
 
-const AIRPORTS = [
+const AIRPORTS: { icon: IllustrationName; title: string; body: string }[] = [
   {
-    icon: "/assets/illustrations/airplane.svg",
+    icon: "airplane",
     title: "Flying Into Italy",
     body: "Most guests will fly into a major Italian hub and connect onward. Rome (FCO), Milan (MXP), and Florence (FLR) all have direct or one-stop service from the U.S. We'll confirm the closest airport once our venue is set.",
   },
   {
-    icon: "/assets/illustrations/postage-stamp.svg",
+    icon: "compass",
     title: "Passports & Entry",
     body: "You'll need a passport valid for at least six months beyond your travel dates. U.S. citizens don't need a visa for stays under 90 days. Double-check your own country's requirements before you book.",
   },
   {
-    icon: "/assets/illustrations/lemon-sprig.svg",
+    icon: "suitcase",
     title: "Getting to the Villa",
     body: "We're planning group transfers from the nearest airport or town on arrival day. Renting a car is a lovely way to explore the countryside if you'd like to venture out on your own.",
   },
@@ -36,7 +38,7 @@ export default function TravelPage() {
           eyebrow="Getting Here"
           title="Travel"
           intro="We're gathering in Italy for a few unforgettable days, and we'd love to help make the journey easy. Here's everything you'll need to start planning your trip."
-          illustration="/assets/illustrations/airplane.svg"
+          illustration={<PostageStamp variant="compass" size={128} rotate={-5} />}
         />
 
         <div className={`page-shell ${styles.page}`}>
@@ -46,7 +48,7 @@ export default function TravelPage() {
             <div className={styles.grid}>
               {AIRPORTS.map((item) => (
                 <div className={styles.card} key={item.title}>
-                  <img src={item.icon} alt="" className={styles.cardIcon} />
+                  <Illustration name={item.icon} size={38} className={styles.cardIcon} />
                   <h3 className={styles.cardTitle}>{item.title}</h3>
                   <p className={styles.cardBody}>{item.body}</p>
                 </div>

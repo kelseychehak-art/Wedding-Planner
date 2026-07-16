@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./KindlyRespondCard.module.css";
+import Illustration from "./Illustration";
 import { findPartyForRsvp, submitRsvp, type RsvpGuest, type RsvpParty } from "@/lib/supabase";
 
 type Phase = "search" | "found" | "notFound" | "error" | "submitted";
@@ -101,7 +102,7 @@ export default function KindlyRespondCard() {
         <div className={styles.left}>
           <div className={styles.headingRow}>
             <h3 className={styles.heading}>Thank You</h3>
-            <img src="/assets/illustrations/heart.svg" alt="" className={styles.heart} />
+            <Illustration name="heart" tone="terracotta" size={16} className={styles.heart} />
           </div>
           <p className={styles.subtitle}>
             Your response has been recorded. We can&rsquo;t wait to celebrate with you.
@@ -117,7 +118,7 @@ export default function KindlyRespondCard() {
         <div className={styles.left}>
           <div className={styles.headingRow}>
             <h3 className={styles.heading}>Kindly Respond</h3>
-            <img src="/assets/illustrations/heart.svg" alt="" className={styles.heart} />
+            <Illustration name="heart" tone="terracotta" size={16} className={styles.heart} />
           </div>
           <p className={styles.subtitle}>By April 1, 2027</p>
 

@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import styles from "./ScheduleCard.module.css";
-import { schedule, SCHEDULE_ICON_SRC, DEFAULT_SCHEDULE_DAY } from "@/data/schedule";
+import Illustration, { type IllustrationName } from "./Illustration";
+import { schedule, DEFAULT_SCHEDULE_DAY, type ScheduleIcon } from "@/data/schedule";
+
+const ICON_NAME: Record<ScheduleIcon, IllustrationName> = {
+  villa: "villa",
+  wine: "wineGlass",
+  music: "music",
+};
 
 export default function ScheduleCard({ showButton = true }: { showButton?: boolean }) {
   const [activeKey, setActiveKey] = useState(DEFAULT_SCHEDULE_DAY);
@@ -42,7 +49,7 @@ export default function ScheduleCard({ showButton = true }: { showButton?: boole
                 <span className={styles.rowTitle}>{row.title}</span>
                 <span className={styles.rowLocation}>{row.location}</span>
               </span>
-              <img src={SCHEDULE_ICON_SRC[row.icon]} alt="" className={styles.rowIcon} />
+              <Illustration name={ICON_NAME[row.icon]} size={20} className={styles.rowIcon} />
             </div>
           ))
         )}

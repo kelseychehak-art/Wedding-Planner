@@ -1,6 +1,8 @@
 import Image from "next/image";
 import styles from "./Hero.module.css";
 import { siteContent } from "@/data/siteContent";
+import Illustration from "./Illustration";
+import PostageStamp from "./PostageStamp";
 
 export default function Hero() {
   const { wedding, couple } = siteContent;
@@ -18,21 +20,14 @@ export default function Hero() {
         />
         <div className={styles.overlay} />
 
-        {/* Decorative only — replace with final illustrations when available */}
-        <Image
-          src="/assets/illustrations/lemon-branch.svg"
-          alt=""
-          width={210}
-          height={150}
+        {/* Decorative brand illustrations */}
+        <Illustration
+          name="lemonBranch"
           className={`${styles.decoration} ${styles.lemon}`}
         />
-        <Image
-          src="/assets/illustrations/postage-stamp.svg"
-          alt=""
-          width={100}
-          height={100}
-          className={`${styles.decoration} ${styles.stamp}`}
-        />
+        <span className={`${styles.decoration} ${styles.stamp}`} aria-hidden="true">
+          <PostageStamp variant="villa" rotate={5} size={92} />
+        </span>
 
         <div className={styles.content}>
           <p className={styles.eyebrow}>{wedding.eyebrow}</p>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
+import Illustration, { type IllustrationName } from "@/components/Illustration";
+import PostageStamp from "@/components/PostageStamp";
 import styles from "@/components/ContentPage.module.css";
 
 export const metadata: Metadata = {
@@ -9,19 +11,19 @@ export const metadata: Metadata = {
   description: "Where to stay for Kelsey & Andrew's wedding week in Italy — villa details, lodging, and booking.",
 };
 
-const HIGHLIGHTS = [
+const HIGHLIGHTS: { icon: IllustrationName; title: string; body: string }[] = [
   {
-    icon: "/assets/illustrations/room-key.svg",
+    icon: "key",
     title: "One Place, Together",
     body: "We're taking over an entire villa estate so we can spend the whole week under one roof. Most guests will stay right on the property, steps from the pool, the gardens, and every celebration.",
   },
   {
-    icon: "/assets/illustrations/lemon-branch.svg",
+    icon: "oliveBranch",
     title: "A Home for the Week",
     body: "Think long lunches on the terrace, morning coffee with a view, and evenings that drift late into the night. This is less a hotel stay and more a shared house full of the people we love.",
   },
   {
-    icon: "/assets/illustrations/wine-glass.svg",
+    icon: "wineGlass",
     title: "Room Blocks & Overflow",
     body: "For guests who prefer their own space, or if rooms fill up, we'll recommend a handful of charming nearby stays with easy access to the villa.",
   },
@@ -36,7 +38,7 @@ export default function StayPage() {
           eyebrow="Where You'll Stay"
           title="Stay"
           intro="We've chosen a place worth settling into — a private Italian estate where we can all be together for the whole week. Here's what to expect."
-          illustration="/assets/illustrations/room-key.svg"
+          illustration={<PostageStamp variant="villa" size={128} rotate={4} />}
         />
 
         <div className={`page-shell ${styles.page}`}>
@@ -49,7 +51,7 @@ export default function StayPage() {
             <div className={styles.grid}>
               {HIGHLIGHTS.map((item) => (
                 <div className={styles.card} key={item.title}>
-                  <img src={item.icon} alt="" className={styles.cardIcon} />
+                  <Illustration name={item.icon} size={38} className={styles.cardIcon} />
                   <h3 className={styles.cardTitle}>{item.title}</h3>
                   <p className={styles.cardBody}>{item.body}</p>
                 </div>

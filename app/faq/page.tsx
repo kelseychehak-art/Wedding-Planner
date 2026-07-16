@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
 import FaqAccordion, { type FaqItem } from "@/components/FaqAccordion";
+import PostageStamp from "@/components/PostageStamp";
 import styles from "@/components/ContentPage.module.css";
 
 export const metadata: Metadata = {
@@ -132,7 +133,7 @@ export default function FaqPage() {
           eyebrow="Good to Know"
           title="FAQ"
           intro="A few answers to the questions we hear most. If something isn't covered here, just reach out — we're always happy to help."
-          illustration="/assets/illustrations/lemon-sprig.svg"
+          illustration={<PostageStamp variant="lemon" size={128} rotate={5} />}
         />
 
         <div className={`page-shell ${styles.page}`}>

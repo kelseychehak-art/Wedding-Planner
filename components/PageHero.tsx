@@ -5,7 +5,7 @@ type PageHeroProps = {
   eyebrow: string;
   title: string;
   intro: string;
-  illustration?: string;
+  illustration?: ReactNode;
   children?: ReactNode;
 };
 
@@ -26,7 +26,9 @@ export default function PageHero({
           {children}
         </div>
         {illustration && (
-          <img src={illustration} alt="" className={styles.illustration} />
+          <span className={styles.illustration} aria-hidden="true">
+            {illustration}
+          </span>
         )}
       </div>
     </section>

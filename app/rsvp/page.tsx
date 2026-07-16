@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero from "@/components/PageHero";
 import KindlyRespondCard from "@/components/KindlyRespondCard";
+import Illustration from "@/components/Illustration";
 import styles from "@/components/ContentPage.module.css";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function RsvpPage() {
           eyebrow="Kindly Respond"
           title="RSVP"
           intro="We can't wait to celebrate with you. Look up your invitation below with your name and email, and let us know if you'll be joining us in Italy."
-          illustration="/assets/illustrations/heart.svg"
+          illustration={<Illustration name="heart" tone="terracotta" size={116} />}
         />
 
         <div className={`page-shell ${styles.page}`}>
