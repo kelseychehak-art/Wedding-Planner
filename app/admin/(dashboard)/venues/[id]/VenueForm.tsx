@@ -28,6 +28,18 @@ const COMM_TYPES = [
   "Internal note",
 ];
 
+const RESEARCH_VERDICTS = [
+  "Strong Contender",
+  "Need More Info",
+  "Over Budget",
+  "Ruled Out",
+  "Ask",
+];
+
+const BUDGET_FITS = ["Fits", "Tight", "Over", "Unknown"];
+
+const EXCLUSIVITY_STATUSES = ["Yes", "Optional", "Ask", "Unclear", "N/A"];
+
 export type VenueRecord = {
   id?: string;
   name: string;
@@ -39,12 +51,15 @@ export type VenueRecord = {
   contact_email: string;
   contact_phone: string;
   stage: string;
+  research_verdict: string;
+  budget_fit: string;
+  exclusivity_status: string;
+  research_notes: string;
   availability: string;
   capacity: string;
   sleeping_capacity: string;
   has_pool: boolean;
   has_outdoor_space: boolean;
-  exclusive_buyout: boolean;
   minimum_nights: string;
   estimated_total_price: string;
   currency: string;
@@ -105,12 +120,15 @@ function emptyVenue(): VenueRecord {
     contact_email: "",
     contact_phone: "",
     stage: "Researching",
+    research_verdict: "",
+    budget_fit: "",
+    exclusivity_status: "",
+    research_notes: "",
     availability: "",
     capacity: "",
     sleeping_capacity: "",
     has_pool: false,
     has_outdoor_space: false,
-    exclusive_buyout: false,
     minimum_nights: "",
     estimated_total_price: "",
     currency: "EUR",
@@ -300,6 +318,66 @@ export default function VenueForm({
       </div>
 
       <section className={styles.section}>
+        <p className={styles.sectionTitle}>Research Summary</p>
+        <div className={styles.fieldGrid}>
+          <div className={styles.field}>
+            <label className={styles.label}>Verdict</label>
+            <select
+              className={styles.select}
+              value={venue.research_verdict}
+              onChange={(e) => update("research_verdict", e.target.value)}
+            >
+              <option value="">— Not yet assessed —</option>
+              {RESEARCH_VERDICTS.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Fits $100k Budget?</label>
+            <select
+              className={styles.select}
+              value={venue.budget_fit}
+              onChange={(e) => update("budget_fit", e.target.value)}
+            >
+              <option value="">— Unknown —</option>
+              {BUDGET_FITS.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Exclusivity</label>
+            <select
+              className={styles.select}
+              value={venue.exclusivity_status}
+              onChange={(e) => update("exclusivity_status", e.target.value)}
+            >
+              <option value="">— Unclear —</option>
+              {EXCLUSIVITY_STATUSES.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={`${styles.field} ${styles.fieldWide}`}>
+            <label className={styles.label}>Research Notes</label>
+            <textarea
+              className={styles.textarea}
+              value={venue.research_notes}
+              onChange={(e) => update("research_notes", e.target.value)}
+              placeholder="Why this verdict — 1-2 concise sentences"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section}>
         <p className={styles.sectionTitle}>Overview</p>
         <div className={styles.fieldGrid}>
           <div className={styles.field}>
@@ -432,15 +510,6 @@ export default function VenueForm({
               onChange={(e) => update("has_outdoor_space", e.target.checked)}
             />
             <label htmlFor="has_outdoor_space">Outdoor Space</label>
-          </div>
-          <div className={styles.checkboxRow}>
-            <input
-              id="exclusive_buyout"
-              type="checkbox"
-              checked={venue.exclusive_buyout}
-              onChange={(e) => update("exclusive_buyout", e.target.checked)}
-            />
-            <label htmlFor="exclusive_buyout">Exclusive Buyout</label>
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Curfew</label>

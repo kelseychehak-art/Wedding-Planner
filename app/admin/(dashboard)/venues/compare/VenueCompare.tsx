@@ -11,13 +11,16 @@ export type ComparableVenue = {
   region: string | null;
   country: string | null;
   stage: string;
+  research_verdict: string | null;
+  budget_fit: string | null;
+  exclusivity_status: string | null;
+  research_notes: string | null;
   availability: string | null;
   capacity: number | null;
   sleeping_capacity: number | null;
   minimum_nights: number | null;
   has_pool: boolean | null;
   has_outdoor_space: boolean | null;
-  exclusive_buyout: boolean | null;
   estimated_total_price: number | null;
   currency: string | null;
   accommodation_cost_note: string | null;
@@ -41,10 +44,28 @@ function priceLabel(v: ComparableVenue) {
   return `${v.currency ?? "EUR"} ${v.estimated_total_price.toLocaleString()}`;
 }
 
+function verdictTone(v: string | null) {
+  if (v === "Strong Contender") return styles.badgeGood;
+  if (v === "Over Budget") return styles.badgeBad;
+  if (v === "Need More Info" || v === "Ask") return styles.badgeWarn;
+  return styles.badgeNeutral; // Ruled Out, null
+}
+
+function budgetTone(v: string | null) {
+  if (v === "Fits") return styles.badgeGood;
+  if (v === "Over") return styles.badgeBad;
+  if (v === "Tight") return styles.badgeWarn;
+  return styles.badgeNeutral; // Unknown, null
+}
+
 const ROWS: {
   label: string;
   render: (v: ComparableVenue) => string;
 }[] = [
+  { label: "Verdict", render: (v) => v.research_verdict || "—" },
+  { label: "Budget Fit", render: (v) => v.budget_fit || "—" },
+  { label: "Exclusivity", render: (v) => v.exclusivity_status || "—" },
+  { label: "Research Notes", render: (v) => v.research_notes || "—" },
   { label: "Stage", render: (v) => v.stage },
   {
     label: "Location",
@@ -62,7 +83,6 @@ const ROWS: {
   },
   { label: "Pool", render: (v) => yesNo(v.has_pool) },
   { label: "Outdoor Space", render: (v) => yesNo(v.has_outdoor_space) },
-  { label: "Exclusive Buyout", render: (v) => yesNo(v.exclusive_buyout) },
   { label: "Estimated Price", render: (v) => priceLabel(v) },
   {
     label: "Accommodation Cost (guest-payable)",
@@ -101,14 +121,14 @@ export default function VenueCompare({ venues }: { venues: ComparableVenue[] }) 
             className={view === "cards" ? styles.toggleActive : styles.toggle}
             onClick={() => setView("cards")}
           >
-            Andrew&rsquo;s View
+            Tile View
           </button>
           <button
             type="button"
             className={view === "table" ? styles.toggleActive : styles.toggle}
             onClick={() => setView("table")}
           >
-            Full Table
+            Table View
           </button>
         </div>
         <label className={styles.includeEliminated}>
@@ -131,10 +151,27 @@ export default function VenueCompare({ venues }: { venues: ComparableVenue[] }) 
                 <h3 className={styles.cardName}>{v.name}</h3>
                 <span className={styles.cardStage}>{v.stage}</span>
               </div>
+              {(v.research_verdict || v.budget_fit) && (
+                <div className={styles.badgeRow}>
+                  {v.research_verdict && (
+                    <span className={`${styles.badge} ${verdictTone(v.research_verdict)}`}>
+                      {v.research_verdict}
+                    </span>
+                  )}
+                  {v.budget_fit && (
+                    <span className={`${styles.badge} ${budgetTone(v.budget_fit)}`}>
+                      Budget: {v.budget_fit}
+                    </span>
+                  )}
+                </div>
+              )}
               {(v.location || v.region) && (
                 <p className={styles.cardLocation}>
                   {[v.location, v.region].filter(Boolean).join(", ")}
                 </p>
+              )}
+              {v.research_notes && (
+                <p className={`${styles.cardNote} ${styles.researchNote}`}>{v.research_notes}</p>
               )}
               <div className={styles.cardStats}>
                 <div>
@@ -145,40 +182,34 @@ export default function VenueCompare({ venues }: { venues: ComparableVenue[] }) 
                   <span className={styles.statLabel}>Sleeps</span>
                   <span className={styles.statValue}>{v.sleeping_capacity ?? "—"}</span>
                 </div>
+                {v.minimum_nights != null && (
+                  <div>
+                    <span className={styles.statLabel}>Min Nights</span>
+                    <span className={styles.statValue}>{v.minimum_nights}</span>
+                  </div>
+                )}
               </div>
               <div className={styles.cardFlags}>
                 {v.has_pool && <span className={styles.flag}>Pool</span>}
                 {v.has_outdoor_space && <span className={styles.flag}>Outdoor Space</span>}
-                {v.exclusive_buyout && <span className={styles.flag}>Exclusive Buyout</span>}
+                {v.exclusivity_status && (
+                  <span className={styles.flag}>Exclusivity: {v.exclusivity_status}</span>
+                )}
               </div>
-              {(v.wedding_day_cost_note || v.accommodation_cost_note || v.estimated_total_price) && (
-                <div className={styles.costBlock}>
-                  {v.wedding_day_cost_note ? (
-                    <p className={styles.cardNote}>
-                      <strong>Counts against budget:</strong> {v.wedding_day_cost_note}
-                    </p>
-                  ) : (
-                    v.estimated_total_price && (
-                      <p className={styles.cardNote}>
-                        <strong>Estimated price:</strong> {priceLabel(v)}
-                      </p>
-                    )
-                  )}
-                  {v.accommodation_cost_note && (
-                    <p className={styles.cardNote}>
-                      <strong>Guest-payable accommodation:</strong> {v.accommodation_cost_note}
-                    </p>
-                  )}
-                </div>
-              )}
-              {v.why_we_love_it && (
+              {v.wedding_day_cost_note ? (
                 <p className={styles.cardNote}>
-                  <strong>Why we love it:</strong> {v.why_we_love_it}
+                  <strong>Counts against budget:</strong> {v.wedding_day_cost_note}
                 </p>
+              ) : (
+                v.estimated_total_price && (
+                  <p className={styles.cardNote}>
+                    <strong>Estimated price:</strong> {priceLabel(v)}
+                  </p>
+                )
               )}
-              {v.why_we_hesitate && (
+              {v.accommodation_cost_note && (
                 <p className={styles.cardNote}>
-                  <strong>Why we hesitate:</strong> {v.why_we_hesitate}
+                  <strong>Guest-payable lodging:</strong> {v.accommodation_cost_note}
                 </p>
               )}
               <Link href={`/admin/venues/${v.id}`} className={styles.cardLink}>
