@@ -54,7 +54,7 @@ export default function Home() {
               heading="Getting Here"
               headingVariant="plain"
               body="Flights, transportation and everything you need to plan your trip."
-              cta={{ label: "View Travel Guide", href: "#travel", style: "link" }}
+              cta={{ label: "View Travel Guide", href: "/travel", style: "link" }}
               illustrations={
                 <img
                   src="/assets/illustrations/airplane.svg"
@@ -70,7 +70,7 @@ export default function Home() {
               heading="Where You’ll Stay"
               headingVariant="plain"
               body="Room blocks, villa details and local recommendations."
-              cta={{ label: "View Stay Options", href: "#stay", style: "link" }}
+              cta={{ label: "View Stay Options", href: "/stay", style: "link" }}
               illustrations={
                 <img
                   src="/assets/illustrations/room-key.svg"
@@ -86,7 +86,7 @@ export default function Home() {
               heading="Things to Do"
               headingVariant="plain"
               body="Local favorites, beaches, markets and more."
-              cta={{ label: "Explore Guide", href: "#things-to-do", style: "link" }}
+              cta={{ label: "Explore Guide", href: "/things-to-do", style: "link" }}
               illustrations={
                 <img
                   src="/assets/illustrations/bicycle.svg"

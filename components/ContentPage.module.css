@@ -1,0 +1,205 @@
+.page {
+  padding: 56px 0 24px;
+}
+
+.section {
+  margin-bottom: 56px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionEyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--olive-dark);
+  margin-top: 8px;
+}
+
+.sectionIntro {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-top: 12px;
+  max-width: 640px;
+}
+
+/* ---------- Card grid ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-card);
+  padding: 26px 28px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cardIcon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  object-position: left center;
+  margin-bottom: 14px;
+  opacity: 0.9;
+}
+
+.cardTitle {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--olive-dark);
+}
+
+.cardBody {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin-top: 10px;
+}
+
+.cardBody a {
+  color: var(--terracotta-dark);
+  border-bottom: 1px solid var(--terracotta);
+  padding-bottom: 1px;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.cardBody a:hover {
+  color: var(--olive-dark);
+  border-color: var(--olive-muted);
+}
+
+/* ---------- Prose / definition rows ---------- */
+
+.prose {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  max-width: 700px;
+}
+
+.prose p {
+  margin-top: 14px;
+}
+
+.prose p:first-child {
+  margin-top: 0;
+}
+
+/* ---------- TBD callout ---------- */
+
+.callout {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--citrus);
+  border-radius: var(--radius-card);
+  padding: 18px 22px;
+  margin-top: 26px;
+  max-width: 720px;
+}
+
+.calloutIcon {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--citrus);
+  flex-shrink: 0;
+}
+
+.calloutBody {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--olive-muted);
+}
+
+.calloutBody strong {
+  color: var(--olive-dark);
+  font-weight: 600;
+}
+
+.tbd {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 3px 8px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+/* ---------- Back / RSVP footer band ---------- */
+
+.ctaBand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-card);
+  padding: 26px 30px;
+  margin-top: 56px;
+}
+
+.ctaText {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--olive-dark);
+}
+
+@media (max-width: 767px) {
+  .page {
+    padding: 40px 0 16px;
+  }
+
+  .section {
+    margin-bottom: 44px;
+  }
+
+  .sectionTitle {
+    font-size: 26px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}

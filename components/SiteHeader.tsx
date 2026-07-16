@@ -5,11 +5,11 @@ import styles from "./SiteHeader.module.css";
 import MobileMenu from "./MobileMenu";
 
 const NAV_ITEMS = [
-  { label: "Our Weekend", href: "#our-weekend" },
-  { label: "Travel", href: "#travel" },
-  { label: "Stay", href: "#stay" },
-  { label: "Things to Do", href: "#things-to-do" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Our Weekend", href: "/#our-weekend" },
+  { label: "Travel", href: "/travel" },
+  { label: "Stay", href: "/stay" },
+  { label: "Things to Do", href: "/things-to-do" },
+  { label: "FAQ", href: "/faq" },
 ];
 
 export default function SiteHeader() {
@@ -18,7 +18,7 @@ export default function SiteHeader() {
   return (
     <header className={styles.header}>
       <div className={`page-shell ${styles.inner}`}>
-        <a href="#top" className={styles.monogram}>
+        <a href="/#top" className={styles.monogram}>
           K &amp; A
         </a>
 
@@ -30,7 +30,7 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        <a href="#rsvp" className={`btn-primary ${styles.rsvp}`}>
+        <a href="/#rsvp" className={`btn-primary ${styles.rsvp}`}>
           RSVP
         </a>
 
