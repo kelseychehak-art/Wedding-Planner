@@ -126,6 +126,15 @@
   flex-shrink: 0;
 }
 
+.emptyDay {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--olive-muted);
+  text-align: center;
+  padding: 24px 8px;
+}
+
 .button {
   margin: 22px auto 4px;
 }

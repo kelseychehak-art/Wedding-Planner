@@ -54,14 +54,8 @@ p {
 /* ---------- Page shell ---------- */
 
 .page-shell {
-  width: min(100% - 48px, 1380px);
+  width: min(100% - 48px, var(--page-max));
   margin: 0 auto;
-}
-
-@media (min-width: 1600px) {
-  .page-shell {
-    width: min(100% - 48px, 1440px);
-  }
 }
 
 @media (max-width: 1099px) {
@@ -93,35 +87,35 @@ p {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   border: 1px solid transparent;
-  transition: background-color 180ms ease, border-color 180ms ease,
-    color 180ms ease;
+  transition: var(--transition);
   white-space: nowrap;
 }
 
 .btn-primary {
-  background: var(--olive);
-  color: #fffaf0;
-  border-color: var(--olive);
+  background: var(--color-olive-dark);
+  color: var(--color-paper);
+  border-color: var(--color-olive-dark);
 }
 
 .btn-primary:hover {
-  background: var(--olive-dark);
-  border-color: var(--olive-dark);
+  background: var(--color-olive);
+  border-color: var(--color-olive);
 }
 
+/* Secondary = fine citrus-gold outline, ink label */
 .btn-outline {
   min-height: 42px;
   padding: 0 22px;
   background: transparent;
-  color: var(--olive-dark);
-  border-color: var(--olive-muted);
+  color: var(--color-ink);
+  border-color: var(--color-citrus-gold);
   font-weight: 700;
 }
 
 .btn-outline:hover {
-  background: var(--olive);
-  color: #fffaf0;
-  border-color: var(--olive);
+  background: var(--color-citrus-gold);
+  color: var(--color-paper);
+  border-color: var(--color-citrus-gold);
 }
 
 .btn-blue {

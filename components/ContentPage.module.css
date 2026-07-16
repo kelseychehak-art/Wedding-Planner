@@ -20,11 +20,11 @@
 }
 
 .sectionTitle {
-  font-family: var(--font-serif);
-  font-size: 30px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--olive-dark);
+  font-family: var(--font-heading);
+  font-size: var(--font-heading-2);
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  color: var(--color-olive-dark);
   margin-top: 8px;
 }
 
@@ -199,10 +199,6 @@
 
   .section {
     margin-bottom: 44px;
-  }
-
-  .sectionTitle {
-    font-size: 26px;
   }
 
   .grid {

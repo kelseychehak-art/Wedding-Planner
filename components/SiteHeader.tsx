@@ -3,14 +3,7 @@
 import { useState } from "react";
 import styles from "./SiteHeader.module.css";
 import MobileMenu from "./MobileMenu";
-
-const NAV_ITEMS = [
-  { label: "Our Weekend", href: "/our-weekend" },
-  { label: "Travel", href: "/travel" },
-  { label: "Stay", href: "/stay" },
-  { label: "Things to Do", href: "/things-to-do" },
-  { label: "FAQ", href: "/faq" },
-];
+import { siteContent } from "@/data/siteContent";
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,11 +12,11 @@ export default function SiteHeader() {
     <header className={styles.header}>
       <div className={`page-shell ${styles.inner}`}>
         <a href="/" className={styles.monogram}>
-          K &amp; A
+          {siteContent.couple.monogram}
         </a>
 
         <nav className={styles.nav} aria-label="Primary">
-          {NAV_ITEMS.map((item) => (
+          {siteContent.navigation.map((item) => (
             <a key={item.href} href={item.href} className={styles.navLink}>
               {item.label}
             </a>

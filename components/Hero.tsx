@@ -1,20 +1,24 @@
 import Image from "next/image";
 import styles from "./Hero.module.css";
+import { siteContent } from "@/data/siteContent";
 
 export default function Hero() {
+  const { wedding, couple } = siteContent;
+
   return (
     <section id="top" className="page-shell">
       <div className={styles.hero}>
         <Image
           src="/assets/hero/villa-hero.jpg"
-          alt="Golden-hour view of an Italian stone villa surrounded by cypress trees and gardens"
+          alt="Golden-hour view of the Italian countryside — cypress trees over rolling hills"
           fill
           priority
-          sizes="(max-width: 899px) 100vw, 1380px"
+          sizes="(max-width: 899px) 100vw, 1440px"
           className={styles.image}
         />
         <div className={styles.overlay} />
 
+        {/* Decorative only — replace with final illustrations when available */}
         <Image
           src="/assets/illustrations/lemon-branch.svg"
           alt=""
@@ -31,19 +35,19 @@ export default function Hero() {
         />
 
         <div className={styles.content}>
-          <p className={styles.eyebrow}>Join us for a week in</p>
-          <h1>
-            <span className={styles.italy}>Italy</span>
+          <p className={styles.eyebrow}>{wedding.eyebrow}</p>
+          <h1 className={styles.title}>
+            <span className={styles.destination}>{wedding.destination}</span>
             <span className={styles.coupleTitle}>
-              Kelsey &amp; Andrew&rsquo;s
+              {couple.displayName}&rsquo;s
               <br />
-              Wedding Week
+              {wedding.eventName}
             </span>
           </h1>
           <p className={styles.dateLocation}>
-            May 2027 &middot; Dates TBD
+            {wedding.dateLabel}
             <br />
-            Venue TBD, Italy
+            {wedding.locationLabel}
           </p>
           <a href="/our-weekend" className={`btn-primary ${styles.cta}`}>
             View Our Weekend

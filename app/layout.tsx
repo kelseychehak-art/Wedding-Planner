@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans, Allura } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Allura, Playfair_Display } from "next/font/google";
 import "../styles/tokens.css";
 import "./globals.css";
 
@@ -7,6 +7,15 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -37,7 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${dmSans.variable} ${allura.variable}`}
+      className={`${cormorant.variable} ${playfair.variable} ${dmSans.variable} ${allura.variable}`}
     >
       <body>{children}</body>
     </html>

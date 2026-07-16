@@ -1,23 +1,79 @@
 :root {
-  --page-bg: #f4efe6;
-  --surface: #fbf8f1;
-  --surface-soft: #f7f1e7;
-  --ink: #20261e;
-  --olive: #425333;
-  --olive-dark: #34432a;
-  --olive-muted: #77785a;
-  --terracotta: #bd5437;
-  --terracotta-dark: #a7442e;
-  --citrus: #d6a326;
-  --blue: #315d91;
-  --blue-soft: #5279a8;
-  --border: #ded5c7;
-  --border-soft: #e7dfd3;
-  --shadow: 0 3px 14px rgba(51, 42, 29, 0.08);
-  --radius-card: 2px;
+  /* ---------- Color palette (editorial Italian countryside) ---------- */
+  --color-olive-dark: #3f4a36;
+  --color-olive: #687a4a;
+  --color-sage: #a9b08c;
+  --color-sand: #efe7da;
+  --color-ivory: #faf7f2;
+  --color-paper: #fffdf8;
+  --color-citrus-gold: #daa63a;
+  --color-terracotta: #e06454;
+  --color-terracotta-dark: #c04b3b;
+  --color-sky-blue: #7fa2c7;
+  --color-sky-blue-deep: #4f77a3;
+  --color-ink: #30342d;
+  --color-muted-ink: #6d7068;
+  --color-border: #d8d0c4;
+  --color-border-soft: #e9e2d8;
+
+  /* ---------- Back-compat aliases (existing components read these) ---------- */
+  --page-bg: var(--color-ivory);
+  --surface: var(--color-paper);
+  --surface-soft: var(--color-sand);
+  --ink: var(--color-ink);
+  --olive: var(--color-olive);
+  --olive-dark: var(--color-olive-dark);
+  --olive-muted: var(--color-muted-ink);
+  --sage: var(--color-sage);
+  --terracotta: var(--color-terracotta);
+  --terracotta-dark: var(--color-terracotta-dark);
+  --citrus: var(--color-citrus-gold);
+  --blue: var(--color-sky-blue-deep);
+  --blue-soft: var(--color-sky-blue);
+  --border: var(--color-border);
+  --border-soft: var(--color-border-soft);
+
+  /* Editorial look: rely on borders, not shadow */
+  --shadow: 0 1px 2px rgba(48, 52, 45, 0.04);
+  --radius-card: 10px;
   --radius-button: 2px;
 
-  --font-serif: var(--font-cormorant), Georgia, serif;
-  --font-script: var(--font-allura), "Parisienne", cursive;
-  --font-sans: var(--font-dm-sans), Arial, sans-serif;
+  /* ---------- Font families ---------- */
+  --font-display: var(--font-cormorant), Georgia, serif; /* hero + major display */
+  --font-heading: var(--font-playfair), Georgia, serif;  /* H1 / H2 */
+  --font-serif: var(--font-cormorant), Georgia, serif;   /* H3 / card titles */
+  --font-script: var(--font-allura), "Parisienne", cursive; /* tiny accents only */
+  --font-sans: var(--font-dm-sans), Arial, sans-serif;   /* body / UI */
+
+  /* ---------- Type scale ---------- */
+  --font-display-xl: clamp(3.75rem, 7vw, 7rem);
+  --font-display-lg: clamp(2.5rem, 5vw, 5rem);
+  --font-heading-1: clamp(2rem, 3.5vw, 3.75rem);
+  --font-heading-2: clamp(1.5rem, 2.5vw, 2.5rem);
+  --font-heading-3: clamp(1.2rem, 1.8vw, 1.75rem);
+  --font-body-lg: 1.125rem;
+  --font-body: 1rem;
+  --font-body-sm: 0.875rem;
+  --font-label: 0.75rem;
+
+  /* ---------- Spacing (8pt grid) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* ---------- Layout widths ---------- */
+  --page-max: 1440px;
+  --content-max: 1200px;
+  --reading-max: 720px;
+
+  /* ---------- Motion ---------- */
+  --transition: background-color 160ms ease, color 160ms ease,
+    border-color 160ms ease, opacity 160ms ease;
 }
