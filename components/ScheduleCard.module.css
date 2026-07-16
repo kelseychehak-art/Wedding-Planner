@@ -1,40 +1,16 @@
 .card {
   background: var(--surface);
-  border: 1.5px solid var(--terracotta);
-  border-radius: 4px;
-  box-shadow: var(--shadow);
+  border-radius: 12px;
   position: relative;
-  padding: 30px 28px 26px;
+  padding: 34px 30px 30px;
   min-height: 320px;
   display: flex;
   flex-direction: column;
 }
 
-.card::before,
-.card::after {
-  content: "";
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  height: 10px;
-  background-image: url("/assets/borders/scallop-terracotta.svg");
-  background-repeat: repeat-x;
-  background-size: 40px 10px;
-  background-position: center;
-}
-
-.card::before {
-  top: 6px;
-}
-
-.card::after {
-  bottom: 6px;
-  transform: scaleY(-1);
-}
-
 @media (max-width: 767px) {
   .card {
-    padding: 26px 20px 22px;
+    padding: 30px 24px 26px;
     min-height: 0;
   }
 }

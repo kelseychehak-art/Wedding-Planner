@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "./KindlyRespondCard.module.css";
 import Illustration from "./Illustration";
+import ScallopFrame from "./ScallopFrame";
 import { findPartyForRsvp, submitRsvp, type RsvpGuest, type RsvpParty } from "@/lib/supabase";
 
 type Phase = "search" | "found" | "notFound" | "error" | "submitted";
@@ -99,6 +100,7 @@ export default function KindlyRespondCard() {
   if (phase === "submitted") {
     return (
       <div className={styles.card}>
+        <ScallopFrame color="var(--color-sky-blue)" />
         <div className={styles.left}>
           <div className={styles.headingRow}>
             <h3 className={styles.heading}>Thank You</h3>
@@ -115,6 +117,7 @@ export default function KindlyRespondCard() {
   if (phase === "search" || phase === "notFound" || phase === "error") {
     return (
       <form className={styles.card} onSubmit={handleSearch}>
+        <ScallopFrame color="var(--color-sky-blue)" />
         <div className={styles.left}>
           <div className={styles.headingRow}>
             <h3 className={styles.heading}>Kindly Respond</h3>
@@ -178,6 +181,7 @@ export default function KindlyRespondCard() {
 
   return (
     <form className={styles.card} onSubmit={handleSubmit}>
+      <ScallopFrame color="var(--color-sky-blue)" />
       <div className={styles.left}>
         <div className={styles.headingRow}>
           <h3 className={styles.heading}>Kindly Respond</h3>

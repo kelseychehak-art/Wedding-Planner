@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "./ScheduleCard.module.css";
 import Illustration, { type IllustrationName } from "./Illustration";
+import ScallopFrame from "./ScallopFrame";
 import { schedule, DEFAULT_SCHEDULE_DAY, type ScheduleIcon } from "@/data/schedule";
 
 const ICON_NAME: Record<ScheduleIcon, IllustrationName> = {
@@ -17,6 +18,7 @@ export default function ScheduleCard({ showButton = true }: { showButton?: boole
 
   return (
     <div className={styles.card}>
+      <ScallopFrame color="var(--color-terracotta)" />
       <h3 className={styles.heading}>Weekend Schedule</h3>
 
       <div className={styles.dateTabs} role="tablist" aria-label="Schedule day">
