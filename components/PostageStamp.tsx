@@ -50,21 +50,23 @@ export default function PostageStamp({
       aria-hidden="true"
     >
       <svg className={styles.frame} viewBox="0 0 100 118" preserveAspectRatio="none">
-        {/* perforated outer edge */}
+        {/* stamp paper */}
+        <rect x="4" y="4" width="92" height="110" rx="3" fill="var(--color-paper)" />
+        {/* perforated edge (round teeth) */}
         <rect
           x="4"
           y="4"
           width="92"
           height="110"
-          rx="4"
-          fill="var(--color-paper)"
+          rx="3"
+          fill="none"
           stroke="currentColor"
-          strokeWidth="2"
-          strokeDasharray="0.5 5"
+          strokeWidth="3"
+          strokeDasharray="0.1 4.1"
           strokeLinecap="round"
         />
-        {/* inner keyline */}
-        <rect x="12" y="12" width="76" height="94" rx="2" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.55" />
+        {/* inner paper tint + keyline */}
+        <rect x="11" y="11" width="78" height="96" rx="2" fill="var(--color-sand)" fillOpacity="0.5" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.6" />
       </svg>
       <span className={styles.art}>
         <Illustration name={STAMP_ART[variant]} strokeWidth={4} />

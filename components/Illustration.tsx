@@ -66,21 +66,38 @@ type Art = { viewBox: string; paths: React.ReactNode };
 const ART: Record<IllustrationName, Art> = {
   // ---------------- Botanical ----------------
   lemonBranch: {
-    viewBox: "0 0 128 96",
+    viewBox: "0 0 150 108",
     paths: (
       <>
-        <path d="M12 84 C 40 76 66 60 94 30" />
+        {/* main branch */}
+        <path d="M6 101 C 46 93 80 73 102 47 C 114 33 122 25 140 15" strokeWidth={3.2} />
+        {/* small offshoots */}
+        <path d="M62 73 C 66 66 66 58 62 50" strokeWidth={2.4} strokeOpacity="0.75" />
+        <path d="M86 79 C 79 80 71 78 65 74" strokeWidth={2.4} strokeOpacity="0.75" />
         {/* leaves */}
-        <path d="M44 66 C 32 64 27 52 33 40 C 45 42 50 54 44 66 Z" fill={SAGE} fillOpacity="0.35" />
-        <path d="M70 48 C 60 44 57 32 64 22 C 74 26 76 38 70 48 Z" fill={SAGE} fillOpacity="0.35" />
-        <path d="M33 40 L 40 53" />
-        <path d="M64 22 L 68 36" />
-        {/* lemons */}
-        <g transform="rotate(-24 96 34)">
-          <ellipse cx="96" cy="34" rx="18" ry="12" fill={GOLD} fillOpacity="0.85" />
+        <g fill={SAGE} fillOpacity="0.4" strokeWidth={2.6}>
+          <path d="M40 92 C 29 86 26 73 33 62 C 44 68 47 82 40 92 Z" />
+          <path d="M60 50 C 52 42 52 30 59 21 C 68 29 67 42 60 50 Z" />
+          <path d="M64 74 C 74 68 87 70 95 78 C 85 84 72 82 64 74 Z" />
+          <path d="M96 52 C 88 44 88 32 95 23 C 104 31 103 44 96 52 Z" />
         </g>
-        <g transform="rotate(-24 78 52)">
-          <ellipse cx="78" cy="52" rx="15" ry="10" fill={GOLD} fillOpacity="0.85" />
+        {/* leaf veins */}
+        <g strokeWidth={1.8} strokeOpacity="0.55">
+          <path d="M36 88 L 37 66" />
+          <path d="M59 47 L 61 26" />
+          <path d="M91 78 L 70 76" />
+          <path d="M95 49 L 97 28" />
+        </g>
+        {/* lemons */}
+        <g transform="rotate(-22 124 25)">
+          <ellipse cx="124" cy="25" rx="15" ry="10.5" fill={GOLD} fillOpacity="0.92" strokeWidth={3} />
+          <path d="M109 25 h-3.5 M139 25 h3.5" strokeWidth={2.6} />
+          <path d="M114 20.5 A 9 9 0 0 1 128 20.5" strokeWidth={1.6} strokeOpacity="0.5" />
+        </g>
+        <g transform="rotate(-22 107 41)">
+          <ellipse cx="107" cy="41" rx="13" ry="9" fill={GOLD} fillOpacity="0.92" strokeWidth={3} />
+          <path d="M94 41 h-3.5 M120 41 h3.5" strokeWidth={2.6} />
+          <path d="M99 37 A 8 8 0 0 1 112 37" strokeWidth={1.6} strokeOpacity="0.5" />
         </g>
       </>
     ),
@@ -98,16 +115,22 @@ const ART: Record<IllustrationName, Art> = {
     ),
   },
   oliveBranch: {
-    viewBox: "0 0 128 96",
+    viewBox: "0 0 132 100",
     paths: (
       <>
-        <path d="M14 80 C 42 72 68 56 96 28" />
-        <path d="M40 66 C 31 65 27 56 31 48 C 40 49 44 58 40 66 Z" fill={SAGE} fillOpacity="0.4" />
-        <path d="M58 54 C 49 53 45 44 49 36 C 58 37 62 46 58 54 Z" fill={SAGE} fillOpacity="0.4" />
-        <path d="M78 40 C 69 39 65 30 69 22 C 78 23 82 32 78 40 Z" fill={SAGE} fillOpacity="0.4" />
-        <circle cx="52" cy="64" r="5" fill="var(--color-olive)" />
-        <circle cx="70" cy="50" r="5" fill="var(--color-olive)" />
-        <circle cx="88" cy="34" r="5" fill="var(--color-olive)" />
+        <path d="M10 84 C 40 76 70 58 100 26 C 106 20 112 16 122 12" strokeWidth={3} />
+        {/* leaves, alternating along the stem */}
+        <g fill={SAGE} fillOpacity="0.42" strokeWidth={2.6}>
+          <path d="M38 68 C 28 67 22 58 25 48 C 36 49 42 58 38 68 Z" />
+          <path d="M52 78 C 54 68 62 61 72 60 C 71 71 62 79 52 78 Z" />
+          <path d="M64 52 C 54 51 48 42 51 32 C 62 33 68 42 64 52 Z" />
+          <path d="M84 44 C 74 43 68 34 71 24 C 82 25 88 34 84 44 Z" />
+          <path d="M104 24 C 100 15 104 6 112 3 C 116 12 112 21 104 24 Z" />
+        </g>
+        {/* olives */}
+        <ellipse cx="50" cy="60" rx="5.5" ry="7" fill="var(--color-olive)" strokeWidth={2.4} transform="rotate(-30 50 60)" />
+        <ellipse cx="78" cy="52" rx="5.5" ry="7" fill="var(--color-olive)" strokeWidth={2.4} transform="rotate(-30 78 52)" />
+        <ellipse cx="96" cy="34" rx="5" ry="6.5" fill="var(--color-olive)" strokeWidth={2.4} transform="rotate(-30 96 34)" />
       </>
     ),
   },
@@ -124,20 +147,30 @@ const ART: Record<IllustrationName, Art> = {
 
   // ---------------- Architecture ----------------
   villa: {
-    viewBox: "0 0 120 100",
+    viewBox: "0 0 122 104",
     paths: (
       <>
-        {/* roof + body */}
-        <path d="M16 50 L 50 28 L 84 50" />
-        <path d="M24 50 L 24 86 L 76 86 L 76 50" />
-        {/* tower */}
-        <path d="M84 50 L 100 40 L 100 86 L 76 86" />
-        <path d="M84 42 L 92 37 L 100 42" />
-        {/* door + windows */}
-        <path d="M44 86 L 44 68 Q44 64 50 64 Q56 64 56 68 L 56 86" />
-        <rect x="30" y="58" width="9" height="9" rx="1" />
-        <rect x="61" y="58" width="9" height="9" rx="1" />
-        <rect x="85" y="54" width="8" height="9" rx="1" />
+        {/* main house body + hip roof */}
+        <path d="M22 52 L 22 90 L 72 90 L 72 52" />
+        <path d="M15 54 L 47 30 L 79 54" strokeWidth={3.4} />
+        {/* eave line */}
+        <path d="M20 52 L 74 52" strokeWidth={2.4} strokeOpacity="0.7" />
+        {/* tower wing */}
+        <path d="M72 44 L 98 44 L 98 90 L 72 90" />
+        <path d="M68 46 L 85 34 L 102 46" strokeWidth={3} />
+        {/* windows — house */}
+        <rect x="30" y="60" width="9" height="12" rx="1" />
+        <rect x="55" y="60" width="9" height="12" rx="1" />
+        <path d="M34.5 60 L 34.5 72 M30 66 L 39 66" strokeWidth={1.4} strokeOpacity="0.6" />
+        <path d="M59.5 60 L 59.5 72 M55 66 L 64 66" strokeWidth={1.4} strokeOpacity="0.6" />
+        {/* door */}
+        <path d="M43 90 L 43 71 Q43 66 49 66 Q55 66 55 71 L 55 90" />
+        {/* tower window */}
+        <rect x="80" y="54" width="9" height="11" rx="1" />
+        {/* slender cypress beside the villa */}
+        <path d="M110 90 L 110 60 C 106 55 106 44 110 39 C 114 44 114 55 110 60 Z" fill="var(--color-olive)" fillOpacity="0.16" strokeWidth={2.6} />
+        {/* ground */}
+        <path d="M12 90 L 116 90" strokeWidth={2.6} />
       </>
     ),
   },
