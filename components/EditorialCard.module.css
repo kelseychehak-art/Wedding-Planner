@@ -49,11 +49,10 @@
 }
 
 .plainHeading {
-  font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: var(--olive-dark);
 }
 
