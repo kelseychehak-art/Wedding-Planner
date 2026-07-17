@@ -42,14 +42,32 @@ settle before the other pages slot in.
 **Decision:** Produce spec docs + memory (`CLAUDE.md`, `docs/*`) with **no code changes**, per the
 user's explicit instruction. Building happens in a later session against these specs.
 
+### D6 — Inner content pages redesigned to a shared frame
+**Decision:** The 5 guest content pages (Our Weekend, Travel, Stay, Activities, FAQ) adopt the new
+**shared frame** from the mockups (faded landscape → rounded panel → centered decorative hero →
+inner footer band) documented in `docs/content-page-frame.md`. This **supersedes** the current
+`PageHero` + `ContentPage` template. Built by **adapting** existing tokens/components (no parallel
+system). Source of truth = the mockups (no written brief was provided).
+
+### D7 — Personalized features deferred; build public parts now
+**Decision:** Document full layouts but **build only the public/static parts**; defer personalized/
+interactive features to a future guest identity system: **Stay** "Your Room Assignment" + "YOUR
+ROOM" badge; **Activities** Sign-Up / "You're attending!" / RSVP status; **Travel** "Add Your Travel
+Info" submission; **FAQ** "which room am I in?" answer. Rationale: no guest login exists (ties to O3).
+
+### D8 — Spec 5 pages now; Things to Do + RSVP pending
+**Decision:** Specs written for the 5 provided mockups. **Things to Do** and **RSVP** have no new
+mockup yet — left on the existing template and flagged pending (see O6).
+
 ---
 
 ## Open items (resolve before/at build time)
 
-### O1 — "Activities" nav item
-The homepage mockup shows a **6-item** nav (Our Weekend · Travel · Stay · **Activities** · Things to
-Do · FAQ). The repo has **5** (no `Activities` route). **Do not invent it.** Add the nav entry +
-route only when the Activities mockup arrives. Until then the homepage nav renders the existing 5.
+### O1 — "Activities" nav item — ✅ RESOLVED
+The Activities mockup confirms a **real `/activities` page** and the **6-item** nav (Our Weekend ·
+Travel · Stay · **Activities** · Things to Do · FAQ). **At build:** add the `/activities` route and
+an `{ label: "Activities", href: "/activities" }` entry to `data/siteContent.ts` `navigation`
+(between Stay and Things to Do). See `docs/pages/activities.md`.
 
 ### O2 — "Login" label vs. reality
 The button reads "RSVP / Login" for 1:1 fidelity, but only RSVP exists (no login). Kept as-is for
@@ -61,13 +79,29 @@ The brief sketches an opaque-token guest login (`/guest-access` → `/guest/[tok
 Supabase schema + auth work. Candidate to outsource if a real guest portal is wanted. The orphan
 `GuestHomeCard.tsx` component may be an early stub for this.
 
-### O4 — Header unification
-Decide whether every page shares one adapted `SiteHeader`, or the homepage uses an "airier" header
-variant. Confirm against the other-page mockups when they arrive. Leaning toward one shared header
-with optional homepage spacing, to keep the brand consistent.
+### O4 — Header unification / RSVP button label
+The inner-page mockups confirm the **same header** across all pages (K&A + sprig, 6-item nav w/
+active underline). Leaning toward **one shared `SiteHeader`** with optional homepage spacing.
+**Normalize the button label:** homepage shows "RSVP / Login", inner pages show "RSVP" — pick one
+(or keep home's longer label as the deliberate landing-page variant). Both → `/rsvp` for now.
 
 ### O5 — Pending assets & fonts (swap points)
 Real hero photo (`tuscan-homepage-landscape.jpg`), the hand-inked illustration SVGs
 (`small-lemon-sprig`, `heart-solid-gold`, `heart-outline-red`, `villa-postage-stamp`), the licensed
 **Canela Sans** UI font, and the handwritten/script footer font are all pending. Build proceeds with
 documented placeholders (see `homepage-spec.md` §12); true 1:1 is reached when these land.
+**Illustration standard:** deliver each as an **SVG**, run through **SVGO**, and give it a clean
+lowercase-hyphen filename (auto-traced SVGs are ~1 MB raw → ship the minified version). Inner-page
+mockups also need new **photos [SWAP]**: per-day schedule photos, the villa exterior, room-category
+thumbnails, and activity photos (`public/assets/{photos,rooms,activities}/…`).
+
+### O6 — Things to Do + RSVP mockups pending
+No new mockup yet for **Things to Do** or **RSVP**. They stay on the existing `PageHero`/`ContentPage`
+template until their mockups arrive, then get specs like the other five.
+
+### O7 — schedule.ts data update
+`data/schedule.ts` currently models **Wed–Mon** with only Saturday populated. The Our Weekend mockup
+is **Mon–Sat, June 16–21 2027** with six events (Welcome Dinner, Wine Tasting, Cooking Class, Pool
+Day & Lunch, Town Excursion, Farewell Party). Repopulate the data and extend `ScheduleEvent`/
+`ScheduleDay`/`ScheduleIcon` (add `description`, `photo`, `endTime`, more icons). See
+`docs/pages/our-weekend.md`.

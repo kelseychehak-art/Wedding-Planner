@@ -80,5 +80,15 @@ available**. Until they land:
 ## Docs index
 
 - [`docs/design-system.md`](./docs/design-system.md) — foundation: tokens, fonts, globals, component APIs.
-- [`docs/homepage-spec.md`](./docs/homepage-spec.md) — 1:1 homepage build spec.
+- [`docs/homepage-spec.md`](./docs/homepage-spec.md) — 1:1 homepage build spec (full-bleed cover).
+- [`docs/content-page-frame.md`](./docs/content-page-frame.md) — shared inner-page frame (faded bg +
+  panel + centered hero + footer band); supersedes the old `PageHero`/`ContentPage` template.
+- **Per-page specs** — [`docs/pages/our-weekend.md`](./docs/pages/our-weekend.md),
+  [`travel.md`](./docs/pages/travel.md), [`stay.md`](./docs/pages/stay.md),
+  [`activities.md`](./docs/pages/activities.md), [`faq.md`](./docs/pages/faq.md).
+  (Things to Do + RSVP specs pending their mockups.)
 - [`docs/decisions.md`](./docs/decisions.md) — locked decisions + open items.
+
+Navigation is **6 items**: Our Weekend · Travel · Stay · **Activities** · Things to Do · FAQ
+(`/activities` is a new route to add). Personalized features (Your Room, activity sign-up, Add Travel
+Info) are **deferred** to a future guest system — build the public/static parts first.
