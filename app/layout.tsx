@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans, Allura, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Fraunces, Instrument_Sans, Pinyon_Script } from "next/font/google";
 import "../styles/tokens.css";
 import "./globals.css";
 
+// Type system — "Option A" (docs/decisions.md D10), all free Google Fonts.
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
@@ -11,23 +12,23 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   display: "swap",
 });
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const allura = Allura({
-  variable: "--font-allura",
+const pinyonScript = Pinyon_Script({
+  variable: "--font-pinyon",
   subsets: ["latin"],
   weight: ["400"],
   display: "swap",
@@ -46,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${playfair.variable} ${dmSans.variable} ${allura.variable}`}
+      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable}`}
     >
       <body>{children}</body>
     </html>

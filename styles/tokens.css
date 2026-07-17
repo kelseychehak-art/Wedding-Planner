@@ -38,12 +38,12 @@
   --radius-card: 10px;
   --radius-button: 2px;
 
-  /* ---------- Font families ---------- */
-  --font-display: var(--font-cormorant), Georgia, serif; /* hero + major display */
-  --font-heading: var(--font-playfair), Georgia, serif;  /* H1 / H2 */
-  --font-serif: var(--font-cormorant), Georgia, serif;   /* H3 / card titles */
-  --font-script: var(--font-allura), "Parisienne", cursive; /* tiny accents only */
-  --font-sans: var(--font-dm-sans), Arial, sans-serif;   /* body / UI */
+  /* ---------- Font families ("Option A" — docs D10) ---------- */
+  --font-display: var(--font-cormorant), Georgia, serif;  /* couple/event, editorial display */
+  --font-heading: var(--font-fraunces), Georgia, serif;   /* display titles: "Italy", page titles */
+  --font-serif: var(--font-cormorant), Georgia, serif;    /* card titles / H3 */
+  --font-script: var(--font-pinyon), "Parisienne", cursive; /* script accent (footer line) */
+  --font-sans: var(--font-instrument-sans), Arial, sans-serif; /* UI / body */
 
   /* ---------- Type scale ---------- */
   --font-display-xl: clamp(3.75rem, 7vw, 7rem);

@@ -1,62 +1,49 @@
 .hero {
   position: relative;
+  width: 100%;
+  min-height: max(760px, calc(100svh - 78px));
   overflow: hidden;
-  border-radius: 8px;
-  margin-top: 24px;
-  margin-bottom: 12px;
-  height: 660px;
   isolation: isolate;
-  /* Reads as a placed, framed photograph on the page */
-  border: 1px solid rgba(48, 52, 45, 0.16);
-  box-shadow: 0 26px 50px -26px rgba(48, 52, 45, 0.55),
-    0 4px 14px rgba(48, 52, 45, 0.08);
 }
 
-@media (max-width: 1599px) and (min-width: 1200px) {
-  .hero {
-    height: 620px;
-  }
-}
-
-@media (max-width: 1199px) and (min-width: 768px) {
-  .hero {
-    height: 540px;
-  }
-}
-
-.image {
+.bg {
   object-fit: cover;
-  object-position: center 55%;
+  object-position: center bottom;
+  z-index: 0;
 }
 
-.overlay {
+/* Cream veil — separate layer so the text never fades. Keeps the top-center
+   light for legibility; landscape reads through the lower half. */
+.veil {
   position: absolute;
   inset: 0;
   z-index: 1;
-  /* Keep the photo crisp to the edges; only a soft halo behind the title
-     for legibility, plus a touch of depth at the base. */
-  background: radial-gradient(
-      100% 68% at 50% 46%,
-      rgba(250, 247, 242, 0.42) 0%,
-      rgba(250, 247, 242, 0.14) 40%,
-      rgba(250, 247, 242, 0) 68%
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 92% 62% at 50% 23%,
+      rgba(250, 247, 242, 0.98) 0%,
+      rgba(250, 247, 242, 0.81) 30%,
+      rgba(250, 247, 242, 0.24) 55%,
+      rgba(250, 247, 242, 0) 76%
     ),
     linear-gradient(
       180deg,
-      rgba(48, 52, 45, 0) 55%,
-      rgba(48, 52, 45, 0.16) 100%
+      rgba(250, 247, 242, 0.97) 0%,
+      rgba(250, 247, 242, 0.9) 18%,
+      rgba(250, 247, 242, 0.58) 42%,
+      rgba(250, 247, 242, 0.12) 68%,
+      rgba(250, 247, 242, 0.08) 100%
     );
 }
 
 .content {
-  position: absolute;
-  z-index: 2;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -38%);
-  width: 100%;
-  max-width: 720px;
-  padding: 0 24px;
+  position: relative;
+  z-index: 4;
+  width: min(650px, 100% - 48px);
+  margin: 0 auto;
+  padding-top: clamp(68px, 8.5vh, 105px);
+  padding-bottom: 130px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -65,113 +52,138 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-olive-dark);
 }
 
-.destination {
-  display: block;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(4rem, 8vw, 6.5rem);
-  line-height: 0.95;
-  letter-spacing: 0.01em;
-  color: var(--color-olive-dark);
-  margin-top: 2px;
+.sprig {
+  width: 115px;
+  height: auto;
+  margin-top: 16px;
 }
 
-.coupleTitle {
-  display: block;
+.country {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(78px, 7vw, 112px);
+  letter-spacing: -0.045em;
+  line-height: 0.96;
+  color: var(--color-olive-dark);
+  margin-top: 6px;
+}
+
+.divider {
+  display: grid;
+  grid-template-columns: 1fr 23px 1fr;
+  align-items: center;
+  gap: 14px;
+  width: min(365px, 90%);
+  margin: 16px 0 6px;
+}
+
+.rule {
+  height: 1px;
+  background: var(--color-citrus-gold);
+}
+
+.divider > svg {
+  justify-self: center;
+}
+
+.couple {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: clamp(1.75rem, 3.4vw, 2.9rem);
+  font-size: clamp(42px, 4vw, 58px);
   line-height: 1.05;
-  color: var(--color-olive);
-  max-width: 600px;
-  margin: 10px auto 0;
+  color: var(--color-ink);
+  margin-top: 8px;
 }
 
-.dateLocation {
+.event {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(49px, 4.5vw, 65px);
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.meta {
   font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.19em;
   text-transform: uppercase;
-  line-height: 1.7;
-  color: var(--color-muted-ink);
+  line-height: 1.75;
+  color: var(--color-olive-dark);
   margin-top: 22px;
 }
 
 .cta {
-  margin-top: 24px;
-  min-width: 190px;
-}
-
-.decoration {
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.lemon {
-  top: 40px;
-  left: 6%;
-  width: 190px;
-  height: auto;
+  width: min(370px, 100%);
+  min-height: 54px;
+  border-radius: 3px;
+  margin-top: 26px;
 }
 
 .stamp {
-  top: 56px;
-  right: 8%;
-  width: 96px;
-  height: auto;
+  position: absolute;
+  z-index: 3;
+  top: clamp(54px, 6vw, 86px);
+  right: clamp(64px, 8vw, 145px);
+  width: clamp(145px, 12vw, 192px);
+  pointer-events: none;
+}
+
+.handwritten {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  bottom: clamp(28px, 5vh, 54px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.handwrittenText {
+  font-family: var(--font-script);
+  font-size: 25px;
+  line-height: 1.1;
+  color: var(--color-terracotta);
 }
 
 @media (max-width: 767px) {
   .hero {
-    height: 740px;
-    border-radius: 4px;
-    margin-top: 0;
+    min-height: calc(100svh - 62px);
   }
 
   .content {
-    top: 44%;
-    max-width: 92%;
-  }
-
-  .eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-  }
-
-  .coupleTitle {
-    max-width: 320px;
-  }
-
-  .dateLocation {
-    font-size: 11px;
-    margin-top: 16px;
-  }
-
-  .cta {
-    margin-top: 20px;
-    min-width: 170px;
-  }
-
-  .lemon {
-    width: 112px;
-    top: 24px;
-    left: 4%;
+    padding-top: 44px;
+    padding-bottom: 40px;
   }
 
   .stamp {
-    width: 66px;
-    top: 32px;
-    right: 6%;
+    width: 96px;
+    top: 26px;
+    right: 20px;
+  }
+
+  .handwritten {
+    position: static;
+    margin: 20px 0 40px;
+  }
+}
+
+@media (max-width: 420px) {
+  .stamp {
+    display: none;
   }
 }

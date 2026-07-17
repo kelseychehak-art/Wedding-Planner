@@ -24,7 +24,7 @@ export default function SiteHeader() {
         </nav>
 
         <a href="/rsvp" className={`btn-primary ${styles.rsvp}`}>
-          RSVP
+          RSVP / Login
         </a>
 
         <button

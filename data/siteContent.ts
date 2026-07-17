@@ -12,9 +12,9 @@ export const siteContent = {
     destination: "Italy",
     eventName: "Wedding Week",
     eyebrow: "Join us for a week in",
-    // Placeholders until the venue + dates are confirmed. Update here only.
-    dateLabel: "May 2027 · Dates TBD",
-    locationLabel: "Venue TBD, Italy",
+    // Venue + exact date still officially TBD (docs/decisions.md D3).
+    dateLabel: "June 16 – 21, 2027",
+    locationLabel: "Tuscany, Italy",
     rsvpDeadlineLabel: "By April 1, 2027",
   },
   navigation: [
