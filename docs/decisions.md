@@ -102,10 +102,8 @@ Real hero photo (`tuscan-homepage-landscape.jpg`), the hand-inked illustration S
 (`small-lemon-sprig`, `heart-solid-gold`, `heart-outline-red`, `villa-postage-stamp`), the licensed
 **Canela Sans** UI font, and the handwritten/script footer font are all pending. Build proceeds with
 documented placeholders (see `homepage-spec.md` §12); true 1:1 is reached when these land.
-**Illustration standard:** deliver each as an **SVG**, run through **SVGO**, and give it a clean
-lowercase-hyphen filename (auto-traced SVGs are ~1 MB raw → ship the minified version). Inner-page
-mockups also need new **photos [SWAP]**: per-day schedule photos, the villa exterior, room-category
-thumbnails, and activity photos (`public/assets/{photos,rooms,activities}/…`).
+**Full asset standard + inventory** (SVG + SVGO + naming, illustration/photo/font checklist) lives in
+[`assets.md`](./assets.md) — single source of truth for asset work.
 
 ### O6 — Things to Do + RSVP mockups pending
 No new mockup yet for **Things to Do** or **RSVP**. They stay on the existing `PageHero`/`ContentPage`

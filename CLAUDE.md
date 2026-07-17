@@ -76,10 +76,13 @@ available**. Until they land:
   components) and mark every swap point in the relevant spec.
 - **Never** substitute a geometric sans (Inter, Poppins, Montserrat) for the intended UI font, or
   emoji / clip-art / flat-vector icons for the hand-inked illustrations, without sign-off.
+- The full asset standard + checklist (SVG + SVGO + naming rules, illustration/photo/font inventory)
+  lives in [`docs/assets.md`](./docs/assets.md).
 
 ## Docs index
 
 - [`docs/design-system.md`](./docs/design-system.md) — foundation: tokens, fonts, globals, component APIs.
+- [`docs/assets.md`](./docs/assets.md) — asset standard + illustration/photo/font inventory checklist.
 - [`docs/homepage-spec.md`](./docs/homepage-spec.md) — 1:1 homepage build spec (full-bleed cover).
 - [`docs/content-page-frame.md`](./docs/content-page-frame.md) — shared inner-page frame (faded bg +
   panel + centered hero + footer band); supersedes the old `PageHero`/`ContentPage` template.
