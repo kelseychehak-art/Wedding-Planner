@@ -1,0 +1,138 @@
+# Assets — Standard & Inventory
+
+Single source of truth for illustrations, photos, and fonts. Use this checklist while producing the
+SVG set. Copy/dates policy is unaffected: **June 16 – 21, 2027 / Tuscany, Italy** everywhere.
+
+---
+
+## Delivery standard (illustrations)
+
+1. **Format: SVG.** Deliver each illustration as an SVG — crisp at every size (73px header sprig up to
+   large hero art), one file per asset.
+2. **Run SVGO before committing.** Auto-traced SVGs are huge (~1 MB raw); SVGO cuts them by roughly a
+   third and gzips to ~200–280 KB. Command: `npx svgo -i file.svg -o file.svg --multipass`. Ship the
+   minified version, never the raw trace. (I can do this pass when wiring them in.)
+3. **Clean filenames.** Lowercase, hyphenated, descriptive — **no spaces or commas** (they break in
+   URLs). E.g. `lemon-branch.svg`, `villa-stamp.svg`, `heart-gold.svg`.
+4. **Transparent background.** No white box behind the art (corners must be fully transparent). Any
+   **chroma-green / placeholder background must be knocked out** — assets render on cream, so a green
+   (or white) field would look wrong.
+5. **Reference as `<img>` / `next/image`, not inlined into JSX.** A traced SVG is ~2 000 path nodes;
+   inlining bloats the DOM. As an external `<img src>` the browser decodes it once.
+6. **Colored SVGs have baked fills.** Unlike the line-art `Illustration` component (which recolors via
+   `currentColor` + tone tokens), these painterly/colored SVGs are **standalone assets**, not new
+   `Illustration` entries. That's fine — just don't expect to re-tint them via CSS.
+7. **Header crop.** The full three-lemon branch is too busy at the ~73px header slot beside "K & A" —
+   provide a **cropped single-sprig variant** for the header.
+8. **PNG only as fallback.** If an asset can't be vector, deliver a transparent PNG at **2–3× its
+   display size** (e.g. ≥345 px for a 115 px sprig).
+
+---
+
+## Illustration inventory (public-first — build now)
+
+Canonical filename = what the build will reference (interim placeholder = existing repo asset used
+until the real one lands). Target dir: `public/assets/illustrations/` (or `public/illustrations/`).
+
+| Canonical file | Used on | Interim placeholder | Status |
+|---|---|---|---|
+| `lemon-branch.svg` (colored) | homepage/footer bands, section accents | uploaded (see below) | ⏳ rename + SVGO |
+| `lemon-sprig.svg` (header, beside "K & A") | homepage + all page headers | `Illustration lemonBranch` / existing `lemon-sprig.svg` | ⏳ needs **cropped single-sprig** |
+| `small-lemon-sprig.svg` (centered, above titles) | homepage hero, content-page hero | `Illustration lemonBranch` | ⏳ pending |
+| `olive-lemon-sprig.svg` (centered hero sprig) | 5 content-page heroes | `Illustration oliveBranch`/`lemonBranch` | ⏳ pending |
+| `heart-gold.svg` (gold divider heart) | homepage + every page divider/footer | `Illustration heart tone="gold"` | ⏳ pending |
+| `heart-outline-red.svg` (title + footer heart) | homepage footer, page title rows, signatures | `Illustration heart tone="terracotta"` | ⏳ pending |
+| `villa-stamp.svg` (tilted postage stamp) | homepage + every page header, upper-right | `PostageStamp variant="villa"` | ❌ **still missing** (only the round postmark landed) |
+| `italy-postmark.svg` (round "ITALY" cancellation mark, terracotta) | homepage upper-right, overlapping the villa stamp | none (decorative) | ✅ on `main` (Jul 17) |
+| `wine-glass.svg` (footer band, left) | content-page footer bands | `Illustration wineGlass` | ⏳ pending |
+| `bicycle.svg` (decorative) | our-weekend, travel, activities, faq | `Illustration bicycle` | ⏳ pending |
+| Line icons — `airplane, car/compass, key, suitcase, calendar, clock, pin, wine, bicycle, cypress, arch, music, villa` | travel/stay/activities/schedule/faq cards & badges | `Illustration` names (18 available) | ⏳ some map, some to add |
+
+> The existing line-art `Illustration` set (18 names, 7 tones — see `design-system.md` §4) already
+> covers many small icons. Only deliver custom SVGs where the mockup's art differs from those.
+
+### Received to date (on `main`) — Jul 17 batch
+
+12 new SVGs pushed to `public/assets/illustrations/` (timestamp names `ChatGPT Image Jul 17…`). **All
+true vectors, transparent backgrounds** (white appears only as fills inside the art, not a background).
+**Most are multi-item "sheets"** — build step: split into individual named assets + SVGO + rename.
+
+| Content | Maps to | Note |
+|---|---|---|
+| Round **"ITALY" postmark**, terracotta | `italy-postmark.svg` | ✅ received, clean single asset |
+| Icon sheet — pin, clock, info, shield, passport, heart, calendar ×2 | travel/faq line icons | split into individual icons |
+| Icon sheet — check, bookmark, dining, cocktail, chef, mic, phone, envelope | line icons | split |
+| Color object art — bicycle, wine, amphora, rolling pin, pasta, wine bottle | activity/food art | **2 duplicate files**; split |
+| Green art — lounge chair, sun, villa, temple, shopping bag, camera | activities/things-to-do | split |
+| Green art — gift, bed, suitcase, airplane, train, car | travel/stay | split |
+| Color art — pot, pan, wine, potted plant | cooking/dining | split |
+| **Divider** sets (heart rules, leafy vines, gold line, dotted) ×2 | section/gold dividers | split → `heart-gold`, dividers |
+| **Frame/border** sheet — blue scallop, red scallop, olive + ornate rects | `ScallopFrame` boxes + panel frames | ✅ great match; split blue/red |
+| Labeled "Decorative Dividers & Accents" sheet | — | **reference only** (labels baked in), not a production asset |
+
+### Still missing (as of Jul 17 batch)
+
+1. **Villa postage stamp** — the rectangular *Tuscan-scene* stamp for page-header corners
+   (`villa-stamp.svg`). Only the round postmark landed; the villa-scene stamps shown in chat earlier
+   were never pushed. Highest priority (every page header). Interim: `PostageStamp variant="villa"`.
+2. **Photography** — hero landscape (`tuscan-homepage-landscape.jpg`), villa exterior, room
+   thumbnails ×4, per-day schedule photos ×6, activity photos ×6.
+3. ~~Fonts~~ — ✅ **RESOLVED** (Option A: Fraunces / Cormorant / Instrument Sans / Pinyon Script, all
+   Google Fonts — see Fonts section below).
+
+All received art still needs the standard build pass: **split sheets → SVGO → clean lowercase-hyphen
+names → transparent** (done at build; nothing needed from the user).
+
+## Illustration inventory (portal — FUTURE-STATE, not greenlit)
+
+The full manifest for the personalized portal is in
+[`guest-portal/master-brief.md`](./guest-portal/master-brief.md) §40 (adds `tiny-olive-sprig`,
+`olive-sprig`, `bicycle-small`, `bicycle-with-branch`, `calendar-sketch`, `heart-outline-gold`,
+`heart-outline-white`, plus a `/icons/*` set and `/borders/scalloped-*-card.svg`). Only relevant if
+the portal is greenlit (see `decisions.md` D9). Several overlap with the public set above — reuse, do
+not duplicate.
+
+---
+
+## Photo inventory
+
+Real photography **[SWAP]**; interim = existing `public/assets/hero|photos/*`. Never ship AI
+placeholder photos as permanent venue content.
+
+| Need | Target path | Interim | Status |
+|---|---|---|---|
+| Hero landscape (homepage + faded page bg) | `public/images/tuscan-homepage-landscape.jpg` | `assets/hero/villa-estate.jpg` / `valdorcia.jpg` | ⏳ pending |
+| Villa exterior (Stay) | `public/assets/hero/…` | `assets/hero/villa-estate.jpg` | ⏳ pending |
+| Room-category thumbnails ×4 (Stay) | `public/assets/rooms/…` | branded placeholder w/ room line-drawing | ⏳ pending |
+| Per-day schedule photos ×6 (Our Weekend / Schedule) | `public/assets/photos/…` | existing `photos/*` | ⏳ pending |
+| Activity photos ×6 (Activities) | `public/assets/activities/…` | existing `photos/*` | ⏳ pending |
+
+---
+
+## Fonts
+
+**RESOLVED — "Option A" type system** (D10). All four are **free Google Fonts** via
+`next/font/google` — no licensing, nothing pending.
+
+| Font | Role | Semantic token |
+|---|---|---|
+| **Fraunces** (italic) | display titles ("Italy", page titles) | `--font-heading` |
+| **Cormorant Garamond** | couple/event, card titles, editorial | `--font-display` / `--font-serif` |
+| **Instrument Sans** | UI / body (eyebrow, nav, labels, buttons, meta) | `--font-sans` |
+| **Pinyon Script** | script accent (footer line) | `--font-script` |
+
+Build swaps `app/layout.tsx` from the current Playfair/DM Sans/Allura to Fraunces/Instrument Sans/
+Pinyon Script (Cormorant stays). Guest-facing only; `/admin` unchanged.
+
+---
+
+## Already uploaded (needs housekeeping)
+
+On **`main`** (not the working branch `claude/wedding-homepage-brief-review-xtzdc1`):
+- `public/assets/illustrations/ChatGPT_Image_Jul_16__2026__04_49_44_PM__1_-removebg-preview.png` —
+  transparent PNG, 612×408, faithful. Fine as a fallback.
+- `public/assets/illustrations/ChatGPT Image Jul 16, 2026, 04_49_44 PM (1).svg` — **true vector**
+  (1 959 paths), renders identically; **1.23 MB raw** → 734 KB (SVGO) → ~278 KB gzipped.
+
+**Action at build:** adopt the SVG as `lemon-branch.svg` → run SVGO → rename (kill the
+spaces/commas) → bring onto the working branch. Prefer the SVG over the PNG.
