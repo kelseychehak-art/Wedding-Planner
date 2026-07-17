@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Typography Bake-Off — Updated Calligraphy</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Allura&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Ephesis&family=Figtree:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600&family=Italianno&family=La+Belle+Aurore&family=Lora:ital,wght@0,400;1,400&family=Manrope:wght@400;500;600&family=Monsieur+La+Doulaise&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,500&family=Parisienne&family=Petit+Formal+Script&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&family=Rouge+Script&family=Source+Sans+3:wght@400;500;600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --olive:#3f4a36;
+  --olive2:#687a4a;
+  --gold:#d4a63a;
+  --terra:#e06454;
+  --cream:#faf7f2;
+  --paper:#fffdf8;
+  --ink:#28271f;
+  --muted:#68655d;
+  --line:#ded6ca;
+  --blue:#7fa2c7;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:"Instrument Sans",Arial,sans-serif;
+}
+.wrapper{
+  max-width:1360px;
+  margin:0 auto;
+  padding:38px 28px 78px;
+}
+.page-header{
+  text-align:center;
+  margin-bottom:38px;
+}
+.page-header h1{
+  margin:0;
+  color:var(--olive);
+  font-family:"Cormorant Garamond",serif;
+  font-size:48px;
+  font-weight:500;
+  letter-spacing:.055em;
+}
+.page-header .subtitle{
+  margin-top:8px;
+  color:var(--gold);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.26em;
+  text-transform:uppercase;
+}
+.page-header .intro{
+  max-width:910px;
+  margin:18px auto 0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.65;
+}
+section{margin-top:42px}
+.section-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:28px;
+  margin-bottom:18px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--line);
+}
+.section-header h2{
+  margin:0;
+  color:var(--olive);
+  font-family:"Cormorant Garamond",serif;
+  font-size:30px;
+  font-weight:600;
+}
+.section-header p{
+  max-width:620px;
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+  text-align:right;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+.script-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+.card{
+  padding:20px;
+  background:rgba(255,253,248,.96);
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:0 6px 16px rgba(63,74,54,.03);
+}
+.font-name{
+  margin-bottom:14px;
+  color:var(--terra);
+  font:600 11px "Instrument Sans",sans-serif;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.hero-sample{
+  color:var(--olive);
+  font-size:84px;
+  line-height:.95;
+}
+.romantic-sample{
+  color:var(--ink);
+  font-size:48px;
+  line-height:1.04;
+}
+.page-title-sample{
+  color:var(--olive);
+  font-size:51px;
+  line-height:1;
+}
+.ui-sample{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:24px;
+  font-size:14px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+.cta{
+  display:inline-flex;
+  min-height:46px;
+  margin-top:18px;
+  padding:0 24px;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  background:var(--olive);
+  border-radius:3px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+}
+.body-sample{
+  max-width:630px;
+  font-size:15px;
+  line-height:1.7;
+}
+.labels-sample{
+  font-size:12px;
+  letter-spacing:.18em;
+  line-height:2;
+  text-transform:uppercase;
+}
+.script-card{
+  min-height:175px;
+  display:flex;
+  flex-direction:column;
+}
+.script-sample{
+  flex:1;
+  display:flex;
+  align-items:center;
+  color:var(--terra);
+  font-size:43px;
+  line-height:1.25;
+}
+.script-meta{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+.context-strip{
+  margin-top:20px;
+  padding:28px;
+  text-align:center;
+  background:
+    linear-gradient(rgba(250,247,242,.89),rgba(250,247,242,.89)),
+    radial-gradient(circle at center,#fffdf8 0%,#efe7da 100%);
+  border:1px solid var(--line);
+  border-radius:13px;
+}
+.context-label{
+  margin-bottom:24px;
+  color:var(--olive);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.context-phrase{
+  color:var(--terra);
+  font-size:38px;
+  line-height:1.3;
+}
+.context-heart{
+  margin-top:12px;
+  color:var(--terra);
+  font-size:22px;
+}
+.systems{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+.system-card{
+  padding:28px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+.system-label{
+  margin-bottom:22px;
+  color:var(--terra);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.preview{
+  padding:26px 12px 18px;
+  text-align:center;
+}
+.preview .eyebrow{
+  color:var(--olive);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+.preview .country{
+  margin:16px 0 10px;
+  color:var(--olive);
+  font-size:76px;
+  line-height:1;
+}
+.preview .divider{
+  margin:6px 0 16px;
+  color:var(--gold);
+  letter-spacing:.2em;
+}
+.preview .couple{
+  font-size:38px;
+  line-height:1.04;
+}
+.preview .meta{
+  margin-top:24px;
+  color:var(--olive);
+  font-size:11px;
+  letter-spacing:.16em;
+  line-height:1.8;
+  text-transform:uppercase;
+}
+.preview .script{
+  margin-top:28px;
+  color:var(--terra);
+  font-size:31px;
+  line-height:1.25;
+}
+.system-note{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+.recommendation{
+  margin-top:20px;
+  padding:22px 24px;
+  background:rgba(127,162,199,.09);
+  border-radius:8px;
+  color:var(--ink);
+  font-size:13px;
+  line-height:1.65;
+}
+@media (max-width:860px){
+  .grid,.script-grid,.systems{grid-template-columns:1fr}
+  .section-header{align-items:flex-start;flex-direction:column}
+  .section-header p{text-align:left}
+  .hero-sample{font-size:68px}
+  .romantic-sample{font-size:40px}
+  .page-title-sample{font-size:43px}
+  .script-sample{font-size:37px}
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+  <header class="page-header">
+    <h1>Kelsey &amp; Andrew Wedding Typography Bake-Off</h1>
+    <div class="subtitle">Updated romantic calligraphy edition</div>
+    <div class="intro">
+      This file loads the actual Google Fonts in your browser and uses each font with the exact kind of text it would handle on the wedding site. The handwritten section has been expanded toward restrained, romantic calligraphy rather than casual handwriting.
+    </div>
+  </header>
+
+  <section>
+    <div class="section-header">
+      <h2>1. Hero Display</h2>
+      <p>Used for the single dramatic word “Italy” and the large italic titles on the interior pages.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="font-name">Fraunces Italic</div><div class="hero-sample" style="font-family:'Fraunces',serif;font-style:italic">Italy</div></div>
+      <div class="card"><div class="font-name">Playfair Display Italic</div><div class="hero-sample" style="font-family:'Playfair Display',serif;font-style:italic">Italy</div></div>
+      <div class="card"><div class="font-name">Newsreader Italic</div><div class="hero-sample" style="font-family:'Newsreader',serif;font-style:italic">Italy</div></div>
+      <div class="card"><div class="font-name">Bodoni Moda Italic</div><div class="hero-sample" style="font-family:'Bodoni Moda',serif;font-style:italic">Italy</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>2. Romantic Homepage Display</h2>
+      <p>Used for “Kelsey &amp; Andrew’s” and “Wedding Week.” This remains a display serif—not the calligraphy accent.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="font-name">Cormorant Garamond Italic</div><div class="romantic-sample" style="font-family:'Cormorant Garamond',serif;font-style:italic">Kelsey &amp; Andrew’s<br>Wedding Week</div></div>
+      <div class="card"><div class="font-name">Newsreader Italic</div><div class="romantic-sample" style="font-family:'Newsreader',serif;font-style:italic">Kelsey &amp; Andrew’s<br>Wedding Week</div></div>
+      <div class="card"><div class="font-name">EB Garamond Italic</div><div class="romantic-sample" style="font-family:'EB Garamond',serif;font-style:italic">Kelsey &amp; Andrew’s<br>Wedding Week</div></div>
+      <div class="card"><div class="font-name">Lora Italic</div><div class="romantic-sample" style="font-family:'Lora',serif;font-style:italic">Kelsey &amp; Andrew’s<br>Wedding Week</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>3. Interior Page Titles</h2>
+      <p>Used for pages such as “Book Your Travel,” “Browse Where You’ll Stay,” and “Activities &amp; Experiences.”</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="font-name">Fraunces Italic</div><div class="page-title-sample" style="font-family:'Fraunces',serif;font-style:italic">Book Your Travel</div></div>
+      <div class="card"><div class="font-name">Playfair Display Italic</div><div class="page-title-sample" style="font-family:'Playfair Display',serif;font-style:italic">Browse Where You’ll Stay</div></div>
+      <div class="card"><div class="font-name">Newsreader Italic</div><div class="page-title-sample" style="font-family:'Newsreader',serif;font-style:italic">Activities &amp; Experiences</div></div>
+      <div class="card"><div class="font-name">Cormorant Garamond Italic</div><div class="page-title-sample" style="font-family:'Cormorant Garamond',serif;font-style:italic">Frequently Asked Questions</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>4. Navigation, Buttons &amp; UI</h2>
+      <p>Used for navigation, RSVP buttons, card labels, form controls, and website interface text.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="font-name">Instrument Sans</div><div class="ui-sample" style="font-family:'Instrument Sans',sans-serif"><span>Our Weekend</span><span>Travel</span><span>Stay</span><span>FAQ</span></div><div class="cta" style="font-family:'Instrument Sans',sans-serif">RSVP / Login</div></div>
+      <div class="card"><div class="font-name">Albert Sans</div><div class="ui-sample" style="font-family:'Albert Sans',sans-serif"><span>Our Weekend</span><span>Travel</span><span>Stay</span><span>FAQ</span></div><div class="cta" style="font-family:'Albert Sans',sans-serif">RSVP / Login</div></div>
+      <div class="card"><div class="font-name">Figtree</div><div class="ui-sample" style="font-family:'Figtree',sans-serif"><span>Our Weekend</span><span>Travel</span><span>Stay</span><span>FAQ</span></div><div class="cta" style="font-family:'Figtree',sans-serif">RSVP / Login</div></div>
+      <div class="card"><div class="font-name">Source Sans 3</div><div class="ui-sample" style="font-family:'Source Sans 3',sans-serif"><span>Our Weekend</span><span>Travel</span><span>Stay</span><span>FAQ</span></div><div class="cta" style="font-family:'Source Sans 3',sans-serif">RSVP / Login</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>5. Body Copy</h2>
+      <p>Used for travel instructions, villa details, activity descriptions, FAQ answers, and helper text.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="font-name">Instrument Sans</div><div class="body-sample" style="font-family:'Instrument Sans',sans-serif">Flights, transportation options and tips to help you plan your journey to Italy. Florence is the closest and most convenient airport for reaching the villa.</div></div>
+      <div class="card"><div class="font-name">Albert Sans</div><div class="body-sample" style="font-family:'Albert Sans',sans-serif">Flights, transportation options and tips to help you plan your journey to Italy. Florence is the closest and most convenient airport for reaching the villa.</div></div>
+      <div class="card"><div class="font-name">Figtree</div><div class="body-sample" style="font-family:'Figtree',sans-serif">Flights, transportation options and tips to help you plan your journey to Italy. Florence is the closest and most convenient airport for reaching the villa.</div></div>
+      <div class="card"><div class="font-name">Work Sans</div><div class="body-sample" style="font-family:'Work Sans',sans-serif">Flights, transportation options and tips to help you plan your journey to Italy. Florence is the closest and most convenient airport for reaching the villa.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>6. Labels, Dates &amp; Small Caps</h2>
+      <p>Used for dates, locations, section labels, schedule metadata, and compact all-caps headings.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="font-name">Instrument Sans</div><div class="labels-sample" style="font-family:'Instrument Sans',sans-serif">June 16 – 21, 2028<br>Tuscany, Italy<br>Planned Activities<br>Recommended Booking Window</div></div>
+      <div class="card"><div class="font-name">Albert Sans</div><div class="labels-sample" style="font-family:'Albert Sans',sans-serif">June 16 – 21, 2028<br>Tuscany, Italy<br>Planned Activities<br>Recommended Booking Window</div></div>
+      <div class="card"><div class="font-name">Manrope</div><div class="labels-sample" style="font-family:'Manrope',sans-serif">June 16 – 21, 2028<br>Tuscany, Italy<br>Planned Activities<br>Recommended Booking Window</div></div>
+      <div class="card"><div class="font-name">Plus Jakarta Sans</div><div class="labels-sample" style="font-family:'Plus Jakarta Sans',sans-serif">June 16 – 21, 2028<br>Tuscany, Italy<br>Planned Activities<br>Recommended Booking Window</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>7. Romantic Calligraphy Accent</h2>
+      <p>Used only for the small homepage phrase and similar personal flourishes. Each font below is shown with the exact sentence from the approved mockup.</p>
+    </div>
+
+    <div class="script-grid">
+      <div class="card script-card">
+        <div class="font-name">Pinyon Script</div>
+        <div class="script-sample" style="font-family:'Pinyon Script',cursive">we can’t wait to celebrate with you</div>
+        <div class="script-meta">Formal, romantic, high-contrast calligraphy. One of the strongest matches for an old-world invitation feel.</div>
+      </div>
+
+      <div class="card script-card">
+        <div class="font-name">Rouge Script</div>
+        <div class="script-sample" style="font-family:'Rouge Script',cursive">we can’t wait to celebrate with you</div>
+        <div class="script-meta">Lighter and more fluid, with a slightly hand-drawn copperplate quality.</div>
+      </div>
+
+      <div class="card script-card">
+        <div class="font-name">Ephesis</div>
+        <div class="script-sample" style="font-family:'Ephesis',cursive">we can’t wait to celebrate with you</div>
+        <div class="script-meta">Natural and personal, with less formality and more of an authentic handwritten signature feeling.</div>
+      </div>
+
+      <div class="card script-card">
+        <div class="font-name">Parisienne</div>
+        <div class="script-sample" style="font-family:'Parisienne',cursive">we can’t wait to celebrate with you</div>
+        <div class="script-meta">Graceful and readable, with subtle bounce. Romantic without becoming overly ornate.</div>
+      </div>
+
+      <div class="card script-card">
+        <div class="font-name">Petit Formal Script</div>
+        <div class="script-sample" style="font-family:'Petit Formal Script',cursive">we can’t wait to celebrate with you</div>
+        <div class="script-meta">Restrained and formal. Refined, but more structured and less organically handwritten.</div>
+      </div>
+
+      <div class="card script-card">
+        <div class="font-name">Monsieur La Doulaise</div>
+        <div class="script-sample" style="font-family:'Monsieur La Doulaise',cursive">we can’t wait to celebrate with you</div>
+        <div class="script-meta">Very delicate, historic penmanship. Best if you want the accent to feel antique and decorative.</div>
+      </div>
+
+      <div class="card script-card">
+        <div class="font-name">La Belle Aurore</div>
+        <div class="script-sample" style="font-family:'La Belle Aurore',cursive">we can’t wait to celebrate with you</div>
+        <div class="script-meta">More intimate and handwritten than formal calligraphy; romantic with a cinematic quality.</div>
+      </div>
+
+      <div class="card script-card">
+        <div class="font-name">Italianno</div>
+        <div class="script-sample" style="font-family:'Italianno',cursive">we can’t wait to celebrate with you</div>
+        <div class="script-meta">Italianate and flowing, but more stylized. Included as a useful contrast rather than a leading recommendation.</div>
+      </div>
+    </div>
+
+    <div class="context-strip">
+      <div class="context-label">Exact homepage placement preview — compare the same sentence at intended scale</div>
+      <div class="context-phrase" style="font-family:'Pinyon Script',cursive">we can’t wait to celebrate with you</div>
+      <div class="context-heart">♥</div>
+    </div>
+
+    <div class="recommendation">
+      <strong>Best three to examine first:</strong> Pinyon Script for polished old-world calligraphy, Rouge Script for a lighter romantic line, and Ephesis for the most natural handwritten effect. Parisienne remains a strong middle-ground option.
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>8. Complete Homepage Systems</h2>
+      <p>The full hierarchy is unchanged except for the updated calligraphy accent, allowing you to judge how each script behaves within the complete design.</p>
+    </div>
+
+    <div class="systems">
+      <div class="system-card">
+        <div class="system-label">System A — Pinyon Script Accent</div>
+        <div class="preview" style="font-family:'Instrument Sans',sans-serif">
+          <div class="eyebrow">Join us for a week in</div>
+          <div class="country" style="font-family:'Fraunces',serif;font-style:italic">Italy</div>
+          <div class="divider">──────── ♥ ────────</div>
+          <div class="couple" style="font-family:'Cormorant Garamond',serif;font-style:italic">Kelsey &amp; Andrew’s<br>Wedding Week</div>
+          <div class="meta">June 16 – 21, 2028<br>Tuscany, Italy</div>
+          <div class="cta">RSVP / Login to Get Started</div>
+          <div class="script" style="font-family:'Pinyon Script',cursive">we can’t wait to celebrate with you</div>
+        </div>
+        <div class="system-note">Fraunces + Cormorant Garamond + Instrument Sans + Pinyon Script</div>
+      </div>
+
+      <div class="system-card">
+        <div class="system-label">System B — Rouge Script Accent</div>
+        <div class="preview" style="font-family:'Instrument Sans',sans-serif">
+          <div class="eyebrow">Join us for a week in</div>
+          <div class="country" style="font-family:'Fraunces',serif;font-style:italic">Italy</div>
+          <div class="divider">──────── ♥ ────────</div>
+          <div class="couple" style="font-family:'Cormorant Garamond',serif;font-style:italic">Kelsey &amp; Andrew’s<br>Wedding Week</div>
+          <div class="meta">June 16 – 21, 2028<br>Tuscany, Italy</div>
+          <div class="cta">RSVP / Login to Get Started</div>
+          <div class="script" style="font-family:'Rouge Script',cursive">we can’t wait to celebrate with you</div>
+        </div>
+        <div class="system-note">Fraunces + Cormorant Garamond + Instrument Sans + Rouge Script</div>
+      </div>
+
+      <div class="system-card">
+        <div class="system-label">System C — Ephesis Accent</div>
+        <div class="preview" style="font-family:'Instrument Sans',sans-serif">
+          <div class="eyebrow">Join us for a week in</div>
+          <div class="country" style="font-family:'Fraunces',serif;font-style:italic">Italy</div>
+          <div class="divider">──────── ♥ ────────</div>
+          <div class="couple" style="font-family:'Cormorant Garamond',serif;font-style:italic">Kelsey &amp; Andrew’s<br>Wedding Week</div>
+          <div class="meta">June 16 – 21, 2028<br>Tuscany, Italy</div>
+          <div class="cta">RSVP / Login to Get Started</div>
+          <div class="script" style="font-family:'Ephesis',cursive">we can’t wait to celebrate with you</div>
+        </div>
+        <div class="system-note">Fraunces + Cormorant Garamond + Instrument Sans + Ephesis</div>
+      </div>
+
+      <div class="system-card">
+        <div class="system-label">System D — Parisienne Accent</div>
+        <div class="preview" style="font-family:'Instrument Sans',sans-serif">
+          <div class="eyebrow">Join us for a week in</div>
+          <div class="country" style="font-family:'Fraunces',serif;font-style:italic">Italy</div>
+          <div class="divider">──────── ♥ ────────</div>
+          <div class="couple" style="font-family:'Cormorant Garamond',serif;font-style:italic">Kelsey &amp; Andrew’s<br>Wedding Week</div>
+          <div class="meta">June 16 – 21, 2028<br>Tuscany, Italy</div>
+          <div class="cta">RSVP / Login to Get Started</div>
+          <div class="script" style="font-family:'Parisienne',cursive">we can’t wait to celebrate with you</div>
+        </div>
+        <div class="system-note">Fraunces + Cormorant Garamond + Instrument Sans + Parisienne</div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
