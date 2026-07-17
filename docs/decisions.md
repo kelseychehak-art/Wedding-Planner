@@ -70,6 +70,19 @@ build continues — until the user gives an explicit greenlight.
 portal shell → the 5 pages), and reconcile the brief's parallel tokens/components/Canela font into the
 existing system per `docs/guest-portal/overview.md` (no silent fork). Likely **outsource candidate**.
 
+### D10 — Typography system chosen ("Option A"), site-wide
+**Decision:** From the user's typography bakeoff
+(`public/assets/Wedding_Typography_Bakeoff_Updated_Calligraphy.html`), **System A / "Option A"** is the
+type system for the **whole guest-facing site**:
+- **Fraunces** — display titles ("Italy", page titles) → `--font-heading` (replaces Playfair Display)
+- **Cormorant Garamond** — couple/event names, card titles, editorial → `--font-display`/`--font-serif` (unchanged)
+- **Instrument Sans** — UI / body (eyebrow, nav, labels, buttons, meta) → `--font-sans` (replaces DM Sans)
+- **Pinyon Script** — script accent, footer line only → `--font-script` (replaces Allura)
+
+**All four are free Google Fonts** → this **closes the two pending font gaps** (Canela Sans UI font and
+the handwritten/script font — see O5). Build = swap the `next/font/google` imports + retarget tokens in
+`app/layout.tsx`; no licensing, no `next/font/local`. Applies to guest-facing pages; `/admin` unchanged.
+
 ---
 
 ## Open items (resolve before/at build time)
@@ -98,10 +111,10 @@ active underline). Leaning toward **one shared `SiteHeader`** with optional home
 (or keep home's longer label as the deliberate landing-page variant). Both → `/rsvp` for now.
 
 ### O5 — Pending assets & fonts (swap points)
-Real hero photo (`tuscan-homepage-landscape.jpg`), the hand-inked illustration SVGs
-(`small-lemon-sprig`, `heart-solid-gold`, `heart-outline-red`, `villa-postage-stamp`), the licensed
-**Canela Sans** UI font, and the handwritten/script footer font are all pending. Build proceeds with
-documented placeholders (see `homepage-spec.md` §12); true 1:1 is reached when these land.
+Real hero photo (`tuscan-homepage-landscape.jpg`) + the villa-scene stamp are still pending. **Fonts
+are now resolved** (D10: Fraunces / Cormorant / Instrument Sans / Pinyon Script — all Google Fonts).
+Build proceeds with documented placeholders (see `homepage-spec.md` §12); true 1:1 is reached when
+the remaining art/photos land.
 **Full asset standard + inventory** (SVG + SVGO + naming, illustration/photo/font checklist) lives in
 [`assets.md`](./assets.md) — single source of truth for asset work.
 

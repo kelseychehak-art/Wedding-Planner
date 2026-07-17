@@ -36,7 +36,7 @@ pages is blocked on:
    shared primitives — built by **adapting** existing components (see mapping below).
 3. **Supabase schema** — the 16 tables + relationships (`master-brief.md` §36) and a
    `data/wedding/*` data-access layer. Admin editing for FAQ/schedule/activities.
-4. **Assets & fonts** — Canela / Canela Sans license; the illustration/icon/border SVGs and photos in
+4. **Assets & fonts** — fonts resolved (Option A, D10 — no Canela needed); the illustration/icon/border SVGs and photos in
    the manifest (`master-brief.md` §40).
 
 ## Component mapping (adapt — do NOT duplicate)
@@ -70,8 +70,8 @@ decision at greenlight (pick one, update `tokens.css` or the portal, don't run t
 | `--radius-page 9px` / `--radius-card 6px` | `--radius-card 10px` / `--radius-button 2px` | ⚠️ differs |
 | `--page-width 1160px` | `--page-max 1440` / `--content-max 1200` | ⚠️ narrower |
 | `--header-height 64px` | (SiteHeader; homepage spec uses 78px) | ⚠️ reconcile |
-| `--font-display` Playfair · `--font-editorial` Cormorant | `--font-heading` / `--font-serif` | ✅ same families |
-| `--font-ui` Canela Sans · `--font-body` Canela | `--font-sans` (DM Sans) | ⏳ Canela pending (swap point) |
+| `--font-display` Playfair · `--font-editorial` Cormorant | `--font-heading` (**Fraunces**, D10) / `--font-serif` (Cormorant) | ✅ resolved |
+| `--font-ui` Canela Sans · `--font-body` Canela | `--font-sans` (**Instrument Sans**, D10) | ✅ resolved — no Canela needed |
 
 ## Per-page detail
 Layouts, data-model interfaces, and the required loading/empty/private **states** live in

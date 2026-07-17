@@ -41,12 +41,14 @@ in `data/siteContent.ts` (`couple`, `wedding`, `navigation`).
 - **Globals:** `app/globals.css` — base resets, `.page-shell` (centered gutter container),
   the button family (`.btn-primary`, `.btn-outline`, `.btn-blue`, `.btn-outline-terracotta`), a
   global `.eyebrow`, and a `prefers-reduced-motion` block.
-- **Fonts:** wired in `app/layout.tsx` via `next/font/google`:
-  Cormorant Garamond → `--font-cormorant` (`--font-display`/`--font-serif`),
-  Playfair Display → `--font-playfair` (`--font-heading`),
-  DM Sans → `--font-dm-sans` (`--font-sans`),
-  Allura → `--font-allura` (`--font-script`). Components reference the semantic
-  `--font-display/heading/serif/script/sans` tokens, never the raw next/font vars.
+- **Fonts — "Option A" type system** (all free Google Fonts via `next/font/google`; see
+  `docs/decisions.md` D10). Applied site-wide (guest-facing; `/admin` unchanged):
+  **Fraunces** → `--font-heading` (display titles: "Italy", page titles),
+  **Cormorant Garamond** → `--font-cormorant` (`--font-display`/`--font-serif`; couple/event, card titles),
+  **Instrument Sans** → `--font-sans` (UI/body), **Pinyon Script** → `--font-script` (footer accent).
+  Components reference the semantic `--font-display/heading/serif/script/sans` tokens, never raw vars.
+  *(Currently the repo wires Playfair/DM Sans/Allura — the build swaps these to Fraunces/Instrument
+  Sans/Pinyon Script.)*
 
 See [`docs/design-system.md`](./docs/design-system.md) for the full inventory and component APIs.
 
@@ -69,8 +71,8 @@ See [`docs/design-system.md`](./docs/design-system.md) for the full inventory an
 
 ## Assets & fonts (pending — swap points)
 
-Illustrations, the hero photograph, and the licensed **Canela Sans** UI font are **not yet
-available**. Until they land:
+Fonts are resolved (Option A, all Google Fonts — see above / D10). Illustrations and the hero
+photograph are still pending. Until they land:
 
 - Use documented placeholders (existing `public/assets/` images; `Illustration`/`PostageStamp`
   components) and mark every swap point in the relevant spec.

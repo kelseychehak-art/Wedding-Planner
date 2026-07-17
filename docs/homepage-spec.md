@@ -4,8 +4,9 @@ Build spec for `/` (`app/page.tsx` + `components/Hero.tsx`), adapted from the su
 brief onto the **existing** design system (see [`design-system.md`](./design-system.md)). The target
 is a full-screen editorial "invitation cover," not a dashboard and not a stationery card.
 
-> **Status:** spec only. No code written yet. Illustrations, the hero photo, and Canela Sans are
-> pending → every dependency below is marked **[SWAP]**.
+> **Status:** spec only. No code written yet. **Fonts resolved** (Option A — Fraunces / Cormorant /
+> Instrument Sans / Pinyon Script, all Google Fonts; see `decisions.md` D10). Illustrations and the
+> hero photo are still pending → those dependencies are marked **[SWAP]**.
 
 ---
 
@@ -107,18 +108,18 @@ Wider/airier than the content-page header. Left-aligned brand, spaced uppercase 
 Column `width: min(650px, 100% - 48px)`, centered, `padding-top: clamp(68px, 8.5vh, 105px)`,
 `text-align: center`, above the veil (`z-index` ~4). Order + treatment:
 
-1. **Eyebrow** — `--font-sans` (→ Canela when available **[SWAP]**), 14px, 600, `letter-spacing
-   .22em`, uppercase, `--color-olive-dark`.
+1. **Eyebrow** — `--font-sans` (**Instrument Sans**), 14px, 600, `letter-spacing .22em`, uppercase,
+   `--color-olive-dark`.
 2. **Center lemon sprig** — `~115px` wide, centered. **[SWAP]** `small-lemon-sprig.svg`; interim
    `Illustration name="lemonBranch"`.
-3. **"Italy" (h1)** — `--font-heading` (Playfair) italic, `clamp(78px, 7vw, 112px)`, `letter-spacing
-   -.045em`, `line-height .96`, `--color-olive-dark`. Real semantic `<h1>`.
+3. **"Italy" (h1)** — `--font-heading` (**Fraunces**) italic, `clamp(78px, 7vw, 112px)`,
+   `letter-spacing -.045em`, `line-height .96`, `--color-olive-dark`. Real semantic `<h1>`.
 4. **Gold divider** — `grid 1fr / 23px / 1fr`, ~365px max-width, two `1px` citrus-gold rules flanking
    a center heart. **[SWAP]** `heart-solid-gold.svg`; interim `Illustration name="heart" tone="gold"`.
-5. **Couple** — "Kelsey & Andrew's", Playfair italic, `clamp(42px, 4vw, 58px)`, `--color-ink`.
-6. **Event** — "Wedding Week", Playfair italic, `clamp(49px, 4.5vw, 65px)`, `--color-ink`.
-7. **Meta** — two lines, `--font-sans`, 14px, 700, `letter-spacing .19em`, uppercase,
-   `--color-olive-dark`: "June 16 – 21, 2027" / "Tuscany, Italy".
+5. **Couple** — "Kelsey & Andrew's", **Cormorant** italic (`--font-serif`), `clamp(42px, 4vw, 58px)`, `--color-ink`.
+6. **Event** — "Wedding Week", **Cormorant** italic (`--font-serif`), `clamp(49px, 4.5vw, 65px)`, `--color-ink`.
+7. **Meta** — two lines, `--font-sans` (**Instrument Sans**), 14px, 700, `letter-spacing .19em`,
+   uppercase, `--color-olive-dark`: "June 16 – 21, 2027" / "Tuscany, Italy".
 8. **Primary CTA** — `.btn-primary`-based, `width: min(370px, 100%)`, `min-height 54px`,
    `border-radius 3px` (**not** pill, no icon, no gradient), soft shadow; label "RSVP / Login to Get
    Started" → `/rsvp`. Focus ring: citrus-gold outline.
@@ -137,9 +138,9 @@ rotate={6}`. Mobile: shrink to ~88px / move in; hide entirely below 420px.
 ## 8. Bottom handwritten message
 
 Absolutely positioned near the bottom fade, centered, `pointer-events: none`: "We can't wait to
-celebrate with you" in an italic serif (Cormorant, ~21px, `--color-terracotta`) + a small red
-outline heart below. **[SWAP]** the approved **handwritten/script font** (do not use a casual brush
-font) and `heart-outline-red.svg` (interim `Illustration name="heart" tone="terracotta"`). On mobile
+celebrate with you" in **Pinyon Script** (`--font-script`, ~21px+, `--color-terracotta`) + a small red
+outline heart below. `heart-outline-red.svg` (interim `Illustration name="heart" tone="terracotta"`).
+On mobile
 this becomes a static block below the content rather than absolutely positioned.
 
 ---
@@ -172,8 +173,8 @@ After building, compare against the mockup at **1536×1024** (also spot-check 14
   high-contrast tree/building; valley leads toward center; handwritten line near the bottom fade.
 - **No horizontal scrolling** at any width.
 
-> This checkpoint pass only reaches true 1:1 once the real hero image, illustration SVGs, and Canela
-> Sans / script fonts are in place. With placeholders it validates layout, spacing, and hierarchy.
+> This checkpoint pass only reaches true 1:1 once the real hero image and illustration SVGs are in
+> place (fonts are set — Option A). With placeholders it validates layout, spacing, and hierarchy.
 
 ---
 
@@ -186,5 +187,6 @@ After building, compare against the mockup at **1536×1024** (also spot-check 14
 | `Illustration heart tone="gold"` | `heart-solid-gold.svg` |
 | `Illustration heart tone="terracotta"` | `heart-outline-red.svg` |
 | `PostageStamp variant="villa"` | `villa-postage-stamp.svg` |
-| `--font-sans` (DM Sans) for UI | Canela Sans (via `next/font/local`) |
-| Cormorant italic for footer line | approved handwritten/script font |
+
+**Fonts:** resolved (Option A) — no swap pending. Build wires Fraunces (`--font-heading`), Cormorant
+(`--font-serif`), Instrument Sans (`--font-sans`), Pinyon Script (`--font-script`) via `next/font/google`.

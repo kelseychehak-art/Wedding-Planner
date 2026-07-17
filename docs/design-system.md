@@ -60,18 +60,30 @@ The homepage brief's `--home-*` colors map onto existing tokens almost 1:1 (e.g.
 Loaded in `app/layout.tsx` via `next/font/google`, each exposed as a CSS variable and consumed by a
 semantic token:
 
-| Font | next/font var | Semantic token | Role |
-|---|---|---|---|
-| Cormorant Garamond (400/500/600, italic) | `--font-cormorant` | `--font-display`, `--font-serif` | hero display, card titles, script accents |
-| Playfair Display (400/500/600, italic) | `--font-playfair` | `--font-heading` | H1/H2 |
-| DM Sans (400/500/600/700) | `--font-dm-sans` | `--font-sans` | body / UI |
-| Allura (400) | `--font-allura` | `--font-script` | tiny script accents |
+**CHOSEN TYPE SYSTEM — "Option A" (all free Google Fonts).** Per the user's typography bakeoff
+(`public/assets/Wedding_Typography_Bakeoff_Updated_Calligraphy.html`, System A), applied site-wide.
+See `decisions.md` D10.
 
-### The Canela Sans gap (swap point)
-The homepage brief calls for **Canela Sans** as the primary UI font. It is **licensed and not in the
-repo.** Interim: use the existing `--font-sans` (DM Sans) for UI text. When Canela Sans files are
-supplied, add them via `next/font/local`, point `--font-sans` (or a new dedicated token) at it, and
-re-check nav/meta letter-spacing against the mockup.
+| Font | next/font var | Semantic token | Role | Replaces |
+|---|---|---|---|---|
+| **Fraunces** (opsz, italic) | `--font-fraunces` | `--font-heading` | display titles ("Italy", page titles) | Playfair Display |
+| **Cormorant Garamond** (400/500/600, italic) | `--font-cormorant` | `--font-display`, `--font-serif` | couple/event names, card titles, editorial | *(unchanged)* |
+| **Instrument Sans** (400/500/600) | `--font-instrument` | `--font-sans` | UI / body (eyebrow, nav, labels, buttons, meta) | DM Sans **and** Canela Sans |
+| **Pinyon Script** (400) | `--font-pinyon` | `--font-script` | script accent (footer line only) | Allura |
+
+Components keep referencing the semantic tokens (`--font-heading/display/serif/sans/script`); only the
+underlying families change. Note the role split: the big **"Italy"** and page titles are **Fraunces**;
+the couple/event lines ("Kelsey & Andrew's Wedding Week") stay **Cormorant**.
+
+### Font gaps — RESOLVED
+The previously-pending **Canela Sans** (UI) and **handwritten/script** fonts are no longer needed:
+Option A uses **Instrument Sans** (UI) and **Pinyon Script** (accent), both free Google Fonts. No
+licensing, no `next/font/local` — all four load via `next/font/google`.
+
+**Build step (`app/layout.tsx`):** swap the four `next/font/google` imports to Fraunces, Cormorant
+Garamond, Instrument Sans, Pinyon Script; retarget the tokens (`--font-heading`→Fraunces,
+`--font-sans`→Instrument Sans, `--font-script`→Pinyon Script; Cormorant unchanged). Applies to the
+guest-facing site; `/admin` left as-is.
 
 **Rule:** do not silently swap in Inter / Poppins / Montserrat for the intended UI font.
 

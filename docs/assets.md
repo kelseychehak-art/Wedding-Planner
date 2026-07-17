@@ -77,7 +77,8 @@ true vectors, transparent backgrounds** (white appears only as fills inside the 
    were never pushed. Highest priority (every page header). Interim: `PostageStamp variant="villa"`.
 2. **Photography** — hero landscape (`tuscan-homepage-landscape.jpg`), villa exterior, room
    thumbnails ×4, per-day schedule photos ×6, activity photos ×6.
-3. **Fonts** — Canela / Canela Sans (UI) + handwritten/script (footer line).
+3. ~~Fonts~~ — ✅ **RESOLVED** (Option A: Fraunces / Cormorant / Instrument Sans / Pinyon Script, all
+   Google Fonts — see Fonts section below).
 
 All received art still needs the standard build pass: **split sheets → SVGO → clean lowercase-hyphen
 names → transparent** (done at build; nothing needed from the user).
@@ -110,15 +111,18 @@ placeholder photos as permanent venue content.
 
 ## Fonts
 
-| Font | Role | Status |
-|---|---|---|
-| **Canela Sans** | primary UI font (`--font-sans` swap) | ⏳ licensed, not supplied — interim DM Sans |
-| **Canela** | editorial body (portal only) | ⏳ pending (future-state) |
-| Handwritten / script | homepage footer line ("We can't wait…") | ⏳ pending — interim Cormorant italic |
-| Playfair Display · Cormorant Garamond · DM Sans · Allura | already wired (`app/layout.tsx`) | ✅ in place |
+**RESOLVED — "Option A" type system** (D10). All four are **free Google Fonts** via
+`next/font/google` — no licensing, nothing pending.
 
-Never substitute a geometric sans (Inter/Poppins/Montserrat) for the UI font, or a casual brush font
-for the script line, without sign-off.
+| Font | Role | Semantic token |
+|---|---|---|
+| **Fraunces** (italic) | display titles ("Italy", page titles) | `--font-heading` |
+| **Cormorant Garamond** | couple/event, card titles, editorial | `--font-display` / `--font-serif` |
+| **Instrument Sans** | UI / body (eyebrow, nav, labels, buttons, meta) | `--font-sans` |
+| **Pinyon Script** | script accent (footer line) | `--font-script` |
+
+Build swaps `app/layout.tsx` from the current Playfair/DM Sans/Allura to Fraunces/Instrument Sans/
+Pinyon Script (Cormorant stays). Guest-facing only; `/admin` unchanged.
 
 ---
 

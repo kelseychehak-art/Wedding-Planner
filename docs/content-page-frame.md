@@ -54,7 +54,7 @@ Order, centered:
    `--color-olive-dark`, with a left arrow. Real `<Link href="/">`.
 2. **Olive-&-lemon sprig** illustration, centered. **[SWAP]** — interim `Illustration
    name="lemonBranch"` / `oliveBranch`.
-3. **Title** — big **Playfair italic**, `--color-olive-dark` (green), e.g. "Frequently Asked
+3. **Title** — big **Fraunces italic** (`--font-heading`), `--color-olive-dark` (green), e.g. "Frequently Asked
    Questions", "Weekend Schedule", "Book Your Travel", "Browse Where You'll Stay",
    "Activities & Experiences". A small **red heart** sits to its right. Real `<h1>`.
 4. **Gold divider** with a center heart (same as homepage: two citrus-gold rules flanking a small
