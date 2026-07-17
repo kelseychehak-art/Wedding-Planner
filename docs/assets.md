@@ -14,7 +14,9 @@ SVG set. Copy/dates policy is unaffected: **June 16 – 21, 2027 / Tuscany, Ital
    minified version, never the raw trace. (I can do this pass when wiring them in.)
 3. **Clean filenames.** Lowercase, hyphenated, descriptive — **no spaces or commas** (they break in
    URLs). E.g. `lemon-branch.svg`, `villa-stamp.svg`, `heart-gold.svg`.
-4. **Transparent background.** No white box behind the art (corners must be fully transparent).
+4. **Transparent background.** No white box behind the art (corners must be fully transparent). Any
+   **chroma-green / placeholder background must be knocked out** — assets render on cream, so a green
+   (or white) field would look wrong.
 5. **Reference as `<img>` / `next/image`, not inlined into JSX.** A traced SVG is ~2 000 path nodes;
    inlining bloats the DOM. As an external `<img src>` the browser decodes it once.
 6. **Colored SVGs have baked fills.** Unlike the line-art `Illustration` component (which recolors via
@@ -40,13 +42,31 @@ until the real one lands). Target dir: `public/assets/illustrations/` (or `publi
 | `olive-lemon-sprig.svg` (centered hero sprig) | 5 content-page heroes | `Illustration oliveBranch`/`lemonBranch` | ⏳ pending |
 | `heart-gold.svg` (gold divider heart) | homepage + every page divider/footer | `Illustration heart tone="gold"` | ⏳ pending |
 | `heart-outline-red.svg` (title + footer heart) | homepage footer, page title rows, signatures | `Illustration heart tone="terracotta"` | ⏳ pending |
-| `villa-stamp.svg` (tilted postage stamp) | homepage + every page header, upper-right | `PostageStamp variant="villa"` | ⏳ pending |
+| `villa-stamp.svg` (tilted postage stamp) | homepage + every page header, upper-right | `PostageStamp variant="villa"` | 🟡 candidate art received (preview) — see Received previews |
+| `italy-postmark.svg` (round "ITALY" cancellation mark, terracotta) | homepage upper-right, overlapping the villa stamp | none (decorative) | 🟡 received (preview) |
 | `wine-glass.svg` (footer band, left) | content-page footer bands | `Illustration wineGlass` | ⏳ pending |
 | `bicycle.svg` (decorative) | our-weekend, travel, activities, faq | `Illustration bicycle` | ⏳ pending |
 | Line icons — `airplane, car/compass, key, suitcase, calendar, clock, pin, wine, bicycle, cypress, arch, music, villa` | travel/stay/activities/schedule/faq cards & badges | `Illustration` names (18 available) | ⏳ some map, some to add |
 
 > The existing line-art `Illustration` set (18 names, 7 tones — see `design-system.md` §4) already
 > covers many small icons. Only deliver custom SVGs where the mockup's art differs from those.
+
+### Received previews (not yet in the repo — pending upload)
+
+Four stamp illustrations were shared as previews (chat only; not committed). Format / transparency /
+resolution are **unverified** until the actual files are pushed. Finals must follow the delivery
+standard: **SVG (or transparent PNG @2–3×), SVGO'd, clean names, transparent background.**
+
+| Preview | Maps to | Note |
+|---|---|---|
+| Round **"ITALY" postmark**, terracotta line art | `italy-postmark.svg` | Matches the homepage mockup's round cancellation mark ✓ |
+| Vertical villa stamp, **cream**, on bright green | `villa-stamp.svg` | ⚠️ **green = placeholder → knock out to transparent** |
+| Square villa+valley stamp, **green-inked**, on white | `villa-stamp.svg` | **Best match to the mockups' stamp** ✓ |
+| Square villa stamp, **dark line art**, on bright green | `villa-stamp.svg` | ⚠️ **green = placeholder → knock out to transparent** |
+
+**Decision (this round):** the bright-green fields are transparency placeholders, **not** intentional
+— they must be removed so the stamp renders on the cream page. Green-inked treatment is the preferred
+villa-stamp color. When the real files are pushed I'll verify, SVGO, rename, and finalize these rows.
 
 ## Illustration inventory (portal — FUTURE-STATE, not greenlit)
 
