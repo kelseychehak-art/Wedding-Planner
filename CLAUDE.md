@@ -87,6 +87,10 @@ available**. Until they land:
   [`travel.md`](./docs/pages/travel.md), [`stay.md`](./docs/pages/stay.md),
   [`activities.md`](./docs/pages/activities.md), [`faq.md`](./docs/pages/faq.md).
   (Things to Do + RSVP specs pending their mockups.)
+- **Guest portal (FUTURE-STATE — not the current plan)** —
+  [`docs/guest-portal/overview.md`](./docs/guest-portal/overview.md) +
+  [`master-brief.md`](./docs/guest-portal/master-brief.md): the token-gated personalized portal
+  (`/guest/[inviteToken]/…`) + Supabase backend. **Not greenlit**; public-first plan is in force.
 - [`docs/decisions.md`](./docs/decisions.md) — locked decisions + open items.
 
 Navigation is **6 items**: Our Weekend · Travel · Stay · **Activities** · Things to Do · FAQ

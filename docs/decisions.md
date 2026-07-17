@@ -59,6 +59,17 @@ Info" submission; **FAQ** "which room am I in?" answer. Rationale: no guest logi
 **Decision:** Specs written for the 5 provided mockups. **Things to Do** and **RSVP** have no new
 mockup yet — left on the existing template and flagged pending (see O6).
 
+### D9 — Personalized guest portal captured as future-state, not greenlit
+**Decision:** The user's "Master Build Brief" (token-gated portal at `/guest/[inviteToken]/…` +
+16-table Supabase backend + live personalization) is captured **as documentation only** in
+`docs/guest-portal/` (`master-brief.md` verbatim + `overview.md` reconciliation). It is the
+**future-state target**, NOT the plan of record. **D1** (adapt, no parallel system), **D2** (RSVP →
+`/rsvp`, no token backend), and **D7** (defer personalization) **remain in force** — the public-first
+build continues — until the user gives an explicit greenlight.
+**On greenlight:** build **foundation-first** (Supabase schema → guest-access/opaque-token layer →
+portal shell → the 5 pages), and reconcile the brief's parallel tokens/components/Canela font into the
+existing system per `docs/guest-portal/overview.md` (no silent fork). Likely **outsource candidate**.
+
 ---
 
 ## Open items (resolve before/at build time)
@@ -75,9 +86,10 @@ now; revisit the wording if/when a guest-access flow ships (O3). Alternative if 
 "RSVP".
 
 ### O3 — Guest-access / invite-token flow (deferred)
-The brief sketches an opaque-token guest login (`/guest-access` → `/guest/[token]`). Not built; needs
-Supabase schema + auth work. Candidate to outsource if a real guest portal is wanted. The orphan
-`GuestHomeCard.tsx` component may be an early stub for this.
+An opaque-token guest login (`/guest/[inviteToken]/…`). Not built; needs Supabase schema + auth work.
+Candidate to outsource if a real guest portal is wanted. The orphan `GuestHomeCard.tsx` may be an
+early stub. **Now fully specified** in [`guest-portal/`](./guest-portal/overview.md) (future-state,
+per D9) — that is the detailed target if/when this is greenlit.
 
 ### O4 — Header unification / RSVP button label
 The inner-page mockups confirm the **same header** across all pages (K&A + sprig, 6-item nav w/
