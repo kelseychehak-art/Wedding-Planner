@@ -42,8 +42,8 @@ until the real one lands). Target dir: `public/assets/illustrations/` (or `publi
 | `olive-lemon-sprig.svg` (centered hero sprig) | 5 content-page heroes | `Illustration oliveBranch`/`lemonBranch` | ⏳ pending |
 | `heart-gold.svg` (gold divider heart) | homepage + every page divider/footer | `Illustration heart tone="gold"` | ⏳ pending |
 | `heart-outline-red.svg` (title + footer heart) | homepage footer, page title rows, signatures | `Illustration heart tone="terracotta"` | ⏳ pending |
-| `villa-stamp.svg` (tilted postage stamp) | homepage + every page header, upper-right | `PostageStamp variant="villa"` | 🟡 candidate art received (preview) — see Received previews |
-| `italy-postmark.svg` (round "ITALY" cancellation mark, terracotta) | homepage upper-right, overlapping the villa stamp | none (decorative) | 🟡 received (preview) |
+| `villa-stamp.svg` (tilted postage stamp) | homepage + every page header, upper-right | `PostageStamp variant="villa"` | ❌ **still missing** (only the round postmark landed) |
+| `italy-postmark.svg` (round "ITALY" cancellation mark, terracotta) | homepage upper-right, overlapping the villa stamp | none (decorative) | ✅ on `main` (Jul 17) |
 | `wine-glass.svg` (footer band, left) | content-page footer bands | `Illustration wineGlass` | ⏳ pending |
 | `bicycle.svg` (decorative) | our-weekend, travel, activities, faq | `Illustration bicycle` | ⏳ pending |
 | Line icons — `airplane, car/compass, key, suitcase, calendar, clock, pin, wine, bicycle, cypress, arch, music, villa` | travel/stay/activities/schedule/faq cards & badges | `Illustration` names (18 available) | ⏳ some map, some to add |
@@ -51,22 +51,36 @@ until the real one lands). Target dir: `public/assets/illustrations/` (or `publi
 > The existing line-art `Illustration` set (18 names, 7 tones — see `design-system.md` §4) already
 > covers many small icons. Only deliver custom SVGs where the mockup's art differs from those.
 
-### Received previews (not yet in the repo — pending upload)
+### Received to date (on `main`) — Jul 17 batch
 
-Four stamp illustrations were shared as previews (chat only; not committed). Format / transparency /
-resolution are **unverified** until the actual files are pushed. Finals must follow the delivery
-standard: **SVG (or transparent PNG @2–3×), SVGO'd, clean names, transparent background.**
+12 new SVGs pushed to `public/assets/illustrations/` (timestamp names `ChatGPT Image Jul 17…`). **All
+true vectors, transparent backgrounds** (white appears only as fills inside the art, not a background).
+**Most are multi-item "sheets"** — build step: split into individual named assets + SVGO + rename.
 
-| Preview | Maps to | Note |
+| Content | Maps to | Note |
 |---|---|---|
-| Round **"ITALY" postmark**, terracotta line art | `italy-postmark.svg` | Matches the homepage mockup's round cancellation mark ✓ |
-| Vertical villa stamp, **cream**, on bright green | `villa-stamp.svg` | ⚠️ **green = placeholder → knock out to transparent** |
-| Square villa+valley stamp, **green-inked**, on white | `villa-stamp.svg` | **Best match to the mockups' stamp** ✓ |
-| Square villa stamp, **dark line art**, on bright green | `villa-stamp.svg` | ⚠️ **green = placeholder → knock out to transparent** |
+| Round **"ITALY" postmark**, terracotta | `italy-postmark.svg` | ✅ received, clean single asset |
+| Icon sheet — pin, clock, info, shield, passport, heart, calendar ×2 | travel/faq line icons | split into individual icons |
+| Icon sheet — check, bookmark, dining, cocktail, chef, mic, phone, envelope | line icons | split |
+| Color object art — bicycle, wine, amphora, rolling pin, pasta, wine bottle | activity/food art | **2 duplicate files**; split |
+| Green art — lounge chair, sun, villa, temple, shopping bag, camera | activities/things-to-do | split |
+| Green art — gift, bed, suitcase, airplane, train, car | travel/stay | split |
+| Color art — pot, pan, wine, potted plant | cooking/dining | split |
+| **Divider** sets (heart rules, leafy vines, gold line, dotted) ×2 | section/gold dividers | split → `heart-gold`, dividers |
+| **Frame/border** sheet — blue scallop, red scallop, olive + ornate rects | `ScallopFrame` boxes + panel frames | ✅ great match; split blue/red |
+| Labeled "Decorative Dividers & Accents" sheet | — | **reference only** (labels baked in), not a production asset |
 
-**Decision (this round):** the bright-green fields are transparency placeholders, **not** intentional
-— they must be removed so the stamp renders on the cream page. Green-inked treatment is the preferred
-villa-stamp color. When the real files are pushed I'll verify, SVGO, rename, and finalize these rows.
+### Still missing (as of Jul 17 batch)
+
+1. **Villa postage stamp** — the rectangular *Tuscan-scene* stamp for page-header corners
+   (`villa-stamp.svg`). Only the round postmark landed; the villa-scene stamps shown in chat earlier
+   were never pushed. Highest priority (every page header). Interim: `PostageStamp variant="villa"`.
+2. **Photography** — hero landscape (`tuscan-homepage-landscape.jpg`), villa exterior, room
+   thumbnails ×4, per-day schedule photos ×6, activity photos ×6.
+3. **Fonts** — Canela / Canela Sans (UI) + handwritten/script (footer line).
+
+All received art still needs the standard build pass: **split sheets → SVGO → clean lowercase-hyphen
+names → transparent** (done at build; nothing needed from the user).
 
 ## Illustration inventory (portal — FUTURE-STATE, not greenlit)
 
