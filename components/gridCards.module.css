@@ -3,8 +3,20 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .grid2 {
@@ -131,6 +143,17 @@
   font-size: 13px;
   line-height: 1.55;
   color: var(--color-muted-ink);
+}
+
+/* Decorative graphic that fills a short card's slack space. */
+.cardFill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-sage);
+  min-height: 48px;
+  padding: 14px 0;
 }
 
 /* Inline sand callout inside a card. */

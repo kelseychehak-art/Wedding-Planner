@@ -3,23 +3,35 @@
 }
 
 .inner {
-  display: grid;
-  grid-template-columns: 180px 1fr 180px;
+  display: flex;
   align-items: center;
+  gap: 16px;
   min-height: 78px;
   padding: 0 24px;
+}
+
+/* Nav links + RSVP button, kept together and centered on the page. */
+.navGroup {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  flex-shrink: 0;
+}
+
+.spacer {
+  flex: 1;
 }
 
 .monogram {
   display: inline-flex;
   align-items: center;
   gap: 9px;
+  flex: 1;
   font-family: var(--font-serif);
   font-size: 32px;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--terracotta);
-  justify-self: start;
 }
 
 .monogramSprig {
@@ -58,7 +70,6 @@
 }
 
 .rsvp {
-  justify-self: end;
   min-width: 96px;
 }
 
@@ -68,27 +79,26 @@
 
 @media (max-width: 767px) {
   .inner {
-    grid-template-columns: auto 1fr auto;
     min-height: 76px;
-    padding: 0 4px;
+    padding: 0 8px;
   }
 
   .monogram {
     font-size: 26px;
   }
 
-  .nav {
+  .navGroup {
     display: none;
   }
 
-  .rsvp {
+  .spacer {
     display: none;
   }
 
   .menuButton {
     display: inline-flex;
     flex-direction: column;
-    justify-self: end;
+    margin-left: auto;
     gap: 5px;
     width: 44px;
     height: 44px;

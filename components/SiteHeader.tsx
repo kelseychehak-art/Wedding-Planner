@@ -20,25 +20,29 @@ export default function SiteHeader() {
           <Illustration name="oliveBranch" size={30} className={styles.monogramSprig} />
         </a>
 
-        <nav className={styles.nav} aria-label="Primary">
-          {siteContent.navigation.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <a
-                key={item.href}
-                href={item.href}
-                className={`${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
-                aria-current={isActive ? "page" : undefined}
-              >
-                {item.label}
-              </a>
-            );
-          })}
-        </nav>
+        <div className={styles.navGroup}>
+          <nav className={styles.nav} aria-label="Primary">
+            {siteContent.navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={`${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
+          </nav>
 
-        <a href="/rsvp" className={`btn-primary ${styles.rsvp}`}>
-          {isHome ? "RSVP / Login" : "RSVP"}
-        </a>
+          <a href="/rsvp" className={`btn-primary ${styles.rsvp}`}>
+            {isHome ? "RSVP / Login" : "RSVP"}
+          </a>
+        </div>
+
+        <span className={styles.spacer} aria-hidden="true" />
 
         <button
           type="button"

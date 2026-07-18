@@ -92,6 +92,9 @@ export default function TravelPage() {
             Book your flights <strong>4&ndash;6 months in advance</strong> for the best prices
             and availability.
           </p>
+          <div className={c.cardFill} aria-hidden="true">
+            <UiIcon name="calendar" size={68} strokeWidth={1.4} />
+          </div>
           <div className={c.callout}>
             <UiIcon name="info" size={16} className={c.calloutIcon} />
             <span className={c.calloutText}>
