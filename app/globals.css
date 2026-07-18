@@ -10,7 +10,9 @@ html {
 
 body {
   margin: 0;
-  background: var(--page-bg);
+  /* Transparent so a page-level fixed background (e.g. the content-page frame's
+     faded landscape) can show through. html provides the base ivory canvas. */
+  background: transparent;
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
