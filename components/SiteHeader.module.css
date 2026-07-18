@@ -14,7 +14,7 @@
 .navGroup {
   display: flex;
   align-items: center;
-  gap: 34px;
+  gap: 26px;
   flex-shrink: 0;
 }
 
@@ -41,7 +41,7 @@
 .nav {
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 30px;
   list-style: none;
   margin: 0;
   padding: 0;

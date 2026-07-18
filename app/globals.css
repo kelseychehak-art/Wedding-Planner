@@ -15,6 +15,9 @@ body {
   background: transparent;
   color: var(--ink);
   font-family: var(--font-sans);
+  /* Subtle open tracking on body text, closer to the mockups. Components with
+     their own letter-spacing (buttons, eyebrows, labels) override this. */
+  letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

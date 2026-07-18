@@ -25,7 +25,7 @@
 /* The rounded cream panel holding all page content. */
 .panel {
   position: relative;
-  max-width: 1280px;
+  max-width: 1400px;
   background: var(--color-paper);
   border: 1px solid var(--color-border-soft);
   box-shadow: 0 12px 38px rgba(48, 52, 45, 0.1), 0 2px 8px rgba(48, 52, 45, 0.05);
@@ -89,7 +89,7 @@
   font-weight: 500;
   font-size: clamp(38px, 5vw, 58px);
   line-height: 1.02;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.005em;
   color: var(--color-olive-dark);
   margin-top: 8px;
 }

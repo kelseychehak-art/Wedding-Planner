@@ -181,12 +181,13 @@
 }
 
 /* Blue wavy-border box (ScallopFrame) — Questions / Share your plans.
-   A full card that stretches to its grid row height; content is centered. */
+   Per the mockup this floats centered in its cell at its natural height
+   (not stretched to the row), with only the scalloped border — no fill. */
 .blueBox {
   position: relative;
-  background: var(--color-ivory);
-  border-radius: var(--radius-card);
-  padding: 30px 28px;
+  align-self: center;
+  background: transparent;
+  padding: 34px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -194,7 +195,6 @@
   text-align: center;
   gap: 10px;
   min-width: 0;
-  height: 100%;
 }
 
 .blueHeading {
