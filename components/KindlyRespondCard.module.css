@@ -1,9 +1,13 @@
 .form {
-  max-width: 560px;
+  max-width: 620px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 28px;
+  background: var(--color-ivory);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-card);
+  padding: clamp(28px, 3.5vw, 44px);
 }
 
 .section {
@@ -214,14 +218,17 @@
 
 /* Confirmation */
 .thanks {
-  max-width: 520px;
+  max-width: 620px;
   margin: 0 auto;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding: 20px 0;
+  background: var(--color-ivory);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-card);
+  padding: clamp(36px, 5vw, 56px);
 }
 
 .thanksTitle {
