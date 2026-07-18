@@ -1,0 +1,203 @@
+/* ---------- Planned activity cards ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.photoWrap {
+  position: relative;
+}
+
+.photo {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 999px;
+  color: var(--color-paper);
+  box-shadow: 0 1px 3px rgba(48, 52, 45, 0.2);
+}
+
+.badgeTerra {
+  background: var(--color-terracotta);
+}
+
+.badgeOlive {
+  background: var(--color-olive);
+}
+
+.body {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.date {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-terracotta);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 23px;
+  font-weight: 600;
+  color: var(--color-olive-dark);
+  margin: 4px 0 8px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.metaRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-muted-ink);
+}
+
+.metaRow svg {
+  color: var(--color-olive);
+}
+
+.desc {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--color-ink);
+  margin-bottom: 16px;
+}
+
+.control {
+  margin-top: auto;
+}
+
+.control :global(.btn-primary),
+.control :global(.btn-outline) {
+  width: 100%;
+}
+
+/* ---------- Legend ---------- */
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+  background: var(--color-sand);
+  border-radius: var(--radius-card);
+  padding: 24px 26px;
+  align-items: start;
+}
+
+.legendItem {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.legendIcon {
+  color: var(--color-olive-dark);
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.legendTitle {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+}
+
+.legendBody {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--color-muted-ink);
+}
+
+.legendCta {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+/* ---------- Things to do (mini cards) ---------- */
+.mini {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.miniCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-card);
+  padding: 18px 20px;
+}
+
+.miniIcon {
+  flex-shrink: 0;
+}
+
+.miniName {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+}
+
+.miniDesc {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-muted-ink);
+  margin-top: 3px;
+}
+
+.miniChevron {
+  margin-left: auto;
+  color: var(--color-sage);
+  flex-shrink: 0;
+}

@@ -7,9 +7,12 @@ import ScallopFrame from "./ScallopFrame";
 import { schedule, DEFAULT_SCHEDULE_DAY, type ScheduleIcon } from "@/data/schedule";
 
 const ICON_NAME: Record<ScheduleIcon, IllustrationName> = {
-  villa: "villa",
-  wine: "wineGlass",
-  music: "music",
+  dinner: "wineGlass",
+  wine: "wineBottle",
+  cooking: "espresso",
+  pool: "lemon",
+  town: "arch",
+  party: "music",
 };
 
 export default function ScheduleCard({ showButton = true }: { showButton?: boolean }) {

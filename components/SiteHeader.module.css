@@ -45,6 +45,11 @@
   color: var(--terracotta-dark);
 }
 
+.navLinkActive {
+  border-bottom-color: var(--color-olive-dark);
+  color: var(--color-olive-dark);
+}
+
 .rsvp {
   justify-self: end;
   min-width: 96px;

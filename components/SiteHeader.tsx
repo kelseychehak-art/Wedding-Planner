@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import styles from "./SiteHeader.module.css";
 import MobileMenu from "./MobileMenu";
 import { siteContent } from "@/data/siteContent";
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   return (
     <header className={styles.header}>
@@ -16,15 +19,23 @@ export default function SiteHeader() {
         </a>
 
         <nav className={styles.nav} aria-label="Primary">
-          {siteContent.navigation.map((item) => (
-            <a key={item.href} href={item.href} className={styles.navLink}>
-              {item.label}
-            </a>
-          ))}
+          {siteContent.navigation.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
 
         <a href="/rsvp" className={`btn-primary ${styles.rsvp}`}>
-          RSVP / Login
+          {isHome ? "RSVP / Login" : "RSVP"}
         </a>
 
         <button

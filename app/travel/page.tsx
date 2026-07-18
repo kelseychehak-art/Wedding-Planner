@@ -1,101 +1,193 @@
 import type { Metadata } from "next";
-import SiteHeader from "@/components/SiteHeader";
-import SiteFooter from "@/components/SiteFooter";
-import PageHero from "@/components/PageHero";
-import Illustration, { type IllustrationName } from "@/components/Illustration";
-import PostageStamp from "@/components/PostageStamp";
-import styles from "@/components/ContentPage.module.css";
+import ContentPageFrame from "@/components/ContentPageFrame";
+import Illustration from "@/components/Illustration";
+import UiIcon from "@/components/UiIcon";
+import ScallopFrame from "@/components/ScallopFrame";
+import c from "@/components/gridCards.module.css";
 
 export const metadata: Metadata = {
   title: "Travel · Kelsey & Andrew's Wedding Week",
-  description: "How to get to Italy for Kelsey & Andrew's wedding week — airports, flights, and getting to the villa.",
+  description:
+    "Flights, transportation options, and tips to help you plan your journey to Tuscany for Kelsey & Andrew's wedding week.",
 };
 
-const AIRPORTS: { icon: IllustrationName; title: string; body: string }[] = [
+const AIRPORTS = [
+  { code: "FLR", city: "Florence, Italy" },
+  { code: "PSA", city: "Pisa, Italy" },
+  { code: "ROM", city: "Rome, Italy" },
+];
+
+const TRANSPORT = [
+  { title: "Private Shuttle", note: "Pre-book a group or private transfer" },
+  { title: "Rent a Car", note: "Recommended for flexibility" },
+  { title: "Train", note: "Scenic option to nearby towns" },
+];
+
+const TIPS = [
   {
-    icon: "airplane",
-    title: "Flying Into Italy",
-    body: "Most guests will fly into a major Italian hub and connect onward. Rome (FCO), Milan (MXP), and Florence (FLR) all have direct or one-stop service from the U.S. We'll confirm the closest airport once our venue is set.",
+    icon: "passport" as const,
+    title: "Check passport validity",
+    body: "It should be valid for at least six months after your return date.",
   },
   {
-    icon: "compass",
-    title: "Passports & Entry",
-    body: "You'll need a passport valid for at least six months beyond your travel dates. U.S. citizens don't need a visa for stays under 90 days. Double-check your own country's requirements before you book.",
+    icon: "shield" as const,
+    title: "Travel insurance",
+    body: "Recommended for international trips — peace of mind is worth it.",
   },
   {
-    icon: "suitcase",
-    title: "Getting to the Villa",
-    body: "We're planning group transfers from the nearest airport or town on arrival day. Renting a car is a lovely way to explore the countryside if you'd like to venture out on your own.",
+    icon: "sparkle" as const,
+    title: "Pack smart",
+    body: "Comfortable shoes, sun protection, and layers for cooler evenings.",
+  },
+  {
+    icon: "bulb" as const,
+    title: "Stay connected",
+    body: "Consider an international plan or an eSIM before you travel.",
   },
 ];
 
 export default function TravelPage() {
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <PageHero
-          eyebrow="Getting Here"
-          title="Travel"
-          intro="We're gathering in Italy for a few unforgettable days, and we'd love to help make the journey easy. Here's everything you'll need to start planning your trip."
-          illustration={<PostageStamp variant="compass" size={128} rotate={-5} />}
-        />
-
-        <div className={`page-shell ${styles.page}`}>
-          <section className={styles.section}>
-            <p className={styles.sectionEyebrow}>The Essentials</p>
-            <h2 className={styles.sectionTitle}>Planning Your Journey</h2>
-            <div className={styles.grid}>
-              {AIRPORTS.map((item) => (
-                <div className={styles.card} key={item.title}>
-                  <Illustration name={item.icon} size={38} className={styles.cardIcon} />
-                  <h3 className={styles.cardTitle}>{item.title}</h3>
-                  <p className={styles.cardBody}>{item.body}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <p className={styles.sectionEyebrow}>Good to Know</p>
-            <h2 className={styles.sectionTitle}>
-              When to Arrive
-              <span className={styles.tbd}>Dates TBD</span>
-            </h2>
-            <div className={styles.prose}>
-              <p>
-                Our celebration spans four nights in the spring of 2027. We recommend
-                arriving at least a day before the festivities begin to settle in, shake
-                off any jet lag, and start soaking up the Italian sun.
-              </p>
-              <p>
-                Italy is beautiful for a longer stay, so many guests may want to build a
-                few extra days into their trip on either end. Once we've locked in our
-                exact dates and venue, we'll share firm arrival and departure guidance
-                here.
-              </p>
-            </div>
-
-            <div className={styles.callout}>
-              <span className={styles.calloutIcon}>✦</span>
-              <p className={styles.calloutBody}>
-                <strong>More details are on the way.</strong> Airport transfers, driving
-                directions, and a recommended arrival window will be confirmed here as
-                soon as our venue is booked. Check back closer to the date — and hold off
-                on non-refundable flights until we share final dates.
-              </p>
-            </div>
-          </section>
-
-          <div className={styles.ctaBand}>
-            <span className={styles.ctaText}>Ready to celebrate with us?</span>
-            <a href="/rsvp" className="btn-primary">
-              RSVP
-            </a>
+    <ContentPageFrame
+      title="Book Your Travel"
+      subtitle="Flights, transportation options, and tips to help you plan your journey to Italy."
+      heroIllustration="lemonBranch"
+      footerLine="We can't wait to welcome you to Italy!"
+    >
+      <div className={c.grid}>
+        {/* 1 — Getting to Italy */}
+        <section className={c.card}>
+          <div className={c.cardHead}>
+            <span className={c.cardIcon}>
+              <Illustration name="airplane" size={22} />
+            </span>
+            <h2 className={c.cardTitle}>Getting to Italy</h2>
           </div>
-        </div>
-      </main>
-      <SiteFooter />
-    </>
+          <p className={c.cardIntro}>We recommend flying into one of the following airports:</p>
+          <div className={c.list}>
+            {AIRPORTS.map((a) => (
+              <div key={a.code} className={c.rowItem}>
+                <span className={c.rowLead}>{a.code}</span>
+                <span className={c.rowText}>{a.city}</span>
+              </div>
+            ))}
+          </div>
+          <div className={c.callout}>
+            <UiIcon name="info" size={16} className={c.calloutIcon} />
+            <span className={c.calloutText}>
+              Florence (FLR) is the closest and most convenient option to our wedding villa.
+            </span>
+          </div>
+        </section>
+
+        {/* 2 — Recommended booking window */}
+        <section className={c.card}>
+          <div className={c.cardHead}>
+            <span className={c.cardIcon}>
+              <UiIcon name="calendarCheck" size={22} />
+            </span>
+            <h2 className={c.cardTitle}>Recommended Booking Window</h2>
+          </div>
+          <p className={c.cardIntro}>
+            Book your flights <strong>4&ndash;6 months in advance</strong> for the best prices
+            and availability.
+          </p>
+          <div className={c.callout}>
+            <UiIcon name="info" size={16} className={c.calloutIcon} />
+            <span className={c.calloutText}>
+              Plan to arrive between <strong>Monday, June 16 &ndash; Wednesday, June 18</strong>.
+              Our welcome events begin the afternoon of June 16.
+            </span>
+          </div>
+        </section>
+
+        {/* 3 — Ground transportation */}
+        <section className={c.card}>
+          <div className={c.cardHead}>
+            <span className={c.cardIcon}>
+              <UiIcon name="car" size={22} />
+            </span>
+            <h2 className={c.cardTitle}>Ground Transportation</h2>
+          </div>
+          <p className={c.cardIntro}>Once you arrive, here are the best ways to reach the villa:</p>
+          <div className={c.list}>
+            {TRANSPORT.map((t) => (
+              <div key={t.title} className={c.rowItem}>
+                <span className={c.rowText}>
+                  <strong>{t.title}</strong>
+                  <br />
+                  {t.note}
+                </span>
+                <UiIcon name="chevron" size={16} className={c.rowChevron} />
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <div className={`${c.grid} ${c.blockGap}`}>
+        {/* 4 — Travel tips */}
+        <section className={c.card}>
+          <div className={c.cardHead}>
+            <span className={c.cardIcon}>
+              <UiIcon name="bulb" size={22} />
+            </span>
+            <h2 className={c.cardTitle}>Travel Tips</h2>
+          </div>
+          {TIPS.map((t) => (
+            <div key={t.title} className={c.tip}>
+              <UiIcon name={t.icon} size={20} className={c.tipIcon} />
+              <span>
+                <span className={c.tipTitle}>{t.title}</span>
+                <br />
+                <span className={c.tipBody}>{t.body}</span>
+              </span>
+            </div>
+          ))}
+        </section>
+
+        {/* 5 — Share your travel plans (blue box, deferred submission) */}
+        <section
+          className={c.card}
+          style={{ padding: 0, border: "none", background: "transparent" }}
+        >
+          <div className={c.blueBox}>
+            <ScallopFrame color="var(--color-sky-blue)" />
+            <Illustration name="heart" tone="terracotta" size={24} />
+            <h2 className={c.blueHeading}>Share Your Travel Plans</h2>
+            <p className={c.blueBody}>
+              Let us know your flight details so we can plan your arrival and any transportation
+              needs!
+            </p>
+            <button type="button" className="btn-blue" disabled title="Available soon">
+              Add Your Travel Info
+            </button>
+            <span className={c.blueBody} style={{ fontSize: 11, marginTop: 4 }}>
+              (Coming soon &mdash; you&rsquo;ll be able to add this once RSVPs open.)
+            </span>
+          </div>
+        </section>
+
+        {/* 6 — Questions */}
+        <section className={c.card}>
+          <div className={c.cardHead}>
+            <span className={c.cardIcon}>
+              <Illustration name="oliveBranch" size={24} />
+            </span>
+            <h2 className={c.cardTitle}>Questions?</h2>
+          </div>
+          <p className={c.cardIntro}>
+            Check out our FAQ or reach out if you need any help planning your trip.
+          </p>
+          <a
+            href="/faq"
+            className="btn-outline"
+            style={{ alignSelf: "flex-start", marginTop: "auto" }}
+          >
+            View FAQ
+          </a>
+        </section>
+      </div>
+    </ContentPageFrame>
   );
 }
