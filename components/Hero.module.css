@@ -115,11 +115,11 @@
 
 .meta {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 0.19em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  line-height: 1.75;
+  line-height: 1.7;
   color: var(--color-olive-dark);
   margin-top: 26px;
 }
@@ -155,7 +155,7 @@
 
 .handwrittenText {
   font-family: var(--font-script);
-  font-size: 25px;
+  font-size: 30px;
   line-height: 1.1;
   color: var(--color-terracotta);
 }

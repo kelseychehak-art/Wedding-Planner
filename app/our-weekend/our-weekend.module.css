@@ -24,9 +24,9 @@
 
 .glanceTitle {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-olive-dark);
   margin-bottom: 14px;
@@ -53,16 +53,16 @@
 
 .glanceDay {
   font-family: var(--font-sans);
-  font-size: 10.5px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-muted-ink);
 }
 
 .glanceEvent {
   font-family: var(--font-serif);
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--color-olive-dark);
 }
@@ -75,9 +75,9 @@
 
 .noteLabel {
   font-family: var(--font-sans);
-  font-size: 10.5px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-citrus-gold);
   margin-bottom: 6px;
@@ -85,7 +85,7 @@
 
 .noteBody {
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 16px;
   line-height: 1.6;
   color: var(--color-muted-ink);
 }
@@ -100,16 +100,16 @@
 
 .downloadTitle {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-olive-dark);
 }
 
 .downloadBody {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.55;
   color: var(--color-muted-ink);
   margin: 8px 0 16px;
@@ -160,9 +160,9 @@
 
 .dayLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-terracotta);
   margin-bottom: 8px;
@@ -192,17 +192,17 @@
 
 .dayTitle {
   font-family: var(--font-serif);
-  font-size: 25px;
+  font-size: 30px;
   font-weight: 600;
   color: var(--color-olive-dark);
 }
 
 .dayDesc {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 18px;
   line-height: 1.6;
   color: var(--color-ink);
-  margin: 7px 0 12px;
+  margin: 8px 0 12px;
 }
 
 .dayMeta {
@@ -216,7 +216,7 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--color-muted-ink);
@@ -251,19 +251,19 @@
 
 .bandLabel {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-olive-dark);
 }
 
 .bandBody {
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 16px;
   line-height: 1.6;
   color: var(--color-muted-ink);
-  max-width: 280px;
+  max-width: 300px;
 }
 
 .hashtag {

@@ -18,9 +18,9 @@
 
 .villaLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-citrus-gold);
 }
@@ -28,7 +28,7 @@
 .villaName {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 33px;
+  font-size: 38px;
   font-weight: 600;
   color: var(--color-olive-dark);
   margin-top: 6px;
@@ -36,9 +36,9 @@
 
 .villaLoc {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-muted-ink);
   margin-top: 4px;
@@ -46,7 +46,7 @@
 
 .villaIntro {
   font-family: var(--font-sans);
-  font-size: 15.5px;
+  font-size: 17px;
   line-height: 1.65;
   color: var(--color-ink);
   margin: 16px 0 18px;
@@ -71,7 +71,7 @@
 
 .factText {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.5;
   color: var(--color-ink);
 }
@@ -120,16 +120,16 @@
 
 .roomName {
   font-family: var(--font-sans);
-  font-size: 12.5px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-olive-dark);
 }
 
 .roomDesc {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.55;
   color: var(--color-muted-ink);
   margin: 8px 0 12px;
@@ -137,7 +137,7 @@
 
 .roomCount {
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--color-terracotta);
   margin-top: auto;
@@ -162,7 +162,7 @@
 
 .assignText {
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 16px;
   line-height: 1.6;
   color: var(--color-muted-ink);
 }
@@ -191,7 +191,7 @@
 
 .policyText {
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 16px;
   line-height: 1.5;
   color: var(--color-ink);
 }

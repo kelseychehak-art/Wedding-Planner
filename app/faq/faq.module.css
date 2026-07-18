@@ -16,9 +16,9 @@
 
 .topicsLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-muted-ink);
   margin-bottom: 12px;
@@ -33,10 +33,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 4px;
+  padding: 13px 4px;
   border-top: 1px solid var(--color-border-soft);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--color-ink);
   transition: color 160ms ease;
@@ -84,7 +84,7 @@
 
 .contactBody {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.55;
   color: var(--color-muted-ink);
   margin-bottom: 4px;
@@ -151,7 +151,7 @@
 
 .bannerText {
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 16px;
   line-height: 1.6;
   color: var(--color-muted-ink);
 }

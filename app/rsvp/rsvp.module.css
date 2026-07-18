@@ -1,10 +1,10 @@
 .deadline {
   text-align: center;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-muted-ink);
-  margin: -8px 0 28px;
+  margin: -4px 0 28px;
 }

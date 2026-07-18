@@ -20,9 +20,9 @@
 
 .groupTitle {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-olive-dark);
 }
@@ -50,9 +50,9 @@
   text-align: left;
   background: transparent;
   border: none;
-  padding: 16px 4px;
+  padding: 17px 4px;
   font-family: var(--font-sans);
-  font-size: 15.5px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--color-ink);
   transition: color 160ms ease;
@@ -76,10 +76,10 @@
 .answer {
   padding: 0 4px 16px;
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.7;
   color: var(--color-muted-ink);
-  max-width: 680px;
+  max-width: 720px;
 }
 
 .answer a {
