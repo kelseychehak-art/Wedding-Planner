@@ -157,15 +157,21 @@
   color: var(--color-muted-ink);
 }
 
-/* Blue wavy-border box (ScallopFrame) — Questions / Share your plans. */
+/* Blue wavy-border box (ScallopFrame) — Questions / Share your plans.
+   A full card that stretches to its grid row height; content is centered. */
 .blueBox {
   position: relative;
+  background: var(--color-ivory);
+  border-radius: var(--radius-card);
   padding: 30px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   gap: 10px;
+  min-width: 0;
+  height: 100%;
 }
 
 .blueHeading {

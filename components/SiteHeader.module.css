@@ -11,12 +11,19 @@
 }
 
 .monogram {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   font-family: var(--font-serif);
   font-size: 32px;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--terracotta);
   justify-self: start;
+}
+
+.monogramSprig {
+  flex-shrink: 0;
 }
 
 .nav {

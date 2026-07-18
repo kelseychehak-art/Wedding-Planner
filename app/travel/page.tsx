@@ -123,9 +123,7 @@ export default function TravelPage() {
             ))}
           </div>
         </section>
-      </div>
 
-      <div className={`${c.grid} ${c.blockGap}`}>
         {/* 4 — Travel tips */}
         <section className={c.card}>
           <div className={c.cardHead}>
@@ -147,25 +145,20 @@ export default function TravelPage() {
         </section>
 
         {/* 5 — Share your travel plans (blue box, deferred submission) */}
-        <section
-          className={c.card}
-          style={{ padding: 0, border: "none", background: "transparent" }}
-        >
-          <div className={c.blueBox}>
-            <ScallopFrame color="var(--color-sky-blue)" />
-            <Illustration name="heart" tone="terracotta" size={24} />
-            <h2 className={c.blueHeading}>Share Your Travel Plans</h2>
-            <p className={c.blueBody}>
-              Let us know your flight details so we can plan your arrival and any transportation
-              needs!
-            </p>
-            <button type="button" className="btn-blue" disabled title="Available soon">
-              Add Your Travel Info
-            </button>
-            <span className={c.blueBody} style={{ fontSize: 11, marginTop: 4 }}>
-              (Coming soon &mdash; you&rsquo;ll be able to add this once RSVPs open.)
-            </span>
-          </div>
+        <section className={c.blueBox}>
+          <ScallopFrame color="var(--color-sky-blue)" />
+          <Illustration name="heart" tone="terracotta" size={24} />
+          <h2 className={c.blueHeading}>Share Your Travel Plans</h2>
+          <p className={c.blueBody}>
+            Let us know your flight details so we can plan your arrival and any transportation
+            needs!
+          </p>
+          <button type="button" className="btn-blue" disabled title="Available soon">
+            Add Your Travel Info
+          </button>
+          <span className={c.blueBody} style={{ fontSize: 11, marginTop: 4 }}>
+            (Coming soon &mdash; you&rsquo;ll be able to add this once RSVPs open.)
+          </span>
         </section>
 
         {/* 6 — Questions */}

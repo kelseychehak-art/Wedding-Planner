@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from "./SiteHeader.module.css";
 import MobileMenu from "./MobileMenu";
+import Illustration from "./Illustration";
 import { siteContent } from "@/data/siteContent";
 
 export default function SiteHeader() {
@@ -15,7 +16,8 @@ export default function SiteHeader() {
     <header className={styles.header}>
       <div className={`page-shell ${styles.inner}`}>
         <a href="/" className={styles.monogram}>
-          {siteContent.couple.monogram}
+          <span>{siteContent.couple.monogram}</span>
+          <Illustration name="oliveBranch" size={30} className={styles.monogramSprig} />
         </a>
 
         <nav className={styles.nav} aria-label="Primary">
