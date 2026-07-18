@@ -14,7 +14,7 @@ export default function SiteHeader() {
 
   return (
     <header className={styles.header}>
-      <div className={`page-shell ${styles.inner}`}>
+      <div className={styles.inner}>
         <a href="/" className={styles.monogram}>
           <span>{siteContent.couple.monogram}</span>
           <Illustration name="oliveBranch" size={30} className={styles.monogramSprig} />

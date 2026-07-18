@@ -7,7 +7,10 @@
   align-items: center;
   gap: 16px;
   min-height: 78px;
-  padding: 0 24px;
+  /* Match the content panel's width so the monogram/nav align with it. */
+  width: min(1720px, 86%);
+  margin: 0 auto;
+  padding: 0;
 }
 
 /* Nav links + RSVP button, kept together and centered on the page. */
@@ -80,7 +83,8 @@
 @media (max-width: 767px) {
   .inner {
     min-height: 76px;
-    padding: 0 8px;
+    width: calc(100% - 24px);
+    padding: 0;
   }
 
   .monogram {

@@ -44,8 +44,7 @@ export default function ContentPageFrame({
       <div className={styles.bg} aria-hidden="true" />
 
       <main className={styles.main}>
-        <div className="page-shell">
-          <article className={styles.panel}>
+        <article className={styles.panel}>
             <Link href="/" className={styles.back}>
               <span aria-hidden="true">←</span> Back to Home
             </Link>
@@ -95,8 +94,7 @@ export default function ContentPageFrame({
               <p className={styles.footerMeta}>{wedding.dateLabel}</p>
               <p className={styles.footerMeta}>{wedding.locationLabel}</p>
             </footer>
-          </article>
-        </div>
+        </article>
       </main>
     </>
   );
