@@ -93,6 +93,10 @@
   margin-top: 14px;
 }
 
+.title[data-tone="terracotta"] {
+  color: var(--color-terracotta);
+}
+
 .titleHeart {
   margin-top: 0.35em;
   flex-shrink: 0;

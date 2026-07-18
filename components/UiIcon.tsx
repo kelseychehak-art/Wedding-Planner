@@ -24,7 +24,9 @@ export type UiIconName =
   | "camera"
   | "passport"
   | "clipboard"
-  | "sparkle";
+  | "sparkle"
+  | "gift"
+  | "attire";
 
 const PATHS: Record<UiIconName, React.ReactNode> = {
   calendar: (
@@ -110,6 +112,18 @@ const PATHS: Record<UiIconName, React.ReactNode> = {
     </>
   ),
   sparkle: <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z" />,
+  gift: (
+    <>
+      <rect x="4" y="9" width="16" height="12" rx="1" />
+      <path d="M4 13h16M12 9v12" />
+      <path d="M12 9S10.5 5 8.5 5A2 2 0 0 0 8.5 9H12ZM12 9s1.5-4 3.5-4a2 2 0 0 1 0 4H12Z" />
+    </>
+  ),
+  attire: (
+    <>
+      <path d="M12 4a1.6 1.6 0 0 0-1 2.8c.4.3.6.7.6 1.2L4 14v3h16v-3l-7.6-6c0-.5.2-.9.6-1.2A1.6 1.6 0 0 0 12 4Z" />
+    </>
+  ),
 };
 
 const VIEWBOX: Partial<Record<UiIconName, string>> = {};

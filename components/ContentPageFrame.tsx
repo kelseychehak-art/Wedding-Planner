@@ -23,6 +23,8 @@ type ContentPageFrameProps = {
   heroIllustration?: IllustrationName;
   /** Closing line in the footer band (rendered uppercase). */
   footerLine?: string;
+  /** Hero title color. Most pages are olive; RSVP/personalized pages use terracotta. */
+  titleTone?: "olive" | "terracotta";
   children: ReactNode;
 };
 
@@ -31,6 +33,7 @@ export default function ContentPageFrame({
   subtitle,
   heroIllustration = "lemonBranch",
   footerLine = "We can't wait to celebrate with you!",
+  titleTone = "olive",
   children,
 }: ContentPageFrameProps) {
   const { couple, wedding } = siteContent;
@@ -53,7 +56,10 @@ export default function ContentPageFrame({
 
             <header className={styles.hero}>
               <Illustration name={heroIllustration} className={styles.sprig} />
-              <h1 className={styles.title}>
+              <h1
+                className={styles.title}
+                data-tone={titleTone === "terracotta" ? "terracotta" : undefined}
+              >
                 <span>{title}</span>
                 <Illustration
                   name="heart"

@@ -1,148 +1,115 @@
-.card {
-  background: var(--surface);
-  border-radius: 12px;
-  position: relative;
-  padding: 34px 40px 32px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 32px;
-}
-
-@media (max-width: 767px) {
-  .card {
-    grid-template-columns: 1fr;
-    padding: 30px 26px 28px;
-  }
-}
-
-.left {
-  padding-top: 8px;
-}
-
-.headingRow {
+.form {
+  max-width: 560px;
+  margin: 0 auto;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 30px;
 }
 
-.heading {
-  font-family: var(--font-serif);
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--blue);
+.section {
+  border-top: 1px solid var(--color-border-soft);
+  padding-top: 22px;
 }
 
-.heart {
-  width: 16px;
-  height: auto;
+.section:first-child {
+  border-top: none;
+  padding-top: 0;
 }
 
-.subtitle {
+.stepLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--olive-muted);
-  margin-top: 6px;
+  color: var(--color-olive-dark);
+}
+
+.stepHelp {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-muted-ink);
+  margin-top: 4px;
 }
 
 .field {
-  margin-top: 22px;
+  display: block;
+  margin-top: 16px;
 }
 
 .fieldLabel {
   display: block;
   font-family: var(--font-sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--olive-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-ink);
   margin-bottom: 6px;
 }
 
-.fieldInput {
+.input {
   width: 100%;
-  max-width: 320px;
-  min-height: 44px;
+  min-height: 46px;
   padding: 0 14px;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 2px;
+  background: var(--color-ivory);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
   font-family: var(--font-sans);
   font-size: 14px;
-  color: var(--ink);
+  color: var(--color-ink);
+  transition: border-color 160ms ease;
 }
 
-.right {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-  min-width: 220px;
+.input:focus {
+  outline: none;
+  border-color: var(--color-olive);
 }
 
-@media (max-width: 767px) {
-  .right {
-    min-width: 0;
-  }
-}
-
-.responseOptions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.responseOption {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--color-ivory);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
   font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--ink);
-  min-height: 44px;
-  padding: 0 4px;
-}
-
-.responseOption input {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--blue);
-}
-
-.submit {
-  margin-top: 6px;
-}
-
-.formError {
-  font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
-  color: var(--terracotta-dark);
-  margin-top: 16px;
-  max-width: 340px;
+  color: var(--color-ink);
+  resize: vertical;
+  margin-top: 12px;
 }
 
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-olive);
+}
+
+.counter {
+  display: block;
+  text-align: right;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-muted-ink);
+  margin-top: 4px;
+}
+
+/* Guest rows */
 .guestList {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 16px;
 }
 
 .guestRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
-.guestRow .fieldInput {
-  max-width: 220px;
+.guestRow .input {
+  flex: 1;
 }
 
 .childToggle {
@@ -150,28 +117,32 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 12px;
-  color: var(--olive-muted);
+  font-size: 12.5px;
+  color: var(--color-muted-ink);
   white-space: nowrap;
 }
 
 .childToggle input {
   width: 15px;
   height: 15px;
-  accent-color: var(--blue);
+  accent-color: var(--color-olive);
 }
 
 .removeGuest {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: transparent;
   border: none;
-  font-size: 18px;
-  color: var(--olive-muted);
+  font-size: 20px;
+  color: var(--color-muted-ink);
+}
+
+.removeGuest:hover {
+  color: var(--color-terracotta);
 }
 
 .addGuest {
@@ -183,6 +154,88 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--olive-dark);
-  padding: 6px 0;
+  color: var(--color-olive-dark);
+  padding: 4px 0;
+}
+
+.addGuest:hover {
+  color: var(--color-terracotta);
+}
+
+/* Accept / decline choices */
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.choice {
+  flex: 1;
+  min-width: 160px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 3px;
+  border: 1px solid var(--color-border);
+  background: var(--color-paper);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  transition: var(--transition);
+}
+
+.choiceAccept {
+  background: var(--color-olive-dark);
+  border-color: var(--color-olive-dark);
+  color: var(--color-paper);
+}
+
+.choiceDecline {
+  background: transparent;
+  border-color: var(--color-terracotta);
+  color: var(--color-terracotta-dark);
+}
+
+.error {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-terracotta-dark);
+  margin-top: 16px;
+}
+
+.submit {
+  width: 100%;
+  min-height: 52px;
+}
+
+/* Confirmation */
+.thanks {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+}
+
+.thanksTitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--color-olive-dark);
+}
+
+.thanksBody {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-muted-ink);
+  max-width: 400px;
 }

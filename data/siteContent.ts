@@ -22,7 +22,6 @@ export const siteContent = {
     { label: "Travel", href: "/travel" },
     { label: "Stay", href: "/stay" },
     { label: "Activities", href: "/activities" },
-    { label: "Things to Do", href: "/things-to-do" },
     { label: "FAQ", href: "/faq" },
   ],
 } as const;

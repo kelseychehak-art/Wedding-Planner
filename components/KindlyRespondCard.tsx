@@ -3,7 +3,6 @@
 import { useState } from "react";
 import styles from "./KindlyRespondCard.module.css";
 import Illustration from "./Illustration";
-import ScallopFrame from "./ScallopFrame";
 import { findPartyForRsvp, submitRsvp, type RsvpGuest, type RsvpParty } from "@/lib/supabase";
 
 type Phase = "search" | "found" | "notFound" | "error" | "submitted";
@@ -18,6 +17,12 @@ function emptyGuest(): RsvpGuest {
   };
 }
 
+/**
+ * RSVP flow — deck slide 3 (right). Keeps the name + email guest-list lookup
+ * (Supabase get_party_for_rsvp / submit_rsvp), styled as the mockup's
+ * numbered-section form: find invitation → respond (guests, accept/decline,
+ * dietary notes).
+ */
 export default function KindlyRespondCard() {
   const [phase, setPhase] = useState<Phase>("search");
   const [partyName, setPartyName] = useState("");
@@ -25,6 +30,7 @@ export default function KindlyRespondCard() {
   const [party, setParty] = useState<RsvpParty | null>(null);
   const [response, setResponse] = useState<"accept" | "decline">("accept");
   const [guests, setGuests] = useState<RsvpGuest[]>([emptyGuest()]);
+  const [dietary, setDietary] = useState("");
   const [searching, setSearching] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -45,9 +51,15 @@ export default function KindlyRespondCard() {
               rsvp_status: g.rsvp_status === "Declined" ? "Declined" : "Confirmed",
               meal_choice: g.meal_choice,
               dietary_restrictions: g.dietary_restrictions,
-            }))
+            })),
           );
-          setResponse(result.guests.some((g) => g.rsvp_status !== "Declined") ? "accept" : "decline");
+          setResponse(
+            result.guests.some((g) => g.rsvp_status !== "Declined") ? "accept" : "decline",
+          );
+          const existingDietary = result.guests
+            .map((g) => g.dietary_restrictions)
+            .find((d) => d && d.trim());
+          if (existingDietary) setDietary(existingDietary);
         }
         setPhase("found");
       }
@@ -63,16 +75,13 @@ export default function KindlyRespondCard() {
     if (!party) return;
     setSubmitting(true);
     try {
-      const finalGuests: RsvpGuest[] =
-        response === "decline"
-          ? guests
-              .filter((g) => g.first_name.trim())
-              .map((g) => ({ ...g, rsvp_status: "Declined" as const }))
-          : guests
-              .filter((g) => g.first_name.trim())
-              .map((g) => ({ ...g, rsvp_status: "Confirmed" as const }));
+      const dietaryNote = dietary.trim() || null;
+      const status = response === "decline" ? ("Declined" as const) : ("Confirmed" as const);
+      const finalGuests: RsvpGuest[] = guests
+        .filter((g) => g.first_name.trim())
+        .map((g) => ({ ...g, rsvp_status: status, dietary_restrictions: dietaryNote }));
 
-      await submitRsvp(party.id, finalGuests.length > 0 ? finalGuests : []);
+      await submitRsvp(party.id, finalGuests);
       setPhase("submitted");
     } catch {
       setPhase("error");
@@ -97,105 +106,90 @@ export default function KindlyRespondCard() {
     setGuests((prev) => prev.filter((_, i) => i !== index));
   }
 
+  // ---- Confirmation ----
   if (phase === "submitted") {
     return (
-      <div className={styles.card}>
-        <ScallopFrame color="var(--color-sky-blue)" />
-        <div className={styles.left}>
-          <div className={styles.headingRow}>
-            <h3 className={styles.heading}>Thank You</h3>
-            <Illustration name="heart" tone="terracotta" size={16} className={styles.heart} />
-          </div>
-          <p className={styles.subtitle}>
-            Your response has been recorded. We can&rsquo;t wait to celebrate with you.
-          </p>
-        </div>
+      <div className={styles.thanks}>
+        <Illustration name="heart" tone="terracotta" size={34} />
+        <h2 className={styles.thanksTitle}>Thank You!</h2>
+        <p className={styles.thanksBody}>
+          {response === "decline"
+            ? "We're sorry you can't make it — you'll be missed. Thank you for letting us know."
+            : "Your response has been recorded. We can't wait to celebrate with you in Italy!"}
+        </p>
       </div>
     );
   }
 
+  // ---- Step 1: find invitation ----
   if (phase === "search" || phase === "notFound" || phase === "error") {
     return (
-      <form className={styles.card} onSubmit={handleSearch}>
-        <ScallopFrame color="var(--color-sky-blue)" />
-        <div className={styles.left}>
-          <div className={styles.headingRow}>
-            <h3 className={styles.heading}>Kindly Respond</h3>
-            <Illustration name="heart" tone="terracotta" size={16} className={styles.heart} />
-          </div>
-          <p className={styles.subtitle}>By April 1, 2027</p>
+      <form className={styles.form} onSubmit={handleSearch}>
+        <section className={styles.section}>
+          <p className={styles.stepLabel}>1. Find Your Invitation</p>
+          <p className={styles.stepHelp}>
+            Look up your party with the name and email on your invitation.
+          </p>
 
-          <div className={styles.field}>
-            <label className={styles.fieldLabel} htmlFor="rsvp-party-name">
-              Party Name
-            </label>
+          <label className={styles.field}>
+            <span className={styles.fieldLabel}>Name(s) *</span>
             <input
-              id="rsvp-party-name"
-              name="partyName"
               type="text"
-              placeholder="As shown on your invitation"
-              className={styles.fieldInput}
+              placeholder="e.g. Taylor Smith or Taylor &amp; Alex Smith"
+              className={styles.input}
               value={partyName}
               onChange={(e) => setPartyName(e.target.value)}
               required
             />
-          </div>
+          </label>
 
-          <div className={styles.field}>
-            <label className={styles.fieldLabel} htmlFor="rsvp-email">
-              Email
-            </label>
+          <label className={styles.field}>
+            <span className={styles.fieldLabel}>Email *</span>
             <input
-              id="rsvp-email"
-              name="email"
               type="email"
               placeholder="you@example.com"
-              className={styles.fieldInput}
+              className={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-          </div>
+          </label>
 
           {phase === "notFound" && (
-            <p className={styles.formError}>
-              We couldn&rsquo;t find an invitation matching that name and email. Please check
-              your invitation or reach out to us directly.
+            <p className={styles.error}>
+              We couldn&rsquo;t find an invitation matching that name and email. Please check your
+              invitation or reach out to us directly.
             </p>
           )}
           {phase === "error" && (
-            <p className={styles.formError}>
+            <p className={styles.error}>
               Something went wrong on our end. Please try again in a moment.
             </p>
           )}
-        </div>
+        </section>
 
-        <div className={styles.right}>
-          <button type="submit" className={`btn-blue ${styles.submit}`} disabled={searching}>
-            {searching ? "Searching…" : "Find My Invitation"}
-          </button>
-        </div>
+        <button type="submit" className={`btn-primary ${styles.submit}`} disabled={searching}>
+          {searching ? "Searching…" : "Find My Invitation"}
+        </button>
       </form>
     );
   }
 
+  // ---- Step 2: respond ----
   return (
-    <form className={styles.card} onSubmit={handleSubmit}>
-      <ScallopFrame color="var(--color-sky-blue)" />
-      <div className={styles.left}>
-        <div className={styles.headingRow}>
-          <h3 className={styles.heading}>Kindly Respond</h3>
-          <img src="/assets/illustrations/heart.svg" alt="" className={styles.heart} />
-        </div>
-        <p className={styles.subtitle}>{party?.name}</p>
-
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <section className={styles.section}>
+        <p className={styles.stepLabel}>1. Your Party</p>
+        <p className={styles.stepHelp}>
+          Found you{party?.name ? `, ${party.name}` : ""}! Confirm who we should plan for.
+        </p>
         <div className={styles.guestList}>
           {guests.map((guest, index) => (
             <div className={styles.guestRow} key={index}>
               <input
                 type="text"
                 placeholder="Guest name"
-                className={styles.fieldInput}
+                className={styles.input}
                 value={guest.first_name}
                 onChange={(e) => updateGuestName(index, e.target.value)}
               />
@@ -223,35 +217,49 @@ export default function KindlyRespondCard() {
             + Add Guest
           </button>
         </div>
-      </div>
+      </section>
 
-      <div className={styles.right}>
-        <div className={styles.responseOptions} role="radiogroup" aria-label="RSVP response">
-          <label className={styles.responseOption}>
-            <input
-              type="radio"
-              name="response"
-              value="accept"
-              checked={response === "accept"}
-              onChange={() => setResponse("accept")}
-            />
-            Accepts with pleasure
-          </label>
-          <label className={styles.responseOption}>
-            <input
-              type="radio"
-              name="response"
-              value="decline"
-              checked={response === "decline"}
-              onChange={() => setResponse("decline")}
-            />
-            Declines with regret
-          </label>
+      <section className={styles.section}>
+        <p className={styles.stepLabel}>2. Will You Be Joining Us?</p>
+        <div className={styles.choices} role="radiogroup" aria-label="RSVP response">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={response === "accept"}
+            className={`${styles.choice} ${response === "accept" ? styles.choiceAccept : ""}`}
+            onClick={() => setResponse("accept")}
+          >
+            Joyfully Accepts
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={response === "decline"}
+            className={`${styles.choice} ${response === "decline" ? styles.choiceDecline : ""}`}
+            onClick={() => setResponse("decline")}
+          >
+            Regretfully Declines
+          </button>
         </div>
-        <button type="submit" className={`btn-blue ${styles.submit}`} disabled={submitting}>
-          {submitting ? "Submitting…" : "Submit Response"}
-        </button>
-      </div>
+      </section>
+
+      <section className={styles.section}>
+        <p className={styles.stepLabel}>3. Any Dietary Restrictions or Allergies?</p>
+        <p className={styles.stepHelp}>Let us know so we can plan accordingly.</p>
+        <textarea
+          className={styles.textarea}
+          placeholder="e.g. Vegetarian, gluten-free, nut allergy, etc."
+          maxLength={250}
+          rows={3}
+          value={dietary}
+          onChange={(e) => setDietary(e.target.value)}
+        />
+        <span className={styles.counter}>{dietary.length} / 250</span>
+      </section>
+
+      <button type="submit" className={`btn-primary ${styles.submit}`} disabled={submitting}>
+        {submitting ? "Submitting…" : "Submit RSVP"}
+      </button>
     </form>
   );
 }
