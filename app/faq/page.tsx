@@ -319,9 +319,11 @@ export default function FaqPage() {
           </div>
         </aside>
 
-        {/* Grouped Q&A */}
+        {/* Grouped Q&A — scrolls independently of the page */}
         <div className={styles.main}>
-          <FaqGroups groups={GROUPS} />
+          <div className={styles.scrollBox}>
+            <FaqGroups groups={GROUPS} />
+          </div>
 
           <div className={styles.banner}>
             <span className={styles.bannerBody}>

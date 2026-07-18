@@ -95,6 +95,37 @@
   min-width: 0;
 }
 
+/* Grouped Q&A in its own scroll area, independent of page scroll. */
+.scrollBox {
+  max-height: min(74vh, 780px);
+  overflow-y: auto;
+  padding-right: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-sage) transparent;
+  scroll-behavior: smooth;
+}
+
+.scrollBox::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollBox::-webkit-scrollbar-thumb {
+  background: var(--color-sage);
+  border-radius: 999px;
+}
+
+.scrollBox::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (max-width: 899px) {
+  .scrollBox {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+}
+
 .banner {
   display: flex;
   gap: 14px;

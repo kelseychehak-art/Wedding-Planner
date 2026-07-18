@@ -175,11 +175,10 @@ export default function TravelPage() {
           <p className={c.cardIntro}>
             Check out our FAQ or reach out if you need any help planning your trip.
           </p>
-          <a
-            href="/faq"
-            className="btn-outline"
-            style={{ alignSelf: "flex-start", marginTop: "auto" }}
-          >
+          <div className={c.cardFill} aria-hidden="true">
+            <Illustration name="lemonBranch" size={92} />
+          </div>
+          <a href="/faq" className="btn-outline" style={{ alignSelf: "flex-start" }}>
             View FAQ
           </a>
         </section>
