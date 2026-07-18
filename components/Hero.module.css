@@ -40,9 +40,9 @@
 .content {
   position: relative;
   z-index: 4;
-  width: min(650px, 100% - 48px);
+  width: min(840px, 100% - 48px);
   margin: 0 auto;
-  padding-top: clamp(68px, 8.5vh, 105px);
+  padding-top: clamp(64px, 8vh, 100px);
   padding-bottom: 130px;
   text-align: center;
   display: flex;
@@ -52,7 +52,7 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -60,29 +60,29 @@
 }
 
 .sprig {
-  width: 115px;
+  width: 132px;
   height: auto;
-  margin-top: 16px;
+  margin-top: 18px;
 }
 
 .country {
   font-family: var(--font-heading);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(78px, 7vw, 112px);
+  font-size: clamp(90px, 8.4vw, 156px);
   letter-spacing: -0.02em;
   line-height: 0.96;
   color: var(--color-olive-dark);
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .divider {
   display: grid;
-  grid-template-columns: 1fr 23px 1fr;
+  grid-template-columns: 1fr 24px 1fr;
   align-items: center;
-  gap: 14px;
-  width: min(365px, 90%);
-  margin: 16px 0 6px;
+  gap: 16px;
+  width: min(460px, 90%);
+  margin: 18px 0 6px;
 }
 
 .rule {
@@ -98,37 +98,37 @@
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: clamp(42px, 4vw, 58px);
+  font-size: clamp(48px, 4.6vw, 74px);
   line-height: 1.05;
   color: var(--color-ink);
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .event {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: clamp(49px, 4.5vw, 65px);
+  font-size: clamp(56px, 5.2vw, 84px);
   line-height: 1;
   color: var(--color-ink);
 }
 
 .meta {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.19em;
   text-transform: uppercase;
   line-height: 1.75;
   color: var(--color-olive-dark);
-  margin-top: 22px;
+  margin-top: 26px;
 }
 
 .cta {
-  width: min(370px, 100%);
-  min-height: 54px;
+  width: min(420px, 100%);
+  min-height: 58px;
   border-radius: 3px;
-  margin-top: 26px;
+  margin-top: 28px;
 }
 
 .stamp {
