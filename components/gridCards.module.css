@@ -57,7 +57,7 @@
 
 .cardTitle {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -67,7 +67,7 @@
 
 .cardIntro {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.65;
   color: var(--color-ink);
   margin-bottom: 14px;
@@ -94,17 +94,17 @@
 
 .rowLead {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-terracotta);
-  min-width: 42px;
+  min-width: 44px;
 }
 
 .rowText {
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.5;
   color: var(--color-ink);
 }
@@ -133,14 +133,14 @@
 
 .tipTitle {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--color-olive-dark);
 }
 
 .tipBody {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 13.5px;
   line-height: 1.55;
   color: var(--color-muted-ink);
 }
@@ -175,7 +175,7 @@
 
 .calloutText {
   font-family: var(--font-sans);
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.55;
   color: var(--color-muted-ink);
 }
@@ -199,7 +199,7 @@
 
 .blueHeading {
   font-family: var(--font-serif);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -208,10 +208,10 @@
 
 .blueBody {
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.6;
   color: var(--color-muted-ink);
-  max-width: 320px;
+  max-width: 340px;
   margin-bottom: 4px;
 }
 
@@ -248,7 +248,7 @@
 
 .sectionTitle {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -257,10 +257,10 @@
 
 .sectionIntro {
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 15.5px;
   line-height: 1.65;
   color: var(--color-muted-ink);
-  max-width: 620px;
+  max-width: 660px;
   margin-bottom: 22px;
 }
 

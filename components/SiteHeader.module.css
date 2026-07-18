@@ -7,10 +7,10 @@
   align-items: center;
   gap: 16px;
   min-height: 78px;
-  /* Match the content panel's width so the monogram/nav align with it. */
-  width: min(1720px, 86%);
-  margin: 0 auto;
-  padding: 0;
+  /* Full width so the monogram sits in the far-left corner; the nav + RSVP
+     group stays centered via the flexible spacers on each side. */
+  width: 100%;
+  padding: 0 clamp(20px, 3vw, 52px);
 }
 
 /* Nav links + RSVP button, kept together and centered on the page. */
@@ -83,8 +83,8 @@
 @media (max-width: 767px) {
   .inner {
     min-height: 76px;
-    width: calc(100% - 24px);
-    padding: 0;
+    width: 100%;
+    padding: 0 14px;
   }
 
   .monogram {
