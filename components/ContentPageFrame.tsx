@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import SiteHeader from "./SiteHeader";
-import Illustration, { type IllustrationName } from "./Illustration";
+import Illustration from "./Illustration";
+import Art from "./Art";
 import PostageStamp from "./PostageStamp";
 import { siteContent } from "@/data/siteContent";
 import styles from "./ContentPageFrame.module.css";
@@ -19,8 +20,6 @@ type ContentPageFrameProps = {
   title: string;
   /** One-line muted subtitle under the gold divider. */
   subtitle: string;
-  /** Centered sprig above the title. Defaults to the lemon branch. */
-  heroIllustration?: IllustrationName;
   /** Closing line in the footer band (rendered uppercase). */
   footerLine?: string;
   /** Hero title color. Most pages are olive; RSVP/personalized pages use terracotta. */
@@ -31,7 +30,6 @@ type ContentPageFrameProps = {
 export default function ContentPageFrame({
   title,
   subtitle,
-  heroIllustration = "lemonBranch",
   footerLine = "We can't wait to celebrate with you!",
   titleTone = "olive",
   children,
@@ -50,11 +48,11 @@ export default function ContentPageFrame({
             </Link>
 
             <span className={styles.stamp} aria-hidden="true">
-              <PostageStamp variant="villa" rotate={5} />
+              <PostageStamp rotate={5} />
             </span>
 
             <header className={styles.hero}>
-              <Illustration name={heroIllustration} className={styles.sprig} />
+              <Art name="lemon-branch" className={styles.sprig} />
               <h1
                 className={styles.title}
                 data-tone={titleTone === "terracotta" ? "terracotta" : undefined}
@@ -67,11 +65,7 @@ export default function ContentPageFrame({
                   className={styles.titleHeart}
                 />
               </h1>
-              <div className={styles.divider} aria-hidden="true">
-                <span className={styles.rule} />
-                <Illustration name="heart" tone="gold" size={18} />
-                <span className={styles.rule} />
-              </div>
+              <Art name="div-gold-heart" className={styles.divider} />
               <p className={styles.subtitle}>{subtitle}</p>
             </header>
 
@@ -79,15 +73,11 @@ export default function ContentPageFrame({
 
             <footer className={styles.footerBand}>
               <div className={styles.footerArt} aria-hidden="true">
-                <Illustration name="wineGlass" size={38} />
-                <Illustration name="oliveBranch" size={66} />
+                <Art name="wine-glass" className={styles.footerArtWine} />
+                <Art name="div-vine" className={styles.footerArtVine} />
               </div>
               <p className={styles.footerLine}>{footerLine}</p>
-              <div className={styles.divider} aria-hidden="true">
-                <span className={styles.rule} />
-                <Illustration name="heart" tone="gold" size={15} />
-                <span className={styles.rule} />
-              </div>
+              <Art name="div-gold-heart" className={styles.divider} />
               <p className={styles.footerNames}>
                 {couple.bride} <span aria-hidden="true">♥</span> {couple.groom}
               </p>

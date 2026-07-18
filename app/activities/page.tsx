@@ -43,7 +43,6 @@ export default function ActivitiesPage() {
     <ContentPageFrame
       title="Activities & Experiences"
       subtitle="Join us for a week filled with unforgettable moments."
-      heroIllustration="lemonBranch"
       footerLine="We can't wait to share this week with you!"
     >
       {/* ---------- Planned activities ---------- */}

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from "./Hero.module.css";
 import { siteContent } from "@/data/siteContent";
-import Illustration from "./Illustration";
+import Art from "./Art";
 import PostageStamp from "./PostageStamp";
 
 /**
@@ -27,19 +27,15 @@ export default function Hero() {
       <div className={styles.veil} />
 
       <span className={styles.stamp} aria-hidden="true">
-        <PostageStamp variant="villa" rotate={6} />
+        <PostageStamp rotate={6} />
       </span>
 
       <div className={styles.content}>
         <p className={styles.eyebrow}>{wedding.eyebrow}</p>
-        <Illustration name="lemonBranch" className={styles.sprig} />
+        <Art name="lemon-branch" className={styles.sprig} />
         <h1 className={styles.country}>{wedding.destination}</h1>
 
-        <div className={styles.divider} aria-hidden="true">
-          <span className={styles.rule} />
-          <Illustration name="heart" tone="gold" size={20} />
-          <span className={styles.rule} />
-        </div>
+        <Art name="div-gold-heart" className={styles.divider} />
 
         <p className={styles.couple}>{couple.displayName}&rsquo;s</p>
         <p className={styles.event}>{wedding.eventName}</p>
@@ -59,7 +55,7 @@ export default function Hero() {
         <span className={styles.handwrittenText}>
           We can&rsquo;t wait to celebrate with you
         </span>
-        <Illustration name="heart" tone="terracotta" size={18} />
+        <Art name="heart" className={styles.handwrittenHeart} />
       </div>
     </section>
   );

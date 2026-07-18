@@ -83,7 +83,7 @@
 }
 
 .sprig {
-  width: clamp(78px, 8vw, 96px);
+  width: clamp(150px, 15vw, 200px);
   height: auto;
 }
 
@@ -112,21 +112,10 @@
 }
 
 .divider {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 14px;
-  width: min(300px, 75%);
+  display: block;
+  width: min(380px, 72%);
+  height: auto;
   margin: 12px 0 0;
-}
-
-.rule {
-  height: 1px;
-  background: var(--color-citrus-gold);
-}
-
-.divider > svg {
-  justify-self: center;
 }
 
 .subtitle {
@@ -158,10 +147,20 @@
 
 .footerArt {
   display: flex;
-  align-items: flex-end;
-  gap: 18px;
-  margin-bottom: 10px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
   opacity: 0.9;
+}
+
+.footerArtWine {
+  width: 30px;
+  height: auto;
+}
+
+.footerArtVine {
+  width: 120px;
+  height: auto;
 }
 
 .footerLine {

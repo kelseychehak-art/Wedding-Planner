@@ -281,7 +281,6 @@ export default function FaqPage() {
     <ContentPageFrame
       title="Frequently Asked Questions"
       subtitle="Find answers to common questions about our wedding weekend in Italy."
-      heroIllustration="lemonBranch"
       footerLine="We can't wait to celebrate with you!"
     >
       <div className={styles.layout}>

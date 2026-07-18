@@ -16,7 +16,6 @@ export default function RsvpPage() {
       title="Submit Your RSVP"
       subtitle="Please let us know if you'll be joining us in Italy!"
       titleTone="terracotta"
-      heroIllustration="lemonBranch"
       footerLine="We can't wait to celebrate with you!"
     >
       <p className={styles.deadline}>

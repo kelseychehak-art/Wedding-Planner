@@ -1,10 +1,19 @@
 .stamp {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
+  width: 100%;
   color: var(--color-olive-dark);
   flex-shrink: 0;
+}
+
+/* The perforated stamp card (holds the frame + villa engraving). */
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 100 / 118;
 }
 
 .frame {
@@ -17,29 +26,18 @@
 .art {
   position: relative;
   z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60%;
-  margin-bottom: 7%;
-}
-
-.art svg {
-  width: 100%;
+  width: 66%;
   height: auto;
+  margin-bottom: 6%;
 }
 
-.label {
+/* Round "ITALY" postmark overlapping the lower-right corner. */
+.postmark {
   position: absolute;
-  bottom: 9%;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  text-align: center;
-  font-family: var(--font-sans);
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-muted-ink);
+  z-index: 2;
+  width: 56%;
+  height: auto;
+  right: -20%;
+  bottom: -14%;
+  opacity: 0.9;
 }

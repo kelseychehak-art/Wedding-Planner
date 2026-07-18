@@ -44,7 +44,6 @@ export default function StayPage() {
     <ContentPageFrame
       title="Browse Where You'll Stay"
       subtitle="Room blocks and details for our week in Italy."
-      heroIllustration="cypress"
       footerLine="We can't wait to welcome you to Italy!"
     >
       {/* Villa intro */}

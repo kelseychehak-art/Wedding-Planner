@@ -48,7 +48,6 @@ export default function OurWeekendPage() {
     <ContentPageFrame
       title="Weekend Schedule"
       subtitle="A week of celebration, connection, and unforgettable moments in Italy."
-      heroIllustration="cypress"
       footerLine="We can't wait to celebrate with you!"
     >
       <div className={styles.layout}>

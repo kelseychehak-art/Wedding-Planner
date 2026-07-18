@@ -51,7 +51,6 @@ export default function TravelPage() {
     <ContentPageFrame
       title="Book Your Travel"
       subtitle="Flights, transportation options, and tips to help you plan your journey to Italy."
-      heroIllustration="lemonBranch"
       footerLine="We can't wait to welcome you to Italy!"
     >
       <div className={c.grid}>
