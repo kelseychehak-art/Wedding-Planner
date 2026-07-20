@@ -11,7 +11,9 @@ with **Next.js 16 (App Router) + React 19 + TypeScript**. It has two surfaces:
 - **Public guest site** — `/` (home) plus `/our-weekend`, `/travel`, `/stay`, `/things-to-do`,
   `/faq`, `/rsvp`. This is the design-mockup work.
 - **Admin back-office** — `/admin` (auth + dashboard for vendors, venues, guests, budget, timeline,
-  decisions, exports), backed by `app/api/admin/*` route handlers. Not part of the mockup rebuild.
+  decisions, exports), backed by `app/api/admin/*` route handlers. Not part of the current mockup
+  rebuild — but admin **design briefs** (Guest List + Dashboard, Travel, Itinerary, Budget,
+  Settings) are now captured in [`docs/admin/`](./docs/admin) for a future build.
 
 **Supabase** (`@supabase/supabase-js`) powers the RSVP flow and admin. RSVP works by **name + email
 lookup** (RPCs `get_party_for_rsvp` / `submit_rsvp` in `lib/supabase.ts`). There is **no guest login
@@ -92,6 +94,13 @@ photograph are still pending. Until they land:
   [`travel.md`](./docs/pages/travel.md), [`stay.md`](./docs/pages/stay.md),
   [`activities.md`](./docs/pages/activities.md), [`faq.md`](./docs/pages/faq.md).
   (Things to Do + RSVP specs pending their mockups.)
+- **Admin back-office specs (captured — not yet built)** —
+  [`docs/admin/README.md`](./docs/admin/README.md) (index), plus
+  [`guest-list.md`](./docs/admin/guest-list.md) (foundation + Dashboard + Guest List),
+  [`travel.md`](./docs/admin/travel.md), [`itinerary.md`](./docs/admin/itinerary.md),
+  [`budget.md`](./docs/admin/budget.md), [`settings.md`](./docs/admin/settings.md). Verbatim
+  implementation briefs + mockup transcriptions; **build `guest-list.md` first** (shared admin
+  shell). See the README for repo-reconciliation + wedding-date caveats.
 - **Guest portal (FUTURE-STATE — not the current plan)** —
   [`docs/guest-portal/overview.md`](./docs/guest-portal/overview.md) +
   [`master-brief.md`](./docs/guest-portal/master-brief.md): the token-gated personalized portal
