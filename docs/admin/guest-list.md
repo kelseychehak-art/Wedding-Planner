@@ -25,6 +25,14 @@
 
 ## Mockup reference — Guest List (transcribed)
 
+**Party View:**
+
+![Guest List — Party View](./mockups/guest-list-party-view.png)
+
+**Individual View** (§13 — one row per guest, with Party, Dietary/Notes columns):
+
+![Guest List — Individual View](./mockups/guest-list-individual-view.png)
+
 Shared sidebar: "Kelsey & Andrew · TUSCANY 2027"; nav Dashboard, **Guest List** (active), Itinerary,
 Travel, Activities, Lodging, Communications, Budget, Vendors, Settings; Italy postmark.
 
@@ -49,6 +57,8 @@ Travel, Activities, Lodging, Communications, Budget, Vendors, Settings; Italy po
 - **Pagination:** "1–3 of 28 parties" · Rows per page 20 · pages 1–2.
 
 ## Mockup reference — Guest Dashboard (§11) (transcribed)
+
+![Guest Dashboard](./mockups/dashboard.png)
 
 - **Header:** title "Guest Dashboard"; subtitle "Track invitations, RSVPs, travel, activities, and
   lodging at a glance."; **+ ADD GUEST OR PARTY** button; **WEDDING DATES Sep 12 – 16, 2027** chip.

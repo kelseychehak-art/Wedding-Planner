@@ -8,55 +8,67 @@ ready when that work is greenlit.
 
 Each spec is the **verbatim source brief** (converted from the original `.docx`, code blocks
 preserved) with a short **header block** prepended that records status, which admin route it maps
-to, a **repo-reconciliation note**, and a **transcription of the approved mockup** (the mockup PNGs
-themselves were shared inline and are **not** committed — see open item 3).
+to, a **repo-reconciliation note**, and a **transcription of the approved mockup**. The approved
+mockup PNGs live in [`docs/admin/mockups/`](./mockups) and are embedded in each spec.
 
-## The five specs
+## The nine specs
 
 | Spec | Mockup(s) | Maps to admin surface | Build state today |
 |---|---|---|---|
-| [`guest-list.md`](./guest-list.md) — **foundation + Dashboard + Guest List** | Guest List ✓, Guest Dashboard ✓ | `app/admin/(dashboard)/` (Dashboard) + `guests/` | Both exist; brief is a richer redesign. **Its §1–10 define the shared admin shell/design-system every other spec reuses.** |
-| [`travel.md`](./travel.md) | Travel ✓ | `/admin/travel` | **Net-new page.** Only `POST /api/admin/travel` (`admin_upsert_travel_info`) exists — no UI, not in nav. |
-| [`itinerary.md`](./itinerary.md) | Itinerary ✓ | `/admin/itinerary` | Related to existing **Timeline** (milestones) but distinct — the weekend **event schedule**. |
-| [`budget.md`](./budget.md) | Budget ✓ | `app/admin/(dashboard)/budget/` | Exists (`BudgetManager`, budget RPCs); brief is a richer redesign. |
-| [`settings.md`](./settings.md) | — (none provided) | `/admin/settings` | **Net-new page.** Only `POST /api/admin/budget/settings` exists today. |
+| [`guest-list.md`](./guest-list.md) — **foundation + Dashboard + Guest List** | [party view](./mockups/guest-list-party-view.png), [individual view](./mockups/guest-list-individual-view.png), [dashboard](./mockups/dashboard.png) | `app/admin/(dashboard)/` (Dashboard) + `guests/` | Both exist; richer redesign. **Its §1–10 define the shared admin shell/design-system every other spec reuses.** |
+| [`travel.md`](./travel.md) | [travel](./mockups/travel.png) | `/admin/travel` | **Net-new page.** Only `POST /api/admin/travel` exists — no UI, not in nav. |
+| [`itinerary.md`](./itinerary.md) | [itinerary](./mockups/itinerary.png) | `/admin/itinerary` | Related to existing **Timeline** (milestones) but distinct — the weekend **event schedule**. |
+| [`budget.md`](./budget.md) | [budget](./mockups/budget.png) | `app/admin/(dashboard)/budget/` | Exists (`BudgetManager`, budget RPCs); richer redesign. |
+| [`settings.md`](./settings.md) | [settings](./mockups/settings.png) | `/admin/settings` | **Net-new page.** Only `POST /api/admin/budget/settings` exists today. |
+| [`activities.md`](./activities.md) | [activities](./mockups/activities.png) | `/admin/activities` | **Net-new page.** Public `/activities` route exists on the guest site; this is the admin counterpart. |
+| [`lodging.md`](./lodging.md) | [lodging](./mockups/lodging.png) | `/admin/lodging` | **Net-new page.** Admin **Venues** exists (venue selection) — distinct from guest room-assignment. |
+| [`communications.md`](./communications.md) | [communications](./mockups/communications.png) | `/admin/communications` | **Net-new page.** No messaging provider wired — sending must be draft/queue only. |
+| [`vendors.md`](./vendors.md) | [vendors](./mockups/vendors.png) | `app/admin/(dashboard)/vendors/` | Exists (`VendorForm`, vendor RPCs); **large expansion** (proposals, contracts, payments, tasks, Gmail). |
 
-Note the asymmetry: the **Guest Dashboard** mockup has no standalone brief — it is specced inside
-`guest-list.md` **§11**. The **Settings** brief has no mockup.
+Notes: the **Guest Dashboard** mockup has no standalone brief — it's specced inside `guest-list.md`
+**§11**. The four newest specs (activities, lodging, communications, vendors) came bundled in one
+`.docx`; their mockups include a right-hand **"Code Structure" panel** showing each brief's intended
+file tree.
 
 ## Recommended build order
 
-1. **`guest-list.md` first** — it establishes the shared admin **shell, design system, typography,
-   sidebar, page header, and summary metric strip** (its §1–10) plus the Dashboard (§11) and Guest
-   List (§12–13). Everything else reuses these primitives.
-2. **`travel.md`** — largest net-new data model (`travel_itineraries` / `travel_segments` /
-   `transportation_requests`); also unifies the guest RSVP travel form with the admin view.
-3. **`itinerary.md`** — reconcile with the existing Timeline page and `data/schedule.ts`.
-4. **`budget.md`** — extend the existing Budget RPC surface.
-5. **`settings.md`** — depends on decisions from the others (esp. adult/child classification, which
-   feeds the Dashboard and Guest List metrics) and introduces a team/role model.
+1. **`guest-list.md` first** — establishes the shared admin **shell, design system, typography,
+   sidebar, page header, and summary metric strip** (§1–10) plus the Dashboard (§11) and Guest List
+   (§12–13). Everything else reuses these primitives.
+2. **`settings.md`** early — its adult/child-age classification, RSVP/travel deadlines, and currency
+   feed the Dashboard, Guest List, Activities, and Lodging metrics.
+3. **`travel.md`** — largest net-new data model; unifies the guest RSVP travel form with the admin view.
+4. **`activities.md`** and **`lodging.md`** — depend on guest/child data and the age-band config.
+5. **`itinerary.md`** — reconcile with the existing Timeline page and `data/schedule.ts`.
+6. **`budget.md`** + **`vendors.md`** together — vendor payments and the budget's committed/paid
+   model must reconcile, and both share one **Gmail-ingest** path.
+7. **`communications.md`** — depends on recipient groups derived from the guest data; gated on a real
+   email/SMS provider.
 
 ## Open reconciliation items (resolve at build time)
 
 1. **Stack divergence.** Every brief assumes a **Tailwind + TanStack Table + React-Hook-Form/Zod**
-   stack with **direct Supabase table reads**. This repo actually uses **CSS Modules** (co-located
-   `*.module.css`), **Supabase RPCs** (`admin_*`, no ORM / no direct table reads), the
-   **`app/admin/(dashboard)/`** route group, and single-token admin auth (`lib/admin-session.ts`).
-   Treat the briefs as the source of truth for **layout, columns, states, data model, and
-   behaviour**, and adapt the stack specifics. See each spec's "Repo reconciliation" header.
+   stack with **direct Supabase table reads** (the newest four even ship a "Code Structure" file
+   tree in the mockup). This repo actually uses **CSS Modules** (co-located `*.module.css`),
+   **Supabase RPCs** (`admin_*`, no ORM / no direct table reads), the **`app/admin/(dashboard)/`**
+   route group, and single-token admin auth (`lib/admin-session.ts`). Treat the briefs as the source
+   of truth for **layout, columns, states, data model, and behaviour**, and adapt the stack. See
+   each spec's "Repo reconciliation" header.
 2. **Wedding-fact discrepancies.** The mockups are internally inconsistent and conflict with the
    canonical facts in `CLAUDE.md` (**Kelsey & Andrew · Tuscany, Italy · June 16–21, 2027**):
-   - Dashboard chip: "Sep 12–16, 2027"; Travel: arrivals "Sep 11–15"; Guest List "Invited" dates:
-     "May 2027"; Budget: mixed 2024/2025 due dates.
-   - Itinerary: "Jun 16–22, 2027" (closest to canonical).
-   - Sidebar wordmark: "TUSCANY 2027" (correct destination, but pair with the June dates).
-   - Dashboard names "Andrew Shutts" — confirm the surname.
-   These are the same class of placeholder-error the guest homepage mockup had ("San Francisco /
-   2028"). **Do not copy mockup dates verbatim — reconcile to June 16–21, 2027 · Tuscany on build.**
-3. **Mockup PNGs not committed.** The five approved mockups (Guest List, Guest Dashboard, Budget,
-   Travel, Itinerary) were shared **inline in chat**, not as files, so only their **transcriptions**
-   live in each spec's "Mockup reference" section. To add the real images, drop the PNGs into
-   `docs/admin/mockups/` and link them from each spec's header.
+   - Dates: Dashboard "Sep 12–16"; Settings "Sep 12–18"; Lodging "Sep 12–19"; Travel arrivals
+     "Sep 11–15"; Guest List "Invited" dates "May 2027"; Budget mixed 2024/2025; only **Itinerary**
+     uses June ("Jun 16–22"). **Reconcile all to June 16–21, 2027 · Tuscany on build.**
+   - **Currency:** Budget + Settings use **EUR (€)**; the Vendors mockup uses **USD ($)**.
+     Standardize to **EUR** (Settings is authoritative).
+   - Same class of placeholder-error the guest homepage mockup had ("San Francisco / 2028").
+   - ✅ **Confirmed by the Settings mockup:** couple = **Kelsey Chehak & Andrew Shults** (surname
+     **Shults**; the Dashboard's "Andrew Shutts" is a typo), destination **Tuscany, Italy**, currency
+     **EUR**, timezone **Europe/Rome**, domain **chehakshultswedding.com**.
+3. **Mockup images — now committed.** The approved mockups live in
+   [`docs/admin/mockups/`](./mockups) (moved out of the repo root, where they were first uploaded,
+   into descriptive filenames) and are embedded in each spec. *(Resolves the earlier "PNGs not
+   committed" item.)*
 4. **Fonts.** The Guest List brief suggests **Inter / Manrope** for the admin UI font. `CLAUDE.md`
    explicitly **forbids** substituting a geometric sans (Inter, Poppins, Montserrat) for the guest
    site's "Option A" fonts. Decide deliberately whether admin shares the guest brand fonts or is
@@ -64,3 +76,6 @@ Note the asymmetry: the **Guest Dashboard** mockup has no standalone brief — i
 5. **Design tokens.** Reuse the existing `--color-*` / `--ink` / `--olive-*` palette in
    `styles/tokens.css`; do **not** spin up a parallel `--admin-*` token set without sign-off
    (`CLAUDE.md` — "RULE — adapt, never duplicate").
+6. **Cross-page overlaps to build once, not twice.** Adult/child-age rules (Settings ↔ Guest List ↔
+   Activities ↔ Lodging); Gmail ingest (Budget ↔ Vendors); vendor payments ↔ budget committed/paid;
+   activity age-eligibility ↔ guest child data.

@@ -16,6 +16,8 @@
 
 ## Mockup reference (transcribed)
 
+![Travel admin mockup](./mockups/travel.png)
+
 Left sidebar (shared admin shell): "Kelsey & Andrew · TUSCANY 2027", nav = Dashboard, Guest List,
 Itinerary, **Travel** (active), Activities, Lodging, Communications, Budget, Vendors, Settings;
 terracotta Italy postmark at the bottom.

@@ -15,6 +15,8 @@
 
 ## Mockup reference (transcribed)
 
+![Budget admin mockup](./mockups/budget.png)
+
 - **Header:** title "Budget"; subtitle "Track your spending, manage payments, and stay on budget.";
   olive sprig upper-right; **+ ADD EXPENSE** button.
 - **Metric strip (6, EUR):** `€245,000 Total Budget` (Updated May 15, 2025) · `€162,450 Total

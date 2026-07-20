@@ -13,7 +13,8 @@ with **Next.js 16 (App Router) + React 19 + TypeScript**. It has two surfaces:
 - **Admin back-office** — `/admin` (auth + dashboard for vendors, venues, guests, budget, timeline,
   decisions, exports), backed by `app/api/admin/*` route handlers. Not part of the current mockup
   rebuild — but admin **design briefs** (Guest List + Dashboard, Travel, Itinerary, Budget,
-  Settings) are now captured in [`docs/admin/`](./docs/admin) for a future build.
+  Settings, Activities, Lodging, Communications, Vendors) are now captured in
+  [`docs/admin/`](./docs/admin) for a future build.
 
 **Supabase** (`@supabase/supabase-js`) powers the RSVP flow and admin. RSVP works by **name + email
 lookup** (RPCs `get_party_for_rsvp` / `submit_rsvp` in `lib/supabase.ts`). There is **no guest login
@@ -95,12 +96,15 @@ photograph are still pending. Until they land:
   [`activities.md`](./docs/pages/activities.md), [`faq.md`](./docs/pages/faq.md).
   (Things to Do + RSVP specs pending their mockups.)
 - **Admin back-office specs (captured — not yet built)** —
-  [`docs/admin/README.md`](./docs/admin/README.md) (index), plus
+  [`docs/admin/README.md`](./docs/admin/README.md) (index), plus nine specs:
   [`guest-list.md`](./docs/admin/guest-list.md) (foundation + Dashboard + Guest List),
   [`travel.md`](./docs/admin/travel.md), [`itinerary.md`](./docs/admin/itinerary.md),
-  [`budget.md`](./docs/admin/budget.md), [`settings.md`](./docs/admin/settings.md). Verbatim
-  implementation briefs + mockup transcriptions; **build `guest-list.md` first** (shared admin
-  shell). See the README for repo-reconciliation + wedding-date caveats.
+  [`budget.md`](./docs/admin/budget.md), [`settings.md`](./docs/admin/settings.md),
+  [`activities.md`](./docs/admin/activities.md), [`lodging.md`](./docs/admin/lodging.md),
+  [`communications.md`](./docs/admin/communications.md), [`vendors.md`](./docs/admin/vendors.md).
+  Verbatim implementation briefs + embedded mockups ([`docs/admin/mockups/`](./docs/admin/mockups));
+  **build `guest-list.md` first** (shared admin shell). See the README for repo-reconciliation +
+  wedding-date/currency caveats.
 - **Guest portal (FUTURE-STATE — not the current plan)** —
   [`docs/guest-portal/overview.md`](./docs/guest-portal/overview.md) +
   [`master-brief.md`](./docs/guest-portal/master-brief.md): the token-gated personalized portal

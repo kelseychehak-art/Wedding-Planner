@@ -14,6 +14,8 @@
 
 ## Mockup reference (transcribed)
 
+![Itinerary admin mockup](./mockups/itinerary.png)
+
 - **Header:** title "Itinerary"; subtitle "Manage your weekend schedule, timeline, and event
   details."; olive sprig upper-right; **+ ADD EVENT** button.
 - **Metric strip (6):** `7 Events` (Across 6 days) · `52 Invited` (Across 28 parties) ·

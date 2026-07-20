@@ -1,8 +1,7 @@
 # Admin Spec — Settings
 
 > **Status:** Captured 2026-07-20 — **not yet built.** Source: "Claude Code Implementation
-> Brief — Admin Settings Page". **No mockup was provided** for this page — layout is described by
-> the brief only.
+> Brief — Admin Settings Page" + approved mockup (added 2026-07-20; transcribed below).
 > **Maps to:** net-new page `/admin/settings`. Today only `POST /api/admin/budget/settings` exists;
 > there is no general settings surface and no sidebar entry.
 > **Repo reconciliation (read before building):** brief assumes Tailwind + shared form components +
@@ -14,12 +13,35 @@
 > (esp. adult/child classification feeding Dashboard + Guest List), and save/unsaved-changes UX are
 > the valuable parts.
 
-## Mockup reference
+## Mockup reference (transcribed)
 
-No mockup image was provided with this brief. The brief specifies a **settings sidebar (≈260px) +
-form panel** layout with these sections: Wedding Details · Guests & RSVP · Events & Activities ·
-Travel & Lodging · Communications · Website & Branding · Integrations · Team & Access · Data &
-Privacy, plus summary cards beneath the active form. When a mockup is provided, transcribe it here.
+![Settings admin mockup](./mockups/settings.png)
+
+Layout: **settings sidebar (≈260px) + form panel**, with a summary-card grid beneath the active
+form. A top nav bar (K & A monogram, section links, "VIEW SITE") sits above the shell here.
+
+- **Sidebar sections:** Wedding Details (active) · Guests & RSVP · Events & Activities · Travel &
+  Lodging · Communications · Website & Branding · Integrations · Team & Access · Data & Privacy;
+  plus a "Need help?" card. Header shows a **"Saved 2 minutes ago"** state.
+- **Wedding Details form:** Couple Names (displayed) = "Kelsey & Andrew" · Formal Names =
+  **"Kelsey Chehak" / "Andrew Shults"** · Wedding Location = "Tuscany, Italy" · Primary Venue =
+  "Villa Rosa" · Wedding Dates = **"Sep 12, 2027 – Sep 18, 2027"** · Time Zone = "Europe/Rome
+  (CEST)" · Primary Currency = **"EUR — Euro"** · Website Domain = "chehakshultswedding.com" ·
+  Admin Contact Email = "hello@chehakshultswedding.com" · Wedding Hashtag = "#ChehaksShults2027".
+  Buttons: **PREVIEW GUEST SITE**, **SAVE CHANGES**.
+- **Summary cards (9):** Guests & RSVP ("RSVP closes Jun 1, 2027 · Adult age begins at 18") ·
+  Events & Activities ("7 events scheduled · Activity sign-ups open") · Travel & Lodging ("Travel
+  collection closes Aug 15, 2027 · Transportation enabled") · Communications ("Email connected · SMS
+  not configured") · Website & Branding ("Published · chehakshultswedding.com") · Integrations
+  ("Gmail connected · Calendar connected") · Team & Access ("2 administrators · Role-based
+  permissions") · Data & Privacy ("Data export available · Privacy & retention settings"). Each has
+  a **Manage →** link.
+
+> ✅ **Useful canonical confirmations from this mockup:** couple = **Kelsey Chehak & Andrew Shults**
+> (surname **Shults** — the Dashboard mockup's "Andrew Shutts" is a typo), destination **Tuscany,
+> Italy**, currency **EUR**, timezone **Europe/Rome**, domain **chehakshultswedding.com**.
+> ⚠️ **But the dates still conflict:** this mockup shows **Sep 12–18, 2027**; canonical per
+> `CLAUDE.md` is **June 16–21, 2027**. Reconcile on build. See `docs/admin/README.md`.
 
 ---
 ## CLAUDE CODE IMPLEMENTATION BRIEF
