@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { IconGrip, IconChevronUp, IconChevronDown } from "@/components/admin/icons";
 import styles from "./guests.module.css";
 
 /*
@@ -101,6 +103,11 @@ export default function PartyForm({
   onCancel: () => void;
   saving: boolean;
 }) {
+  /* Native HTML5 drag for the mouse; the arrow buttons cover keyboard and
+     touch, which drag-and-drop alone would shut out. */
+  const [dragging, setDragging] = useState<number | null>(null);
+  const [dragOver, setDragOver] = useState<number | null>(null);
+
   function set<K extends keyof PartyDraft>(key: K, value: PartyDraft[K]) {
     setDraft({ ...draft, [key]: value });
   }
@@ -120,6 +127,15 @@ export default function PartyForm({
       guests: draft.guests.filter((_, i) => i !== idx),
       removedGuestIds: g.id ? [...draft.removedGuestIds, g.id] : draft.removedGuestIds,
     });
+  }
+
+  /* Order is saved as each guest's array index on save (sort_order). */
+  function moveGuest(from: number, to: number) {
+    if (to < 0 || to >= draft.guests.length || from === to) return;
+    const next = [...draft.guests];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setDraft({ ...draft, guests: next });
   }
 
   return (
@@ -225,8 +241,67 @@ export default function PartyForm({
         </button>
       </div>
       {draft.guests.length === 0 && <p className={styles.noGuests}>No guests yet.</p>}
+      {draft.guests.length > 1 && (
+        <p className={styles.reorderHint}>
+          Drag a guest by the handle to reorder, or use the arrows. This is the order they appear
+          everywhere — the guest list, exports and stationery.
+        </p>
+      )}
       {draft.guests.map((g, idx) => (
-        <div className={styles.guestEditRow} key={g.id ?? `new-${idx}`}>
+        <div
+          className={`${styles.guestEditRow} ${dragOver === idx ? styles.guestEditRowOver : ""} ${
+            dragging === idx ? styles.guestEditRowDragging : ""
+          }`}
+          key={g.id ?? `new-${idx}`}
+          onDragOver={(e) => {
+            if (dragging === null) return;
+            e.preventDefault();
+            setDragOver(idx);
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            if (dragging !== null) moveGuest(dragging, idx);
+            setDragging(null);
+            setDragOver(null);
+          }}
+        >
+          {draft.guests.length > 1 && (
+            <div className={styles.reorderBar}>
+              <span
+                className={styles.dragHandle}
+                draggable
+                onDragStart={() => setDragging(idx)}
+                onDragEnd={() => {
+                  setDragging(null);
+                  setDragOver(null);
+                }}
+                aria-hidden="true"
+              >
+                <IconGrip size={15} />
+              </span>
+              <span className={styles.reorderPosition}>
+                {idx + 1} of {draft.guests.length}
+              </span>
+              <button
+                type="button"
+                className={styles.reorderBtn}
+                onClick={() => moveGuest(idx, idx - 1)}
+                disabled={idx === 0}
+                aria-label={`Move ${g.first_name || "guest"} up`}
+              >
+                <IconChevronUp size={14} />
+              </button>
+              <button
+                type="button"
+                className={styles.reorderBtn}
+                onClick={() => moveGuest(idx, idx + 1)}
+                disabled={idx === draft.guests.length - 1}
+                aria-label={`Move ${g.first_name || "guest"} down`}
+              >
+                <IconChevronDown size={14} />
+              </button>
+            </div>
+          )}
           <div className={styles.fieldGrid}>
             <div className={styles.field}>
               <label className={styles.label}>First Name</label>

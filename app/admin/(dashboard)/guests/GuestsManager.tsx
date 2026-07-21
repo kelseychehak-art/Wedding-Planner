@@ -624,12 +624,13 @@ export default function GuestsManager({
       }
 
       const savedGuests: Guest[] = [];
-      for (const g of draft.guests) {
+      for (const [index, g] of draft.guests.entries()) {
         if (!g.first_name.trim()) continue;
         const gRes = await fetch("/api/admin/guests", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...g, party_id: partyId }),
+          /* Position in the form is the stored order. */
+          body: JSON.stringify({ ...g, party_id: partyId, sort_order: index }),
         });
         if (gRes.ok) {
           const { guest } = await gRes.json();

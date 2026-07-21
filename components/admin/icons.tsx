@@ -179,6 +179,28 @@ export function IconSearch({ size, className }: IconProps) {
   );
 }
 
+/* Six-dot grip — the conventional "drag me" affordance. */
+export function IconGrip({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <circle cx="9" cy="6" r="1" />
+      <circle cx="15" cy="6" r="1" />
+      <circle cx="9" cy="12" r="1" />
+      <circle cx="15" cy="12" r="1" />
+      <circle cx="9" cy="18" r="1" />
+      <circle cx="15" cy="18" r="1" />
+    </svg>
+  );
+}
+
+export function IconChevronUp({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="m7 14 5-5 5 5" />
+    </svg>
+  );
+}
+
 export function IconChevronDown({ size, className }: IconProps) {
   return (
     <svg {...base(size, className)}>
