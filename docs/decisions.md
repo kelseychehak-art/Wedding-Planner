@@ -121,6 +121,32 @@ needs a name before invitations go out; a single-guest party grouped as a couple
 "wedding party") cutting across households, for filtering and later for controlling which guests
 see which events. Additive; it cannot disturb the household structure.
 
+### D14 — Responding to an RSVP never destroys guest data (resolved 2026-07-21)
+**Decision:** `submit_rsvp` **merges**; it must never delete. Rules:
+- a guest sent with an id belonging to that party is **updated in place** (same row id);
+- a guest sent without a valid id is **inserted**;
+- existing guests the form didn't mention are **left alone** — the couple owns the guest list, and
+  responding must not remove people from it;
+- only the fields the public form owns are written (`first_name`, `is_child`, `rsvp_status`,
+  `meal_choice`, `dietary_restrictions`), and the last two are merged with `coalesce`, so a **blank
+  box means "no change"** rather than erasing what was entered in the admin;
+- id lookups are scoped `where id = … and party_id = p_party_id`, because this is an
+  **anon-callable `SECURITY DEFINER`** function and must not be able to reach another party's rows.
+
+**What it replaced:** `delete from guests where party_id = …` followed by a reinsert. Every guest
+row got a new id, and all **eight** foreign keys referencing `guests` are `ON DELETE CASCADE` — so a
+single guest updating their RSVP silently destroyed their `activity_bookings`,
+`event_guest_invitations`, `lodging_assignment_guests`, `lodging_requests` and
+`travel_itinerary_guests` rows, broke `plus_one_of`, and blanked `last_name`, `allergies`,
+`accessibility_needs` and `is_plus_one`.
+
+**Rule going forward:** any guest-facing write is a **merge scoped to the fields that surface
+belongs to**. Deleting rows on behalf of a guest is not allowed. If a future guest portal needs to
+remove someone, that is an admin action.
+
+**Still open:** the public form applies one shared RSVP status and one shared dietary note to every
+guest in the party (`KindlyRespondCard.tsx`) — per-guest answers need the RSVP form rebuild.
+
 ---
 
 ## Open items (resolve before/at build time)

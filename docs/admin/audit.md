@@ -10,6 +10,7 @@ the dev build (`/admin/guests`), so the geometry below is observed, not inferred
 **Legend:** 🔴 wrong or misleading · 🟠 missing vs mockup · 🟡 consistency/polish
 
 **Status:** the truth pass (items 1, 2, 3, 5, 8, 9, 10) is done and verified in the browser.
+The `submit_rsvp` data-loss bug listed under "guest-facing" is also fixed (see `decisions.md` D14).
 Items 4, 6, 7 and everything under P1/P2 remain open.
 
 ---

@@ -46,6 +46,10 @@ export default function KindlyRespondCard() {
         if (result.guests.length > 0) {
           setGuests(
             result.guests.map((g) => ({
+              /* Carry the id back on submit so submit_rsvp updates this row
+                 rather than creating a duplicate. Dropping it here is what let
+                 the old delete-and-reinsert lose everything attached to a guest. */
+              id: g.id,
               first_name: g.first_name,
               is_child: g.is_child,
               rsvp_status: g.rsvp_status === "Declined" ? "Declined" : "Confirmed",
