@@ -24,6 +24,8 @@ type Guest = {
   rsvp_status: string;
   meal_choice: string | null;
   created_at?: string | null;
+  /* Joined by admin_list_guests; see the guest_list_activities_and_events migration. */
+  activities?: { activity_id: string; title: string }[];
 };
 type Travel = {
   arrival_date: string | null;
@@ -280,9 +282,18 @@ async function getDashboard() {
     .slice(0, 4)
     .map(([, v]) => v);
 
-  // ---- Child guests (real) ----
+  // ---- Child guests (mockup §11: count + share for each line) ----
   const childGuests = allGuests.filter((g) => g.is_child);
+  const childPct = (n: number) =>
+    childGuests.length ? Math.round((n / childGuests.length) * 100) : 0;
   const childWithRsvp = childGuests.filter((g) => g.rsvp_status !== "Invited").length;
+  const childWithActivities = childGuests.filter(
+    (g) => (g.activities?.length ?? 0) > 0
+  ).length;
+  const childNoActivities = childGuests.length - childWithActivities;
+  const childNoTravel = partyList
+    .filter((p) => !partyHasTravel(p))
+    .reduce((s, p) => s + p.guests.filter((g) => g.is_child).length, 0);
 
   // ---- Recently added (real, from created_at) ----
   const recent = [...partyList]
@@ -373,8 +384,23 @@ async function getDashboard() {
     arrivals,
     arrivalsTotal: travelSubmitted,
     arrivalsNeeded: travelNeeded,
-    childTotal: childGuests.length,
-    childWithRsvp,
+    child: {
+      total: childGuests.length,
+      rows: [
+        { label: "With an RSVP", value: childWithRsvp, pct: childPct(childWithRsvp) },
+        { label: "No travel submitted", value: childNoTravel, pct: childPct(childNoTravel) },
+        {
+          label: "With activity sign-ups",
+          value: childWithActivities,
+          pct: childPct(childWithActivities),
+        },
+        {
+          label: "Not signed up for activities",
+          value: childNoActivities,
+          pct: childPct(childNoActivities),
+        },
+      ],
+    },
     recent,
     planning: planning.slice(0, 6),
     eventProgress,
@@ -578,25 +604,38 @@ export default async function AdminDashboardPage() {
           )}
         </section>
 
-        {/* Child Guests */}
+        {/* Child Guest Overview (mockup §11) */}
         <section className={styles.card}>
           <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>Child Guests</h2>
+            <h2 className={styles.cardTitle}>Child Guest Overview</h2>
+            <Link href="/admin/guests?view=individual" className={styles.cardLink}>
+              View all
+            </Link>
           </div>
-          <div className={styles.bigStat}>
-            <span className={styles.bigStatValue}>{data.childTotal}</span>
-            <span className={styles.bigStatLabel}>under 18</span>
-          </div>
-          <ul className={styles.miniStats}>
-            <li>
-              <span>With an RSVP</span>
-              <strong>{data.childWithRsvp}</strong>
-            </li>
-            <li className={styles.miniMuted}>
-              <span>Activity preferences</span>
-              <strong>Not tracked yet</strong>
-            </li>
-          </ul>
+          {data.child.total === 0 ? (
+            <p className={styles.cardEmpty}>
+              No child guests yet. Mark guests as children on the Guest List to track meals,
+              travel, and activity eligibility here.
+            </p>
+          ) : (
+            <>
+              <div className={styles.bigStat}>
+                <span className={styles.bigStatValue}>{data.child.total}</span>
+                <span className={styles.bigStatLabel}>under 18</span>
+              </div>
+              <ul className={styles.miniStats}>
+                {data.child.rows.map((r) => (
+                  <li key={r.label}>
+                    <span>{r.label}</span>
+                    <span className={styles.miniValue}>
+                      <strong>{r.value}</strong>
+                      <span className={styles.miniPct}>{r.pct}%</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </section>
 
         {/* Planning Reminders (preserved budget/vendor/venue attention) */}

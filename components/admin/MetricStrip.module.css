@@ -1,9 +1,22 @@
-/* Connected strip: one bordered surface, cards divided by inner borders. */
+/*
+ * Connected strip: one bordered surface, cards divided by hairlines.
+ *
+ * The dividers are the 1px `gap` showing the strip's own background through
+ * between cards — so they land correctly both across a row and between rows
+ * when the strip wraps, with no phantom tracks and no empty trailing cell.
+ * (A grid with `auto-fit` produced both: seven cards in an eight-track grid,
+ * then a ragged 4+3 with a hole in it once the strip narrowed.)
+ *
+ * Cards `flex: 1 1 150px`, so a wrapped last row stretches to fill the width
+ * instead of leaving a gap, and this responds to the strip's real width rather
+ * than the viewport's — the two diverge whenever a side panel is open.
+ */
 
 .strip {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  background: var(--surface);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  background: var(--border-soft);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow);
@@ -12,19 +25,16 @@
 }
 
 .card {
+  flex: 1 1 150px;
+  min-width: 0;
   display: flex;
   align-items: flex-start;
   gap: 12px;
   padding: 16px 16px 14px;
   border: none;
-  border-right: 1px solid var(--border-soft);
-  background: transparent;
+  background: var(--surface);
   text-align: left;
   font: inherit;
-}
-
-.card:last-child {
-  border-right: none;
 }
 
 .cardClickable {
@@ -102,9 +112,5 @@
   color: var(--blue);
 }
 
-/* On narrow screens the strip wraps into rows; keep bottom borders tidy. */
-@media (max-width: 1099px) {
-  .card {
-    border-bottom: 1px solid var(--border-soft);
-  }
-}
+/* Wrapping and its dividers are handled by the flex `gap` above — no
+   viewport media query, which could not see how wide the strip itself was. */

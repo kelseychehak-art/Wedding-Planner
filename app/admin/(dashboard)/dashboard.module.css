@@ -382,14 +382,18 @@
   font-weight: 600;
 }
 
-.miniMuted {
-  color: var(--olive-muted) !important;
+/* Count plus its share of all child guests, as in the mockup's four rows. */
+.miniValue {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
-.miniMuted strong {
-  font-weight: 500;
-  color: var(--olive-muted);
+.miniPct {
   font-size: 11px;
+  color: var(--olive-muted);
+  min-width: 30px;
+  text-align: right;
 }
 
 /* ---- Donut charts (Activity Booking Status, Lodging Snapshot) ---- */

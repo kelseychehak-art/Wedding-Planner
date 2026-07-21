@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import PageHeader from "@/components/admin/PageHeader";
 import {
   IconCalendarHeart,
@@ -20,8 +21,10 @@ import styles from "./settings.module.css";
  * (CSS Modules + Supabase RPCs instead of the brief's Tailwind/RHF/Zod).
  *
  * Sections backed by real storage: Wedding Details, Guests & RSVP,
- * Travel & Lodging. The rest are honest placeholders — they need backends
- * (events, messaging provider, OAuth, multi-user auth) that don't exist yet.
+ * Travel & Lodging, Events & Activities. The rest are honest placeholders —
+ * they need backends (messaging provider, OAuth, multi-user auth) that don't
+ * exist yet. A placeholder must describe what is genuinely missing today; if a
+ * module ships, its section stops being a placeholder.
  */
 
 type Settings = Record<string, string>;
@@ -388,7 +391,7 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
 
               <p className={styles.note}>
                 Child-specific RSVP questions (date of birth, high chair, crib) arrive with the
-                guest RSVP form rebuild — the fields aren't collected publicly yet.
+                guest RSVP form rebuild — the fields aren&rsquo;t collected publicly yet.
               </p>
             </SectionCard>
           )}
@@ -433,18 +436,67 @@ export default function SettingsManager({ initialSettings }: { initialSettings: 
                 onChange={(v) => set("travel_require_flight", String(v))}
               />
               <p className={styles.note}>
-                Room assignments live under Lodging, which isn&rsquo;t built yet. Travel details
-                are admin-entered today — guest self-submission comes with the Travel page.
+                Room assignments live under <Link href="/admin/lodging">Lodging</Link>; flights and
+                transfers live under <Link href="/admin/travel">Travel</Link>. Both are
+                admin-entered today — guests can&rsquo;t submit their own details until the
+                guest-facing travel form exists.
               </p>
             </SectionCard>
           )}
 
           {section === "events" && (
-            <Placeholder
+            <SectionCard
               title="Events & Activities"
-              needs="an events/activities backend"
-              detail="Event defaults, activity sign-up windows, capacity behaviour, and age eligibility all need the Itinerary and Activities data model, which doesn't exist yet. The weekend schedule currently lives in data/schedule.ts as static content."
-            />
+              errors={errors}
+              dirty={dirty}
+              saveState={saveState}
+              onSave={save}
+            >
+              <h3 className={styles.subhead}>Activity sign-up window</h3>
+              <div className={styles.grid}>
+                <Field label="Sign-ups open">
+                  <input
+                    className={styles.input}
+                    type="date"
+                    value={get("activity_signup_opens")}
+                    onChange={(e) => set("activity_signup_opens", e.target.value)}
+                  />
+                </Field>
+                <Field label="Sign-ups close">
+                  <input
+                    className={styles.input}
+                    type="date"
+                    value={get("activity_signup_closes")}
+                    onChange={(e) => set("activity_signup_closes", e.target.value)}
+                  />
+                </Field>
+              </div>
+              <Toggle
+                label="Keep a waitlist when an activity is full"
+                checked={get("activity_waitlist_enabled", "true") === "true"}
+                onChange={(v) => set("activity_waitlist_enabled", String(v))}
+              />
+
+              <h3 className={styles.subhead}>Event defaults</h3>
+              <div className={styles.grid}>
+                <Field label="New events default to">
+                  <select
+                    className={styles.input}
+                    value={get("event_default_visibility", "public")}
+                    onChange={(e) => set("event_default_visibility", e.target.value)}
+                  >
+                    <option value="public">Public — visible to guests</option>
+                    <option value="private">Private — internal only</option>
+                  </select>
+                </Field>
+              </div>
+              <p className={styles.note}>
+                The schedule itself lives under <Link href="/admin/itinerary">Itinerary</Link> and
+                the optional experiences under <Link href="/admin/activities">Activities</Link>.
+                The sign-up window is shown on the Activities page; it will gate guest sign-ups
+                once the guest-facing form is built.
+              </p>
+            </SectionCard>
           )}
           {section === "communications" && (
             <Placeholder

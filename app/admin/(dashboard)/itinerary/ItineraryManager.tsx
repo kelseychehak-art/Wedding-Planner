@@ -114,10 +114,13 @@ export default function ItineraryManager({
   data,
   timezone,
   invited,
+  defaultVisibility,
 }: {
   data: ItineraryData;
   timezone: string;
   invited: number;
+  /* Settings → Events & Activities; applies to newly added events only. */
+  defaultVisibility: string;
 }) {
   const router = useRouter();
   const { events, locations, tasks } = data;
@@ -256,6 +259,7 @@ export default function ItineraryManager({
         <EventForm
           event={editing === "new" ? null : editing}
           locations={locations}
+          defaultVisibility={defaultVisibility}
           onCancel={() => setEditing(null)}
           onSaved={() => {
             setEditing(null);
@@ -394,11 +398,13 @@ function toLocalInput(iso: string | null): string {
 function EventForm({
   event,
   locations,
+  defaultVisibility,
   onCancel,
   onSaved,
 }: {
   event: WeddingEvent | null;
   locations: EventLocation[];
+  defaultVisibility: string;
   onCancel: () => void;
   onSaved: () => void;
 }) {
@@ -410,7 +416,7 @@ function EventForm({
     location_id: event?.location_id ?? "",
     starts_at: toLocalInput(event?.starts_at ?? null),
     ends_at: toLocalInput(event?.ends_at ?? null),
-    visibility: event?.visibility ?? "public",
+    visibility: event?.visibility ?? defaultVisibility,
     status: event?.status ?? "draft",
     dress_code: event?.dress_code ?? "",
     what_to_bring: event?.what_to_bring ?? "",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./SiteHeader.module.css";
 import MobileMenu from "./MobileMenu";
@@ -15,10 +16,10 @@ export default function SiteHeader() {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <a href="/" className={styles.monogram}>
+        <Link href="/" className={styles.monogram}>
           <span>{siteContent.couple.monogram}</span>
           <Illustration name="oliveBranch" size={30} className={styles.monogramSprig} />
-        </a>
+        </Link>
 
         <div className={styles.navGroup}>
           <nav className={styles.nav} aria-label="Primary">

@@ -37,6 +37,23 @@ import {
   type AttentionItem,
 } from "./attention";
 
+export type GuestActivity = {
+  activity_id: string;
+  title: string;
+  category: string | null;
+  starts_at: string | null;
+  booking_status: string | null;
+};
+
+export type GuestEvent = {
+  event_id: string;
+  title: string;
+  short_label: string | null;
+  starts_at: string | null;
+  invitation_status: string | null;
+  rsvp_status: string | null;
+};
+
 export type Guest = {
   id: string;
   party_id: string;
@@ -50,6 +67,8 @@ export type Guest = {
   dietary_restrictions: string | null;
   allergies: string | null;
   accessibility_needs: string | null;
+  activities: GuestActivity[];
+  events: GuestEvent[];
 };
 
 export type Travel = {
@@ -84,6 +103,7 @@ type TabKey =
   | "attention"
   | "awaiting"
   | "travel-missing"
+  | "activities"
   | "attending"
   | "declined";
 
@@ -92,9 +112,15 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "attention", label: "Needs Attention" },
   { key: "awaiting", label: "Awaiting RSVP" },
   { key: "travel-missing", label: "Travel Missing" },
+  { key: "activities", label: "Activity Follow-up" },
   { key: "attending", label: "Attending" },
   { key: "declined", label: "Declined" },
 ];
+
+/** Attending, but hasn't signed up for anything yet. */
+function needsActivityFollowUp(g: Guest) {
+  return isAttending(g) && (g.activities?.length ?? 0) === 0;
+}
 
 const statusClass: Record<string, string> = {
   Confirmed: "statusConfirmed",
@@ -159,6 +185,8 @@ function partyMatchesTab(p: Party, tab: TabKey): boolean {
       return p.guests.some(isAwaiting);
     case "travel-missing":
       return p.guests.some(isAttending) && !partyHasTravel(p);
+    case "activities":
+      return p.guests.some(needsActivityFollowUp);
     case "attending":
       return p.guests.some(isAttending);
     case "declined":
@@ -176,6 +204,8 @@ function guestMatchesTab(g: Guest, p: Party, tab: TabKey): boolean {
       return isAwaiting(g);
     case "travel-missing":
       return isAttending(g) && !partyHasTravel(p);
+    case "activities":
+      return needsActivityFollowUp(g);
     case "attending":
       return isAttending(g);
     case "declined":
@@ -255,6 +285,13 @@ export default function GuestsManager({
     const travelSubmitted = attendingParties.filter(partyHasTravel).length;
     const travelNeeded = attendingParties.length - travelSubmitted;
     const attentionCount = parties.filter((p) => partyAttention(p).length > 0).length;
+
+    /* Activity sign-ups: count guests who have booked at least one, and how
+       many attending guests still have none — the mockup's "8 need to select". */
+    const activityBooked = allGuests.filter((g) => (g.activities?.length ?? 0) > 0).length;
+    const activityNeeded = attending.filter((g) => (g.activities?.length ?? 0) === 0).length;
+    const anyActivities = allGuests.some((g) => (g.activities?.length ?? 0) > 0);
+
     return {
       invited,
       partyCount: parties.length,
@@ -268,6 +305,9 @@ export default function GuestsManager({
       travelSubmitted,
       travelNeeded,
       attentionCount,
+      activityBooked,
+      activityNeeded,
+      anyActivities,
     };
   }, [parties]);
 
@@ -306,10 +346,11 @@ export default function GuestsManager({
     {
       key: "activities",
       icon: <IconBasket size={18} />,
-      value: "—",
+      value: String(metrics.activityBooked),
       label: "Activities Booked",
-      sub: "Not tracked yet",
-      disabled: true,
+      sub: metrics.anyActivities
+        ? `${metrics.activityNeeded} still to select`
+        : "No sign-ups yet",
     },
     {
       key: "travel-missing",
@@ -451,7 +492,16 @@ export default function GuestsManager({
         });
         if (gRes.ok) {
           const { guest } = await gRes.json();
-          savedGuests.push(guest);
+          /* The upsert returns the guest row alone; activities and events come
+             from admin_list_guests, so preserve what we already had for them. */
+          const prior = parties
+            .flatMap((p) => p.guests)
+            .find((x) => x.id === guest.id);
+          savedGuests.push({
+            ...guest,
+            activities: prior?.activities ?? [],
+            events: prior?.events ?? [],
+          });
         }
       }
 
@@ -515,7 +565,6 @@ export default function GuestsManager({
   }
 
   function metricSelect(key: string) {
-    if (key === "activities") return;
     changeTab(key as TabKey);
   }
 
@@ -533,9 +582,12 @@ export default function GuestsManager({
         }
       />
 
+      {/* "all" is the resting state, not a chosen filter — highlighting the
+          Invited card on load reads as a filter nobody applied (and the tab
+          row already says "All Guests"). */}
       <MetricStrip
         metrics={metricCards}
-        activeKey={tab}
+        activeKey={tab === "all" ? null : tab}
         onSelect={metricSelect}
       />
 
@@ -782,8 +834,8 @@ function AttentionCell({ items }: { items: AttentionItem[] }) {
   return (
     <div className={styles.attentionCell}>
       <span className={styles.attentionHead}>
-        <IconAlert size={13} /> {items.length}{" "}
-        {items.length === 1 ? "issue" : "issues"}
+        <IconAlert size={13} />
+        <span>{`${items.length} ${items.length === 1 ? "issue" : "issues"}`}</span>
       </span>
       <ul className={styles.attentionList}>
         {items.map((it) => (

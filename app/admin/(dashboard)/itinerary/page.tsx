@@ -6,7 +6,8 @@ const EMPTY: ItineraryData = { events: [], locations: [], tasks: [] };
 
 async function getItinerary() {
   const token = await getAdminToken();
-  if (!token) return { data: EMPTY, timezone: "Europe/Rome", invited: 0 };
+  if (!token)
+    return { data: EMPTY, timezone: "Europe/Rome", invited: 0, defaultVisibility: "public" };
 
   const [{ data }, { data: settings }, { data: parties }] = await Promise.all([
     supabase.rpc("admin_get_itinerary", { p_token: token }),
@@ -23,10 +24,18 @@ async function getItinerary() {
     data: (data ?? EMPTY) as ItineraryData,
     timezone: (settings?.timezone || "Europe/Rome") as string,
     invited,
+    defaultVisibility: (settings?.event_default_visibility || "public") as string,
   };
 }
 
 export default async function ItineraryPage() {
-  const { data, timezone, invited } = await getItinerary();
-  return <ItineraryManager data={data} timezone={timezone} invited={invited} />;
+  const { data, timezone, invited, defaultVisibility } = await getItinerary();
+  return (
+    <ItineraryManager
+      data={data}
+      timezone={timezone}
+      invited={invited}
+      defaultVisibility={defaultVisibility}
+    />
+  );
 }

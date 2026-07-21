@@ -48,6 +48,11 @@ const CATEGORIES = [
   "Other",
 ];
 
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
 function fmtDate(iso: string | null, tz: string): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleDateString("en-US", {
@@ -69,6 +74,32 @@ function fmtTimeRange(start: string | null, end: string | null, tz: string): str
   return end ? `${t(start)} – ${t(end)}` : t(start);
 }
 
+/*
+ * The sign-up window from Settings, read as plain dates. Compared against
+ * today's calendar date rather than a timestamp, so "closes Jul 15" means the
+ * whole of the 15th — and no timezone can shift the boundary by a day.
+ */
+function describeSignupWindow(opens: string, closes: string) {
+  const label = (iso: string) => {
+    const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return m ? `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}` : iso;
+  };
+  if (!opens && !closes) {
+    return { value: "Not set", sub: "Set it in Settings", tone: "default" as const };
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const range = [opens && label(opens), closes && label(closes)].filter(Boolean).join(" – ");
+
+  if (opens && today < opens) {
+    return { value: "Opens soon", sub: range, tone: "info" as const };
+  }
+  if (closes && today > closes) {
+    return { value: "Closed", sub: range, tone: "bad" as const };
+  }
+  return { value: "Open", sub: range, tone: "good" as const };
+}
+
 function ageLabel(a: Activity): string {
   if (a.age_rule_type === "adults_only") return "18+ only";
   if (a.age_rule_type === "minimum_age" && a.minimum_age) return `${a.minimum_age}+`;
@@ -78,9 +109,14 @@ function ageLabel(a: Activity): string {
 export default function ActivitiesManager({
   initialActivities,
   timezone,
+  signupOpens,
+  signupCloses,
 }: {
   initialActivities: Activity[];
   timezone: string;
+  /* Set under Settings → Events & Activities. */
+  signupOpens: string;
+  signupCloses: string;
 }) {
   const router = useRouter();
   const [activities, setActivities] = useState(initialActivities);
@@ -88,6 +124,11 @@ export default function ActivitiesManager({
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [editing, setEditing] = useState<Activity | "new" | null>(null);
+
+  const signupWindow = useMemo(
+    () => describeSignupWindow(signupOpens, signupCloses),
+    [signupOpens, signupCloses]
+  );
 
   const metrics: Metric[] = useMemo(() => {
     const totalCapacity = activities.reduce((s, a) => s + (a.capacity ?? 0), 0);
@@ -130,12 +171,13 @@ export default function ActivitiesManager({
       {
         key: "window",
         icon: <IconClock size={22} />,
-        value: activities.length ? "Open" : "—",
+        value: signupWindow.value,
         label: "Sign-up Window",
-        sub: "Guest sign-up not built yet",
+        sub: signupWindow.sub,
+        tone: signupWindow.tone,
       },
     ];
-  }, [activities]);
+  }, [activities, signupWindow]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
