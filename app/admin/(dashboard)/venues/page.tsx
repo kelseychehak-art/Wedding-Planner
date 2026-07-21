@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAdminToken } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
+import { getEurUsdRate, DEFAULT_EUR_USD_RATE } from "@/lib/admin-rate";
 import styles from "./venues.module.css";
 import VenueList, { type VenueRow } from "./VenueList";
 
@@ -16,11 +17,14 @@ const STAGES = [
   "Eliminated",
 ];
 
-async function getVenues(): Promise<VenueRow[]> {
+async function getVenues(): Promise<{ venues: VenueRow[]; eurUsdRate: number }> {
   const token = await getAdminToken();
-  if (!token) return [];
-  const { data } = await supabase.rpc("admin_list_venues", { p_token: token });
-  return (data ?? []) as VenueRow[];
+  if (!token) return { venues: [], eurUsdRate: DEFAULT_EUR_USD_RATE };
+  const [{ data }, eurUsdRate] = await Promise.all([
+    supabase.rpc("admin_list_venues", { p_token: token }),
+    getEurUsdRate(token),
+  ]);
+  return { venues: (data ?? []) as VenueRow[], eurUsdRate };
 }
 
 export default async function AdminVenuesPage({
@@ -29,7 +33,7 @@ export default async function AdminVenuesPage({
   searchParams: Promise<{ stage?: string }>;
 }) {
   const { stage: activeStage } = await searchParams;
-  const venues = await getVenues();
+  const { venues, eurUsdRate } = await getVenues();
   const filtered = activeStage ? venues.filter((v) => v.stage === activeStage) : venues;
 
   return (
@@ -79,7 +83,7 @@ export default async function AdminVenuesPage({
             : "No venues at this stage."}
         </p>
       ) : (
-        <VenueList venues={filtered} />
+        <VenueList venues={filtered} eurUsdRate={eurUsdRate} />
       )}
     </div>
   );

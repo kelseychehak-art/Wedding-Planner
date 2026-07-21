@@ -4,6 +4,8 @@ import { supabase } from "@/lib/supabase";
 import styles from "./dashboard.module.css";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
+import { formatMoney, toBoth } from "@/components/admin/Money";
+import { getEurUsdRate } from "@/lib/admin-rate";
 import {
   IconUsers,
   IconLeaf,
@@ -312,16 +314,11 @@ async function getDashboard() {
   const currency = (budget?.currency ?? "EUR") as string;
   const total = Number(budget?.total ?? 0);
   const allocated = budgetItems.reduce((s, i) => s + (i.estimated_amount ?? 0), 0);
+  /* D12: USD primary, EUR beside it — the same treatment as everywhere else. */
+  const eurUsdRate = await getEurUsdRate(token);
   const money = (n: number) => {
-    try {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        maximumFractionDigits: 0,
-      }).format(n);
-    } catch {
-      return `${currency} ${Math.round(n).toLocaleString()}`;
-    }
+    const { usd, eur } = toBoth(n, currency, eurUsdRate);
+    return `${formatMoney(usd, "USD")} (${formatMoney(eur, "EUR")})`;
   };
   const today = new Date();
   today.setHours(0, 0, 0, 0);

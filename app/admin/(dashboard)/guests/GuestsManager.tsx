@@ -81,6 +81,25 @@ export type Travel = {
   needs_shuttle: boolean;
 } | null;
 
+export type Lodging = {
+  assignment_id: string;
+  status: string | null;
+  check_in_date: string | null;
+  check_out_date: string | null;
+  room_name: string | null;
+  room_type: string | null;
+  property_name: string | null;
+};
+
+/** An RSVP-enabled event; one column of the Weekend Events dot matrix. */
+export type WeekendEvent = {
+  id: string;
+  title: string;
+  short_label: string | null;
+  starts_at: string | null;
+  rsvp_enabled: boolean;
+};
+
 export type Party = {
   id: string;
   name: string;
@@ -95,6 +114,7 @@ export type Party = {
   formal_name_override: string | null;
   guests: Guest[];
   travel: Travel;
+  lodging: Lodging[];
 };
 
 type ViewMode = "party" | "individual";
@@ -215,10 +235,13 @@ function guestMatchesTab(g: Guest, p: Party, tab: TabKey): boolean {
 
 export default function GuestsManager({
   initialParties,
+  events,
   initialView = "party",
   initialTab = "all",
 }: {
   initialParties: Party[];
+  /* RSVP-enabled events; the columns of the Weekend Events dot matrix. */
+  events: WeekendEvent[];
   initialView?: string;
   initialTab?: string;
 }) {
@@ -542,6 +565,9 @@ export default function GuestsManager({
         formal_name_override: party.formal_name_override ?? null,
         guests: savedGuests,
         travel,
+        /* Room assignments are managed under Lodging, not this form — keep
+           whatever the list already had for this party. */
+        lodging: parties.find((x) => x.id === partyId)?.lodging ?? [],
       };
 
       setParties((prev) => {
@@ -701,6 +727,7 @@ export default function GuestsManager({
       ) : view === "party" ? (
         <PartyTable
           parties={pageParties}
+          events={events}
           onOpen={(p) => setDetail({ party: p, guest: null })}
           menuId={menuId}
           setMenuId={setMenuId}
@@ -710,6 +737,7 @@ export default function GuestsManager({
       ) : (
         <IndividualTable
           rows={pageGuests}
+          events={events}
           onOpen={(g, p) => setDetail({ party: p, guest: g })}
           menuId={menuId}
           setMenuId={setMenuId}
@@ -892,9 +920,160 @@ function TravelCell({ party }: { party: Party }) {
 }
 
 function LodgingCell({ party }: { party: Party }) {
-  const room = party.travel?.room_assignment;
-  if (!room) return <span className={styles.dim}>—</span>;
-  return <span className={styles.lodgingCell}>{room}</span>;
+  const assignment = party.lodging?.[0];
+
+  if (assignment) {
+    const room = [assignment.room_name, assignment.room_type].filter(Boolean).join(" · ");
+    const stay = [assignment.check_in_date, assignment.check_out_date]
+      .filter(Boolean)
+      .map((d) => formatDate(d as string))
+      .join(" – ");
+    return (
+      <div className={styles.lodgingCell}>
+        {assignment.property_name && (
+          <span className={styles.lodgingProperty}>{assignment.property_name}</span>
+        )}
+        {room && <span>{room}</span>}
+        {stay && <span className={styles.dim}>{stay}</span>}
+        {assignment.status && assignment.status !== "assigned" && (
+          <span className={styles.lodgingStatus}>{assignment.status}</span>
+        )}
+      </div>
+    );
+  }
+
+  /* Fall back to the free-text room on travel_info for parties assigned before
+     the Lodging module existed. */
+  const legacy = party.travel?.room_assignment;
+  if (legacy) return <span className={styles.lodgingCell}>{legacy}</span>;
+  return <span className={styles.dim}>—</span>;
+}
+
+/*
+ * Weekend Events — one dot per RSVP-enabled event, per guest, aligned to the
+ * party's member list so a row reads across. Green attending, terracotta
+ * declined, amber awaiting, hollow for not invited to that event.
+ */
+const EVENT_RSVP_CLASS: Record<string, string> = {
+  attending: "dotAttending",
+  confirmed: "dotAttending",
+  declined: "dotDeclined",
+  awaiting: "dotAwaiting",
+  invited: "dotAwaiting",
+  pending: "dotAwaiting",
+};
+
+function eventShortLabel(e: WeekendEvent): string {
+  if (e.short_label?.trim()) return e.short_label.trim();
+  return e.title.split(/\s+/)[0];
+}
+
+function eventDayLabel(e: WeekendEvent): string {
+  if (!e.starts_at) return "";
+  const m = e.starts_at.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return "";
+  const [, y, mo, d] = m.map(Number);
+  return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+    new Date(Date.UTC(y, mo - 1, d)).getUTCDay()
+  ];
+}
+
+function WeekendEventsCell({
+  party,
+  events,
+}: {
+  party: Party;
+  events: WeekendEvent[];
+}) {
+  if (events.length === 0) {
+    return (
+      <span className={styles.dim} title="No RSVP-enabled events in the Itinerary yet">
+        —
+      </span>
+    );
+  }
+  return (
+    <div className={styles.eventMatrix}>
+      {party.guests.map((g) => (
+        <div className={styles.eventRow} key={g.id}>
+          {events.map((e) => {
+            const invite = g.events?.find((x) => x.event_id === e.id);
+            const cls = invite
+              ? styles[EVENT_RSVP_CLASS[(invite.rsvp_status ?? "").toLowerCase()] ?? "dotAwaiting"]
+              : styles.dotNotInvited;
+            const label = invite
+              ? `${g.first_name || "Guest"} · ${e.title}: ${invite.rsvp_status ?? "awaiting"}`
+              : `${g.first_name || "Guest"} · not invited to ${e.title}`;
+            return (
+              <span key={e.id} className={styles.eventDotCell} title={label}>
+                <span className={`${styles.eventDot} ${cls}`} />
+              </span>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* Single-guest variants for the Individual view. */
+function GuestEventsCell({ guest, events }: { guest: Guest; events: WeekendEvent[] }) {
+  if (events.length === 0) return <span className={styles.dim}>—</span>;
+  return (
+    <div className={styles.eventRow}>
+      {events.map((e) => {
+        const invite = guest.events?.find((x) => x.event_id === e.id);
+        const cls = invite
+          ? styles[EVENT_RSVP_CLASS[(invite.rsvp_status ?? "").toLowerCase()] ?? "dotAwaiting"]
+          : styles.dotNotInvited;
+        const label = invite
+          ? `${e.title}: ${invite.rsvp_status ?? "awaiting"}`
+          : `Not invited to ${e.title}`;
+        return (
+          <span key={e.id} className={styles.eventDotCell} title={label}>
+            <span className={`${styles.eventDot} ${cls}`} />
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function GuestActivitiesCell({ guest }: { guest: Guest }) {
+  const list = guest.activities ?? [];
+  if (list.length === 0) return <span className={styles.dim}>—</span>;
+  return (
+    <div className={styles.activitiesCell}>
+      {list.map((a) => (
+        <span key={a.activity_id}>{a.title}</span>
+      ))}
+    </div>
+  );
+}
+
+/* Activities — party rollup plus each activity and how many of them booked it. */
+function ActivitiesCell({ party }: { party: Party }) {
+  const counts = new Map<string, number>();
+  for (const g of party.guests) {
+    for (const a of g.activities ?? []) {
+      counts.set(a.title, (counts.get(a.title) ?? 0) + 1);
+    }
+  }
+  if (counts.size === 0) return <span className={styles.dim}>—</span>;
+
+  return (
+    <div className={styles.activitiesCell}>
+      <span className={styles.activitiesCount}>
+        <IconLeaf size={12} className={styles.cellIcon} />
+        {`${counts.size} ${counts.size === 1 ? "activity" : "activities"}`}
+      </span>
+      {[...counts.entries()].map(([title, n]) => (
+        <span key={title} className={styles.dim}>
+          {`${title} (${n})`}
+        </span>
+      ))}
+    </div>
+  );
 }
 
 function RowMenu({
@@ -940,6 +1119,7 @@ function RowMenu({
 
 function PartyTable({
   parties,
+  events,
   onOpen,
   menuId,
   setMenuId,
@@ -947,6 +1127,7 @@ function PartyTable({
   onDelete,
 }: {
   parties: Party[];
+  events: WeekendEvent[];
   onOpen: (p: Party) => void;
   menuId: string | null;
   setMenuId: (id: string | null) => void;
@@ -961,8 +1142,20 @@ function PartyTable({
             <th className={styles.thGuest}>Guest / Party</th>
             <th>Child</th>
             <th>RSVP</th>
-            <th title="Per-event RSVP is not tracked yet">Weekend Events</th>
-            <th title="Activity sign-ups are not tracked yet">Activities</th>
+            <th>
+              Weekend Events
+              {events.length > 0 && (
+                <span className={styles.eventHeadRow}>
+                  {events.map((e) => (
+                    <span key={e.id} className={styles.eventHead} title={e.title}>
+                      <span>{eventShortLabel(e)}</span>
+                      <span className={styles.eventHeadDay}>{eventDayLabel(e)}</span>
+                    </span>
+                  ))}
+                </span>
+              )}
+            </th>
+            <th>Activities</th>
             <th>Travel</th>
             <th>Lodging</th>
             <th>Contact</th>
@@ -1048,8 +1241,12 @@ function PartyTable({
                     ))}
                   </ul>
                 </td>
-                <td className={styles.placeholderCell}>—</td>
-                <td className={styles.placeholderCell}>—</td>
+                <td>
+                  <WeekendEventsCell party={p} events={events} />
+                </td>
+                <td>
+                  <ActivitiesCell party={p} />
+                </td>
                 <td>
                   <TravelCell party={p} />
                 </td>
@@ -1096,6 +1293,7 @@ function PartyTable({
 
 function IndividualTable({
   rows,
+  events,
   onOpen,
   menuId,
   setMenuId,
@@ -1103,6 +1301,7 @@ function IndividualTable({
   onDelete,
 }: {
   rows: { guest: Guest; party: Party }[];
+  events: WeekendEvent[];
   onOpen: (g: Guest, p: Party) => void;
   menuId: string | null;
   setMenuId: (id: string | null) => void;
@@ -1117,8 +1316,8 @@ function IndividualTable({
             <th className={styles.thGuest}>Guest</th>
             <th>Party</th>
             <th>RSVP</th>
-            <th title="Per-event RSVP is not tracked yet">Weekend Events</th>
-            <th title="Activity sign-ups are not tracked yet">Activities</th>
+            <th>Weekend Events</th>
+            <th>Activities</th>
             <th>Travel</th>
             <th>Lodging</th>
             <th>Dietary / Notes</th>
@@ -1173,8 +1372,12 @@ function IndividualTable({
                         : g.rsvp_status}
                   </span>
                 </td>
-                <td className={styles.placeholderCell}>—</td>
-                <td className={styles.placeholderCell}>—</td>
+                <td>
+                  <GuestEventsCell guest={g} events={events} />
+                </td>
+                <td>
+                  <GuestActivitiesCell guest={g} />
+                </td>
                 <td>
                   <TravelCell party={p} />
                 </td>

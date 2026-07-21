@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Money from "@/components/admin/Money";
 import styles from "./venues.module.css";
 
 export type VenueRow = {
@@ -43,7 +44,13 @@ function budgetTone(v: string | null): string {
   return "neutral";
 }
 
-export default function VenueList({ venues }: { venues: VenueRow[] }) {
+export default function VenueList({
+  venues,
+  eurUsdRate,
+}: {
+  venues: VenueRow[];
+  eurUsdRate: number;
+}) {
   const router = useRouter();
   const [sort, setSort] = useState<SortKey>("shortlist");
   const [busy, setBusy] = useState<string | null>(null);
@@ -142,7 +149,12 @@ export default function VenueList({ venues }: { venues: VenueRow[] }) {
 
             {venue.estimated_total_price != null && (
               <span className={styles.rowPrice}>
-                {venue.currency ?? "EUR"} {venue.estimated_total_price.toLocaleString()}
+                <Money
+                  amount={venue.estimated_total_price}
+                  currency={venue.currency ?? "EUR"}
+                  eurUsdRate={eurUsdRate}
+                  size="sm"
+                />
               </span>
             )}
             <span className={styles.rowStage}>{venue.stage}</span>

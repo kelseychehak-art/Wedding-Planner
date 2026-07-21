@@ -1,18 +1,22 @@
 import Link from "next/link";
 import { getAdminToken } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
+import { getEurUsdRate, DEFAULT_EUR_USD_RATE } from "@/lib/admin-rate";
 import VenueCompare, { type ComparableVenue } from "./VenueCompare";
 import styles from "../venues.module.css";
 
-async function getVenues(): Promise<ComparableVenue[]> {
+async function getVenues(): Promise<{ venues: ComparableVenue[]; eurUsdRate: number }> {
   const token = await getAdminToken();
-  if (!token) return [];
-  const { data } = await supabase.rpc("admin_list_venues", { p_token: token });
-  return (data ?? []) as ComparableVenue[];
+  if (!token) return { venues: [], eurUsdRate: DEFAULT_EUR_USD_RATE };
+  const [{ data }, eurUsdRate] = await Promise.all([
+    supabase.rpc("admin_list_venues", { p_token: token }),
+    getEurUsdRate(token),
+  ]);
+  return { venues: (data ?? []) as ComparableVenue[], eurUsdRate };
 }
 
 export default async function VenueComparePage() {
-  const venues = await getVenues();
+  const { venues, eurUsdRate } = await getVenues();
 
   return (
     <div>
@@ -34,7 +38,7 @@ export default async function VenueComparePage() {
           <Link href="/admin/venues/new">Add one</Link> to start comparing.
         </p>
       ) : (
-        <VenueCompare venues={venues} />
+        <VenueCompare venues={venues} eurUsdRate={eurUsdRate} />
       )}
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import Money from "@/components/admin/Money";
 import styles from "./compare.module.css";
 
 export type ComparableVenue = {
@@ -39,9 +40,18 @@ function yesNo(value: boolean | null) {
   return value ? "Yes" : "—";
 }
 
-function priceLabel(v: ComparableVenue) {
+/* D12: USD primary with the EUR equivalent beside it. Venue quotes are
+   stored in euros, which is exactly the figure that gets misread. */
+function priceLabel(v: ComparableVenue, eurUsdRate: number) {
   if (!v.estimated_total_price) return "—";
-  return `${v.currency ?? "EUR"} ${v.estimated_total_price.toLocaleString()}`;
+  return (
+    <Money
+      amount={v.estimated_total_price}
+      currency={v.currency ?? "EUR"}
+      eurUsdRate={eurUsdRate}
+      size="sm"
+    />
+  );
 }
 
 function verdictTone(v: string | null) {
@@ -60,7 +70,7 @@ function budgetTone(v: string | null) {
 
 const ROWS: {
   label: string;
-  render: (v: ComparableVenue) => string;
+  render: (v: ComparableVenue, eurUsdRate: number) => React.ReactNode;
 }[] = [
   { label: "Verdict", render: (v) => v.research_verdict || "—" },
   { label: "Budget Fit", render: (v) => v.budget_fit || "—" },
@@ -83,7 +93,7 @@ const ROWS: {
   },
   { label: "Pool", render: (v) => yesNo(v.has_pool) },
   { label: "Outdoor Space", render: (v) => yesNo(v.has_outdoor_space) },
-  { label: "Estimated Price", render: (v) => priceLabel(v) },
+  { label: "Estimated Price", render: (v, rate) => priceLabel(v, rate) },
   {
     label: "Accommodation Cost (guest-payable)",
     render: (v) => v.accommodation_cost_note || "—",
@@ -102,7 +112,13 @@ const ROWS: {
   { label: "Decision", render: (v) => v.decision || "—" },
 ];
 
-export default function VenueCompare({ venues }: { venues: ComparableVenue[] }) {
+export default function VenueCompare({
+  venues,
+  eurUsdRate,
+}: {
+  venues: ComparableVenue[];
+  eurUsdRate: number;
+}) {
   const [view, setView] = useState<"table" | "cards">("cards");
   const [includeEliminated, setIncludeEliminated] = useState(false);
 
@@ -203,7 +219,7 @@ export default function VenueCompare({ venues }: { venues: ComparableVenue[] }) 
               ) : (
                 v.estimated_total_price && (
                   <p className={styles.cardNote}>
-                    <strong>Estimated price:</strong> {priceLabel(v)}
+                    <strong>Estimated price:</strong> {priceLabel(v, eurUsdRate)}
                   </p>
                 )
               )}
@@ -237,7 +253,7 @@ export default function VenueCompare({ venues }: { venues: ComparableVenue[] }) 
                   <th className={styles.rowLabel}>{row.label}</th>
                   {filtered.map((v) => (
                     <td key={v.id} className={styles.cell}>
-                      {row.render(v)}
+                      {row.render(v, eurUsdRate)}
                     </td>
                   ))}
                 </tr>

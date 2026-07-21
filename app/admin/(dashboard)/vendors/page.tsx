@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getAdminToken } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
+import { getEurUsdRate, DEFAULT_EUR_USD_RATE } from "@/lib/admin-rate";
+import Money from "@/components/admin/Money";
 import styles from "./vendors.module.css";
 
 const STAGES = [
@@ -24,11 +26,14 @@ type Vendor = {
   currency: string | null;
 };
 
-async function getVendors(): Promise<Vendor[]> {
+async function getVendors(): Promise<{ vendors: Vendor[]; eurUsdRate: number }> {
   const token = await getAdminToken();
-  if (!token) return [];
-  const { data } = await supabase.rpc("admin_list_vendors", { p_token: token });
-  return (data ?? []) as Vendor[];
+  if (!token) return { vendors: [], eurUsdRate: DEFAULT_EUR_USD_RATE };
+  const [{ data }, eurUsdRate] = await Promise.all([
+    supabase.rpc("admin_list_vendors", { p_token: token }),
+    getEurUsdRate(token),
+  ]);
+  return { vendors: (data ?? []) as Vendor[], eurUsdRate };
 }
 
 export default async function AdminVendorsPage({
@@ -37,7 +42,7 @@ export default async function AdminVendorsPage({
   searchParams: Promise<{ stage?: string }>;
 }) {
   const { stage: activeStage } = await searchParams;
-  const vendors = await getVendors();
+  const { vendors, eurUsdRate } = await getVendors();
   const filtered = activeStage ? vendors.filter((v) => v.stage === activeStage) : vendors;
 
   return (
@@ -94,7 +99,12 @@ export default async function AdminVendorsPage({
               </div>
               {vendor.estimated_cost != null && (
                 <span className={styles.rowPrice}>
-                  {vendor.currency ?? "EUR"} {vendor.estimated_cost.toLocaleString()}
+                  <Money
+                    amount={vendor.estimated_cost}
+                    currency={vendor.currency ?? "EUR"}
+                    eurUsdRate={eurUsdRate}
+                    size="sm"
+                  />
                 </span>
               )}
               <span className={styles.rowStage}>{vendor.stage}</span>
