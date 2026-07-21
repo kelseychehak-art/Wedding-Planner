@@ -357,3 +357,15 @@ export function IconLock({ size, className }: IconProps) {
     </svg>
   );
 }
+
+export function IconBed({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="M3.5 18.5v-11" />
+      <path d="M3.5 11.5h17V18.5" />
+      <path d="M3.5 15.5h17" />
+      <path d="M7.5 11.5V9a1.5 1.5 0 0 1 1.5-1.5h8a3.5 3.5 0 0 1 3.5 3.5" />
+      <circle cx="8" cy="13.5" r="0.01" />
+    </svg>
+  );
+}

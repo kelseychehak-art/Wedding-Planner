@@ -14,6 +14,8 @@ import {
   IconDownload,
   IconSettings,
   IconPlane,
+  IconBed,
+  IconLeaf,
 } from "@/components/admin/icons";
 
 const NAV_ITEMS = [
@@ -22,6 +24,8 @@ const NAV_ITEMS = [
   { label: "Travel", href: "/admin/travel", Icon: IconPlane },
   { label: "Venues", href: "/admin/venues", Icon: IconBuilding },
   { label: "Vendors", href: "/admin/vendors", Icon: IconStore },
+  { label: "Activities", href: "/admin/activities", Icon: IconLeaf },
+  { label: "Lodging", href: "/admin/lodging", Icon: IconBed },
   { label: "Budget", href: "/admin/budget", Icon: IconWallet },
   { label: "Timeline", href: "/admin/timeline", Icon: IconCalendar },
   { label: "Decisions", href: "/admin/decisions", Icon: IconScale },
