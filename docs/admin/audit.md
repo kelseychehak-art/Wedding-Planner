@@ -12,7 +12,8 @@ the dev build (`/admin/guests`), so the geometry below is observed, not inferred
 **Status:** P0 items 1, 2, 3, 4, 5, 8, 9, 10 are done and verified in the browser, as is the
 `submit_rsvp` data-loss bug under "guest-facing" (see `decisions.md` D14). The shared toolbar and
 pagination are built and applied to Guest List, Travel, Lodging and Activities.
-**Still open:** P0 items 6 (error/loading boundaries) and 7 (keyboard rows), plus the rest of P1/P2.
+**All ten P0 items are now done and verified in the browser.** What remains is P1 (structural gaps
+vs the mockups) and P2 (consistency/polish), plus the unbuilt Communications page.
 
 ---
 
@@ -50,13 +51,13 @@ figures most likely to be misread, and they're the ones still EUR-only.
 The mockup's Child Guest Overview has four rows, each with a count *and* a percentage, plus a
 `VIEW CHILD GUEST DETAILS →` footer link. Activity preferences are now trackable.
 
-### 6. No error or loading boundaries anywhere in the app
+### 6. ✅ FIXED — No error or loading boundaries anywhere in the app
 `find app -name "error.tsx" -o -name "loading.tsx"` returns nothing. Every admin page is an async
 server component doing 1–7 Supabase RPCs. One failed call = Next's raw error screen, and every
 navigation is a blank pause with no skeleton. For a tool you'd hand to another bride, this is the
 single biggest "feels unfinished" gap.
 
-### 7. Keyboard users can't open a guest
+### 7. ✅ FIXED — Keyboard users couldn't open a guest
 `GuestsManager.tsx:929-932` and `1089-1092` — rows are `<tr onClick>` with no `tabIndex`,
 no `role`, no `onKeyDown`. Measured live: every row reports `tabIndex: -1`, `role: none`.
 The detail drawer is unreachable without a mouse. The drawer itself is

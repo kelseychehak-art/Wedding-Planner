@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { IconX } from "@/components/admin/icons";
 import styles from "./drawer.module.css";
 import type { Guest, Party } from "./GuestsManager";
@@ -41,13 +41,48 @@ export default function DetailDrawer({
   onClose: () => void;
   onEdit: () => void;
 }) {
-  // Escape closes the drawer.
+  const drawerRef = useRef<HTMLElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  /*
+   * Escape closes; Tab is trapped inside. An aria-modal dialog that leaves
+   * focus behind the scrim tells assistive tech the rest of the page is inert
+   * while still letting you tab into it — worse than no dialog role at all.
+   */
   useEffect(() => {
+    /* Remember where focus came from, so closing returns it there rather than
+       dumping the user back at the top of the document. */
+    const opener = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
+
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const focusables = drawerRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables || focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
+
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      opener?.focus?.();
+    };
   }, [onClose]);
 
   const t = party.travel;
@@ -59,6 +94,7 @@ export default function DetailDrawer({
     <>
       <div className={styles.scrim} onClick={onClose} aria-hidden="true" />
       <aside
+        ref={drawerRef}
         className={styles.drawer}
         role="dialog"
         aria-modal="true"
@@ -72,7 +108,13 @@ export default function DetailDrawer({
             </h2>
             {guest && <p className={styles.subtitle}>{party.name}</p>}
           </div>
-          <button type="button" className={styles.close} onClick={onClose} aria-label="Close">
+          <button
+            ref={closeRef}
+            type="button"
+            className={styles.close}
+            onClick={onClose}
+            aria-label="Close"
+          >
             <IconX size={18} />
           </button>
         </header>

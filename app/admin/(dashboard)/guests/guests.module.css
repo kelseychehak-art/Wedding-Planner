@@ -234,13 +234,32 @@
   min-width: 190px;
 }
 
+/* A real <button>, so the drawer is reachable by keyboard — styled to read as
+   the row's title rather than as a control. */
 .partyName {
   display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: left;
   font-family: var(--font-serif);
   font-size: 16px;
   font-weight: 600;
   color: var(--ink);
   line-height: 1.2;
+  cursor: pointer;
+}
+
+.partyName:hover {
+  color: var(--olive-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.partyName:focus-visible {
+  outline: 2px solid var(--olive);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 .partyMeta {

@@ -1250,7 +1250,19 @@ function PartyTable({
                 onClick={() => onOpen(p)}
               >
                 <td className={styles.tdGuest}>
-                  <span className={styles.partyName}>{displayName(p)}</span>
+                  {/* The row is clickable for convenience, but the accessible
+                      control is this button — putting role="button" on a <tr>
+                      would strip the table semantics screen readers rely on. */}
+                  <button
+                    type="button"
+                    className={styles.partyName}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpen(p);
+                    }}
+                  >
+                    {displayName(p)}
+                  </button>
                   <span className={styles.partyMeta}>
                     <span className={styles.householdTag}>
                       {HOUSEHOLD_LABEL[p.household_type] ?? p.household_type}
@@ -1434,11 +1446,18 @@ function IndividualTable({
                 onClick={() => onOpen(g, p)}
               >
                 <td className={styles.tdGuest}>
-                  <span className={styles.partyName}>
+                  <button
+                    type="button"
+                    className={styles.partyName}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpen(g, p);
+                    }}
+                  >
                     {g.first_name || (
                       <em className={styles.dim}>(name not set)</em>
                     )}
-                  </span>
+                  </button>
                   <span className={styles.partyMeta}>
                     {g.is_child ? "Child" : "Adult"}
                   </span>
