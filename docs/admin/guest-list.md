@@ -1,8 +1,46 @@
 # Admin Spec — Guest List + Dashboard (+ shared admin foundation)
 
-> **Status:** Captured 2026-07-20 — **not yet built.** Source: "Claude Code Implementation
-> Brief — Guest List" + two approved mockups (Guest List, Guest Dashboard; transcribed below, PNGs
-> not committed).
+> **Status:** Foundation + Guest List + **Guest Dashboard (§11) built 2026-07-21** (adapted — see
+> "Implementation notes" below). Source: "Claude Code Implementation Brief — Guest List" + two
+> approved mockups.
+
+## Implementation notes (first build, 2026-07-21)
+
+What shipped, adapted to the repo's real stack (CSS Modules + Supabase RPCs — not the brief's
+Tailwind/TanStack/RHF):
+
+- **Shared foundation** — sidebar redesign in `app/admin/(dashboard)/layout.tsx` +
+  `AdminNav.module.css` (script wordmark, TUSCANY 2027 eyebrow, thin-line nav icons, active-state
+  highlighting via `AdminSidebarNav.tsx`, terracotta Italy `Postmark`); shared primitives in
+  `components/admin/` (`icons.tsx` hand-rolled line-icon set, `PageHeader`, `MetricStrip`).
+- **Guest List rebuild** — `guests/GuestsManager.tsx` + `PartyForm.tsx` + `attention.ts`:
+  7-metric strip (clickable → filters), toolbar (search + RSVP/Travel/Side filters), saved-view
+  tabs with counts, **Party View + Individual View** tables, computed needs-attention rules,
+  client pagination, URL-synced `view`/`tab`, inline edit/add panel reusing the existing
+  party/guest/travel RPC save flow.
+
+**Guest Dashboard (§11)** — rebuilt `app/admin/(dashboard)/page.tsx` on the shared foundation:
+PageHeader + wedding-dates chip (canonical **Jun 16–21, 2027**), the shared 7-metric strip, and a
+card grid. Cards built from **real** data — Needs Attention (grouped guest issues, each links to the
+filtered Guest List), Upcoming Arrivals (grouped by `travel_info.arrival_date`), Child Guests, and
+Recently Added (by `created_at`). The prior budget/venue/vendor reminders are preserved as a
+**Planning Reminders** card. The spec's per-event RSVP progress, activity-booking donut, and lodging
+snapshot are a single honest **placeholder** card (they need the Itinerary/Activities/Lodging
+backends, which don't exist yet).
+
+Deliberate adaptations from the brief/mockup (revisit as later builds land):
+
+- **Fonts:** guest-brand Option-A fonts (Fraunces titles, Cormorant values, Instrument Sans UI,
+  Pinyon wordmark) — **not** Inter/Manrope (per decision 2026-07-21).
+- **Placeholder columns:** Weekend Events + Activities render "—" (no per-event RSVP or activities
+  backend yet); Activities metric card is disabled. Travel/Lodging columns use the real party-level
+  admin-entered `travel` record. No "Invited (date)" column (field doesn't exist).
+- **Inline edit panel** (repo convention) instead of a slide-over drawer; row actions via a small
+  overflow menu (Edit / Delete).
+- Filters limited to real data (no Activities/Lodging/Information dropdowns); no column picker or
+  CSV export yet (exports live on `/admin/exports`).
+- Nav keeps the repo's real pages (Venues, Timeline, Decisions, Exports, …); "Guests" renamed
+  **Guest List**. Dead links to unbuilt pages were not added.
 > **This is the foundational admin brief — build it first.** Its §1–10 define the shared admin
 > **shell, design system, typography, borders/radii, sidebar, page header, and summary metric
 > strip** that every other admin spec (Travel, Itinerary, Budget, Settings) reuses. §11 specs the
