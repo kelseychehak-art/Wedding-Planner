@@ -964,7 +964,11 @@ function PartyTable({
                   <ContactCell party={p} />
                 </td>
                 <td>
-                  <AttentionCell items={partyAttention(p)} />
+                  {p.guests.length === 0 ? (
+                    <span className={styles.dim}>No guests yet</span>
+                  ) : (
+                    <AttentionCell items={partyAttention(p)} />
+                  )}
                 </td>
                 <td className={styles.tdActions}>
                   <RowMenu

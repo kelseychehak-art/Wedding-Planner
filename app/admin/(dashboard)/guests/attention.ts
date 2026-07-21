@@ -40,7 +40,9 @@ export function partyAttention(p: Party): AttentionItem[] {
     });
   }
 
-  if (!p.email && !p.phone) {
+  // Only flag missing contact once a party has real guests entered — otherwise
+  // every early-setup party shell (no guests yet) lights up red.
+  if (p.guests.length > 0 && !p.email && !p.phone) {
     items.push({ key: "contact", label: "Contact info missing", tone: "warn" });
   }
 
