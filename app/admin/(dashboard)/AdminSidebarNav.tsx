@@ -12,6 +12,7 @@ import {
   IconCalendar,
   IconScale,
   IconDownload,
+  IconSettings,
 } from "@/components/admin/icons";
 
 const NAV_ITEMS = [
@@ -23,6 +24,7 @@ const NAV_ITEMS = [
   { label: "Timeline", href: "/admin/timeline", Icon: IconCalendar },
   { label: "Decisions", href: "/admin/decisions", Icon: IconScale },
   { label: "Exports", href: "/admin/exports", Icon: IconDownload },
+  { label: "Settings", href: "/admin/settings", Icon: IconSettings },
 ];
 
 function isActive(pathname: string, href: string) {

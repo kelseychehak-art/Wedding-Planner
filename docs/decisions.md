@@ -83,6 +83,25 @@ type system for the **whole guest-facing site**:
 the handwritten/script font — see O5). Build = swap the `next/font/google` imports + retarget tokens in
 `app/layout.tsx`; no licensing, no `next/font/local`. Applies to guest-facing pages; `/admin` unchanged.
 
+### D11 — Admin shares the guest-brand Option-A fonts (resolved 2026-07-21)
+**Decision:** The `/admin` back-office uses **the same Google fonts as the guest site** (Fraunces /
+Cormorant Garamond / Instrument Sans / Pinyon Script), adapted as needed for dense UI.
+**Rejected:** the admin briefs' suggestion of **Inter / Manrope**.
+**Rationale:** Kelsey's call — one typographic voice across the whole product. This closes the open
+reconciliation item in `docs/admin/README.md` (#4) and confirms the choice the first admin build
+already made. Admin may adjust *sizes/weights* freely for data density, but must not introduce a
+geometric sans.
+
+### D12 — Money shows USD primary with a secondary EUR figure (resolved 2026-07-21)
+**Decision:** Every money value in the admin displays **USD as the primary amount**, with the
+**EUR amount beside it in a smaller, lighter treatment**. Both are always shown, because the two
+figures genuinely differ (vendors quote in EUR; the $100k budget is USD).
+**Rejected:** the briefs'/Settings mockup's single-currency EUR display.
+**Implementation:** a stored **EUR→USD rate** (`settings.eur_usd_rate`, editable in Settings →
+Wedding Details) plus a shared `Money` component that takes an amount + its native currency and
+renders both. Venue prices are stored in EUR (`venues.currency`); the budget total is USD.
+**Note:** the rate is a manually maintained planning estimate, not a live FX feed — label it as such.
+
 ---
 
 ## Open items (resolve before/at build time)

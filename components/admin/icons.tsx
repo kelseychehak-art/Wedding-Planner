@@ -289,3 +289,71 @@ export function OliveSprig({ size, className }: IconProps) {
     </svg>
   );
 }
+
+export function IconSettings({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 3.5v2M12 18.5v2M20.5 12h-2M5.5 12h-2M17.8 6.2l-1.4 1.4M7.6 16.4l-1.4 1.4M17.8 17.8l-1.4-1.4M7.6 7.6 6.2 6.2" />
+    </svg>
+  );
+}
+
+export function IconCalendarHeart({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+      <path d="M3.5 9.5h17M8 3.5v3M16 3.5v3" />
+      <path d="M12 17.5c-2-1.4-3-2.5-3-3.7a1.5 1.5 0 0 1 3-.5 1.5 1.5 0 0 1 3 .5c0 1.2-1 2.3-3 3.7Z" />
+    </svg>
+  );
+}
+
+export function IconLuggage({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <rect x="5" y="7.5" width="14" height="13" rx="2.5" />
+      <path d="M9.5 7.5V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2.5" />
+      <path d="M10 11v6M14 11v6" />
+    </svg>
+  );
+}
+
+export function IconPalette({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="M12 3.5a8.5 8.5 0 0 0 0 17c1.4 0 2-1 2-1.8 0-1.4-1.4-1.6-1.4-2.7 0-.8.7-1.3 1.6-1.3h1.4a4.9 4.9 0 0 0 4.9-4.9c0-3.6-3.6-6.3-8.5-6.3Z" />
+      <circle cx="8" cy="10" r="1" />
+      <circle cx="11.5" cy="7.5" r="1" />
+      <circle cx="15.5" cy="9" r="1" />
+    </svg>
+  );
+}
+
+export function IconLink({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="M10.5 13.5a3.5 3.5 0 0 0 5 0l3-3a3.54 3.54 0 0 0-5-5l-1.5 1.5" />
+      <path d="M13.5 10.5a3.5 3.5 0 0 0-5 0l-3 3a3.54 3.54 0 0 0 5 5l1.5-1.5" />
+    </svg>
+  );
+}
+
+export function IconShield({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="M12 3.5 5.5 6v5.5c0 4 2.7 7.4 6.5 8.6 3.8-1.2 6.5-4.6 6.5-8.6V6Z" />
+      <path d="m9.5 12 1.8 1.8 3.4-3.6" />
+    </svg>
+  );
+}
+
+export function IconLock({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5" />
+      <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" />
+      <path d="M12 14.5v2" />
+    </svg>
+  );
+}

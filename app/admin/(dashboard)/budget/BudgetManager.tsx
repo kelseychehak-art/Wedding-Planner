@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Money from "@/components/admin/Money";
 import styles from "./budget.module.css";
 
 export type BudgetItem = {
@@ -74,11 +75,13 @@ export default function BudgetManager({
   initialCurrency,
   initialItems,
   initialTargets,
+  eurUsdRate,
 }: {
   initialTotal: number;
   initialCurrency: string;
   initialItems: BudgetItem[];
   initialTargets: Record<string, number>;
+  eurUsdRate: number;
 }) {
   const router = useRouter();
   const [items, setItems] = useState(initialItems);
@@ -263,7 +266,7 @@ export default function BudgetManager({
             </div>
           ) : (
             <div className={styles.budgetValueRow}>
-              <span className={styles.summaryValue}>{money(total)}</span>
+              <Money amount={total} currency={currency} eurUsdRate={eurUsdRate} size="lg" />
               <button
                 type="button"
                 className={styles.linkBtn}
@@ -280,19 +283,24 @@ export default function BudgetManager({
         </div>
         <div className={styles.summaryCard}>
           <span className={styles.summaryLabel}>Allocated</span>
-          <span className={styles.summaryValue}>{money(allocated)}</span>
+          <Money amount={allocated} currency={currency} eurUsdRate={eurUsdRate} size="lg" />
           <span className={styles.summaryMeta}>across {items.length} items</span>
         </div>
         <div className={styles.summaryCard}>
           <span className={styles.summaryLabel}>Paid so far</span>
-          <span className={styles.summaryValue}>{money(paid)}</span>
+          <Money amount={paid} currency={currency} eurUsdRate={eurUsdRate} size="lg" />
           <span className={styles.summaryMeta}>{money(remainingToPay)} still to pay</span>
         </div>
         <div className={`${styles.summaryCard} ${overBudget ? styles.overCard : ""}`}>
           <span className={styles.summaryLabel}>
             {overBudget ? "Over Budget" : "Left in Budget"}
           </span>
-          <span className={styles.summaryValue}>{money(Math.abs(budgetRemaining))}</span>
+          <Money
+            amount={Math.abs(budgetRemaining)}
+            currency={currency}
+            eurUsdRate={eurUsdRate}
+            size="lg"
+          />
           <span className={styles.summaryMeta}>
             {overBudget ? "allocated exceeds budget" : "still unallocated"}
           </span>
@@ -313,9 +321,13 @@ export default function BudgetManager({
                   <span className={`${styles.upcomingWhen} ${tone}`}>
                     {d < 0 ? `${Math.abs(d)}d overdue` : d === 0 ? "Due today" : `Due in ${d}d`}
                   </span>
-                  <span className={styles.upcomingAmount}>
-                    {i.outstanding > 0 ? money(i.outstanding) : money(i.estimated_amount ?? 0)}
-                  </span>
+                  <Money
+                    amount={i.outstanding > 0 ? i.outstanding : (i.estimated_amount ?? 0)}
+                    currency={currency}
+                    eurUsdRate={eurUsdRate}
+                    size="sm"
+                    className={styles.upcomingAmount}
+                  />
                 </div>
               );
             })}
@@ -355,7 +367,12 @@ export default function BudgetManager({
               <div className={styles.categoryHeader}>
                 <span className={styles.categoryName}>{category}</span>
                 <div className={styles.categoryRight}>
-                  <span className={styles.categoryTotal}>{money(catEstimated)}</span>
+                  <Money
+                    amount={catEstimated}
+                    currency={currency}
+                    eurUsdRate={eurUsdRate}
+                    size="sm"
+                  />
                   {targetEditCat === category ? (
                     <span className={styles.targetEdit}>
                       <span className={styles.targetOf}>of</span>
@@ -430,9 +447,12 @@ export default function BudgetManager({
                       </div>
                     </div>
                     <div className={styles.itemAmounts}>
-                      <span className={styles.itemEstimated}>
-                        {item.estimated_amount != null ? money(item.estimated_amount) : "—"}
-                      </span>
+                      <Money
+                        amount={item.estimated_amount}
+                        currency={currency}
+                        eurUsdRate={eurUsdRate}
+                        size="sm"
+                      />
                       {item.amount_paid > 0 && (
                         <span className={styles.itemPaid}>{money(item.amount_paid)} paid</span>
                       )}

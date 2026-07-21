@@ -1,0 +1,45 @@
+.money {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.primary {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Secondary EUR figure: smaller and lighter, per docs/decisions.md D12. */
+.secondary {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  color: var(--olive-muted);
+  opacity: 0.85;
+}
+
+.sm .primary {
+  font-size: 14px;
+}
+.sm .secondary {
+  font-size: 11px;
+}
+
+.md .primary {
+  font-size: 18px;
+}
+.md .secondary {
+  font-size: 12px;
+}
+
+.lg .primary {
+  font-size: 26px;
+}
+.lg .secondary {
+  font-size: 13px;
+}
+
+.empty {
+  color: var(--olive-muted);
+}
