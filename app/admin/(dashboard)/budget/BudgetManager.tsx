@@ -73,21 +73,46 @@ export default function BudgetManager({
   initialTotal,
   initialCurrency,
   initialItems,
+  initialTargets,
 }: {
   initialTotal: number;
   initialCurrency: string;
   initialItems: BudgetItem[];
+  initialTargets: Record<string, number>;
 }) {
   const router = useRouter();
   const [items, setItems] = useState(initialItems);
   const [total, setTotal] = useState(initialTotal);
   const [currency, setCurrency] = useState(initialCurrency);
+  const [targets, setTargets] = useState<Record<string, number>>(initialTargets ?? {});
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft());
   const [saving, setSaving] = useState(false);
   const [editingBudget, setEditingBudget] = useState(false);
   const [totalDraft, setTotalDraft] = useState(String(initialTotal));
   const [currencyDraft, setCurrencyDraft] = useState(initialCurrency);
+  const [targetEditCat, setTargetEditCat] = useState<string | null>(null);
+  const [targetDraft, setTargetDraft] = useState("");
+
+  async function saveTarget(category: string) {
+    const raw = targetDraft.trim();
+    const amount = raw === "" ? null : Number(raw);
+    const res = await fetch("/api/admin/budget/targets", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ category, amount }),
+    });
+    if (res.ok) {
+      setTargets((prev) => {
+        const next = { ...prev };
+        if (amount == null || Number.isNaN(amount)) delete next[category];
+        else next[category] = amount;
+        return next;
+      });
+    }
+    setTargetEditCat(null);
+    setTargetDraft("");
+  }
 
   const money = useMemo(() => {
     return (n: number) => {
@@ -117,6 +142,23 @@ export default function BudgetManager({
     }
     return map;
   }, [items]);
+
+  const upcoming = useMemo(() => {
+    return items
+      .filter((i) => i.due_date && i.status !== "Paid")
+      .map((i) => ({
+        ...i,
+        outstanding: (i.estimated_amount ?? 0) - (i.amount_paid ?? 0),
+      }))
+      .sort((a, b) => (a.due_date! < b.due_date! ? -1 : 1))
+      .slice(0, 6);
+  }, [items]);
+
+  function daysUntil(dateStr: string): number {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return Math.round((new Date(dateStr + "T00:00:00").getTime() - today.getTime()) / 86400000);
+  }
 
   function startAdd() {
     setDraft(emptyDraft());
@@ -257,6 +299,30 @@ export default function BudgetManager({
         </div>
       </div>
 
+      {upcoming.length > 0 && (
+        <section className={styles.upcoming}>
+          <p className={styles.upcomingTitle}>Upcoming Payments</p>
+          <div className={styles.upcomingList}>
+            {upcoming.map((i) => {
+              const d = daysUntil(i.due_date!);
+              const tone = d < 0 ? styles.dueOverdue : d <= 14 ? styles.dueSoon : "";
+              return (
+                <div className={styles.upcomingRow} key={i.id}>
+                  <span className={styles.upcomingName}>{i.name}</span>
+                  <span className={styles.upcomingCat}>{i.category}</span>
+                  <span className={`${styles.upcomingWhen} ${tone}`}>
+                    {d < 0 ? `${Math.abs(d)}d overdue` : d === 0 ? "Due today" : `Due in ${d}d`}
+                  </span>
+                  <span className={styles.upcomingAmount}>
+                    {i.outstanding > 0 ? money(i.outstanding) : money(i.estimated_amount ?? 0)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       <div className={styles.actions}>
         <button type="button" className="btn-primary" onClick={startAdd}>
           Add Item
@@ -280,12 +346,68 @@ export default function BudgetManager({
       ) : (
         Array.from(grouped.entries()).map(([category, list]) => {
           const catEstimated = list.reduce((s, i) => s + (i.estimated_amount ?? 0), 0);
+          const target = targets[category];
+          const hasTarget = typeof target === "number" && target > 0;
+          const overTarget = hasTarget && catEstimated > target;
+          const barPct = hasTarget ? Math.min(100, Math.round((catEstimated / target) * 100)) : 0;
           return (
             <section className={styles.categoryBlock} key={category}>
               <div className={styles.categoryHeader}>
                 <span className={styles.categoryName}>{category}</span>
-                <span className={styles.categoryTotal}>{money(catEstimated)}</span>
+                <div className={styles.categoryRight}>
+                  <span className={styles.categoryTotal}>{money(catEstimated)}</span>
+                  {targetEditCat === category ? (
+                    <span className={styles.targetEdit}>
+                      <span className={styles.targetOf}>of</span>
+                      <input
+                        className={styles.targetInput}
+                        type="number"
+                        autoFocus
+                        value={targetDraft}
+                        placeholder="target"
+                        onChange={(e) => setTargetDraft(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") saveTarget(category);
+                          if (e.key === "Escape") setTargetEditCat(null);
+                        }}
+                      />
+                      <button type="button" className={styles.linkBtn} onClick={() => saveTarget(category)}>
+                        Save
+                      </button>
+                    </span>
+                  ) : hasTarget ? (
+                    <button
+                      type="button"
+                      className={`${styles.targetChip} ${overTarget ? styles.targetOver : ""}`}
+                      onClick={() => {
+                        setTargetDraft(String(target));
+                        setTargetEditCat(category);
+                      }}
+                    >
+                      of {money(target)} target
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className={styles.linkBtn}
+                      onClick={() => {
+                        setTargetDraft("");
+                        setTargetEditCat(category);
+                      }}
+                    >
+                      + target
+                    </button>
+                  )}
+                </div>
               </div>
+              {hasTarget && (
+                <div className={styles.targetTrack}>
+                  <span
+                    className={`${styles.targetFill} ${overTarget ? styles.targetFillOver : ""}`}
+                    style={{ width: `${barPct}%` }}
+                  />
+                </div>
+              )}
               {list.map((item) =>
                 editingId === item.id ? (
                   <div className={styles.editCard} key={item.id}>

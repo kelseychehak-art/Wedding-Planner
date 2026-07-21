@@ -152,6 +152,161 @@
   color: var(--olive-muted);
 }
 
+.categoryRight {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.targetChip {
+  background: transparent;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--olive-muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.targetChip:hover {
+  color: var(--olive-dark);
+  text-decoration: underline;
+}
+
+.targetOver {
+  color: var(--terracotta-dark);
+  font-weight: 600;
+}
+
+.targetEdit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.targetOf {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--olive-muted);
+}
+
+.targetInput {
+  width: 90px;
+  min-height: 30px;
+  padding: 0 8px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.targetTrack {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border-soft);
+  overflow: hidden;
+  margin: 0 4px 10px;
+}
+
+.targetFill {
+  display: block;
+  height: 100%;
+  background: var(--olive);
+  border-radius: 999px;
+}
+
+.targetFillOver {
+  background: var(--terracotta);
+}
+
+/* ---- Upcoming payments ---- */
+
+.upcoming {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-card);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+}
+
+.upcomingTitle {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+  margin: 0 0 12px;
+}
+
+.upcomingList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.upcomingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border-soft);
+}
+
+.upcomingRow:first-child {
+  border-top: none;
+}
+
+.upcomingName {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+}
+
+.upcomingCat {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--olive-muted);
+  white-space: nowrap;
+}
+
+.upcomingWhen {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--olive-muted);
+  white-space: nowrap;
+  min-width: 92px;
+  text-align: right;
+}
+
+.dueSoon {
+  color: #7a5a08;
+  font-weight: 600;
+}
+
+.dueOverdue {
+  color: var(--terracotta-dark);
+  font-weight: 700;
+}
+
+.upcomingAmount {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  min-width: 84px;
+  text-align: right;
+}
+
 /* ---- Item rows ---- */
 
 .itemRow {

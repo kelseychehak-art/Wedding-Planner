@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAdminToken } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
 import styles from "./venues.module.css";
+import VenueList, { type VenueRow } from "./VenueList";
 
 const STAGES = [
   "Researching",
@@ -15,21 +16,11 @@ const STAGES = [
   "Eliminated",
 ];
 
-type Venue = {
-  id: string;
-  name: string;
-  location: string | null;
-  region: string | null;
-  stage: string;
-  estimated_total_price: number | null;
-  currency: string | null;
-};
-
-async function getVenues(): Promise<Venue[]> {
+async function getVenues(): Promise<VenueRow[]> {
   const token = await getAdminToken();
   if (!token) return [];
   const { data } = await supabase.rpc("admin_list_venues", { p_token: token });
-  return (data ?? []) as Venue[];
+  return (data ?? []) as VenueRow[];
 }
 
 export default async function AdminVenuesPage({
@@ -88,26 +79,7 @@ export default async function AdminVenuesPage({
             : "No venues at this stage."}
         </p>
       ) : (
-        <div className={styles.list}>
-          {filtered.map((venue) => (
-            <Link href={`/admin/venues/${venue.id}`} className={styles.row} key={venue.id}>
-              <div className={styles.rowMeta}>
-                <div className={styles.rowName}>{venue.name}</div>
-                {(venue.location || venue.region) && (
-                  <div className={styles.rowLocation}>
-                    {[venue.location, venue.region].filter(Boolean).join(", ")}
-                  </div>
-                )}
-              </div>
-              {venue.estimated_total_price && (
-                <span className={styles.rowPrice}>
-                  {venue.currency ?? "EUR"} {venue.estimated_total_price.toLocaleString()}
-                </span>
-              )}
-              <span className={styles.rowStage}>{venue.stage}</span>
-            </Link>
-          ))}
-        </div>
+        <VenueList venues={filtered} />
       )}
     </div>
   );
