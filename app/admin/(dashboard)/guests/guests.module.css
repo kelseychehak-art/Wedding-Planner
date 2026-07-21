@@ -717,3 +717,17 @@
 .linkBtn:hover {
   color: var(--ink);
 }
+
+/* Rows open the detail drawer (guest-list.md §18). */
+.rowClickable {
+  cursor: pointer;
+}
+
+.rowClickable:hover {
+  background: var(--surface-soft);
+}
+
+.rowClickable:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--olive) 45%, transparent);
+  outline-offset: -2px;
+}

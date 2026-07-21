@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import DetailDrawer from "./DetailDrawer";
 import styles from "./guests.module.css";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
@@ -192,6 +193,7 @@ export default function GuestsManager({
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [menuId, setMenuId] = useState<string | null>(null);
+  const [detail, setDetail] = useState<{ party: Party; guest: Guest | null } | null>(null);
 
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<PartyDraft>(emptyPartyDraft());
@@ -629,6 +631,7 @@ export default function GuestsManager({
       ) : view === "party" ? (
         <PartyTable
           parties={pageParties}
+          onOpen={(p) => setDetail({ party: p, guest: null })}
           menuId={menuId}
           setMenuId={setMenuId}
           onEdit={startEdit}
@@ -637,10 +640,24 @@ export default function GuestsManager({
       ) : (
         <IndividualTable
           rows={pageGuests}
+          onOpen={(g, p) => setDetail({ party: p, guest: g })}
           menuId={menuId}
           setMenuId={setMenuId}
           onEdit={startEdit}
           onDelete={deleteParty}
+        />
+      )}
+
+      {detail && (
+        <DetailDrawer
+          party={detail.party}
+          guest={detail.guest}
+          onClose={() => setDetail(null)}
+          onEdit={() => {
+            const p = detail.party;
+            setDetail(null);
+            startEdit(p);
+          }}
         />
       )}
 
@@ -853,12 +870,14 @@ function RowMenu({
 
 function PartyTable({
   parties,
+  onOpen,
   menuId,
   setMenuId,
   onEdit,
   onDelete,
 }: {
   parties: Party[];
+  onOpen: (p: Party) => void;
   menuId: string | null;
   setMenuId: (id: string | null) => void;
   onEdit: (p: Party) => void;
@@ -889,7 +908,11 @@ function PartyTable({
             const attending = p.guests.filter(isAttending).length;
             const awaiting = p.guests.filter(isAwaiting).length;
             return (
-              <tr key={p.id}>
+              <tr
+                key={p.id}
+                className={styles.rowClickable}
+                onClick={() => onOpen(p)}
+              >
                 <td className={styles.tdGuest}>
                   <span className={styles.partyName}>{p.name}</span>
                   <span className={styles.partyMeta}>
@@ -970,7 +993,7 @@ function PartyTable({
                     <AttentionCell items={partyAttention(p)} />
                   )}
                 </td>
-                <td className={styles.tdActions}>
+                <td className={styles.tdActions} onClick={(e) => e.stopPropagation()}>
                   <RowMenu
                     open={menuId === p.id}
                     onToggle={() => setMenuId(menuId === p.id ? null : p.id)}
@@ -991,12 +1014,14 @@ function PartyTable({
 
 function IndividualTable({
   rows,
+  onOpen,
   menuId,
   setMenuId,
   onEdit,
   onDelete,
 }: {
   rows: { guest: Guest; party: Party }[];
+  onOpen: (g: Guest, p: Party) => void;
   menuId: string | null;
   setMenuId: (id: string | null) => void;
   onEdit: (p: Party) => void;
@@ -1031,7 +1056,11 @@ function IndividualTable({
             ].filter(Boolean) as string[];
             const menuKey = `g-${g.id}`;
             return (
-              <tr key={g.id}>
+              <tr
+                key={g.id}
+                className={styles.rowClickable}
+                onClick={() => onOpen(g, p)}
+              >
                 <td className={styles.tdGuest}>
                   <span className={styles.partyName}>
                     {g.first_name || (
@@ -1084,7 +1113,7 @@ function IndividualTable({
                 <td>
                   <AttentionCell items={guestAttention(g, p)} />
                 </td>
-                <td className={styles.tdActions}>
+                <td className={styles.tdActions} onClick={(e) => e.stopPropagation()}>
                   <RowMenu
                     open={menuId === menuKey}
                     onToggle={() => setMenuId(menuId === menuKey ? null : menuKey)}

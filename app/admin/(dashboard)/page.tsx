@@ -58,6 +58,21 @@ type PipelineItem = {
   next_action_date: string | null;
 };
 
+type ActivityRow = {
+  id: string;
+  title: string;
+  status: string;
+  capacity: number | null;
+  booked_count: number;
+  waitlist_count: number;
+};
+
+type LodgingSnapshot = {
+  properties?: { id: string; name: string }[];
+  rooms?: { id: string }[];
+  assignments?: { room_id: string | null; status: string; party_guest_count: number }[];
+};
+
 const MONTHS = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
@@ -96,12 +111,21 @@ async function getDashboard() {
   const token = await getAdminToken();
   if (!token) return null;
 
-  const [{ data: parties }, { data: budget }, { data: venues }, { data: vendors }] =
+  const [
+    { data: parties },
+    { data: budget },
+    { data: venues },
+    { data: vendors },
+    { data: activityRows },
+    { data: lodging },
+  ] =
     await Promise.all([
       supabase.rpc("admin_list_guests", { p_token: token }),
       supabase.rpc("admin_get_budget", { p_token: token }),
       supabase.rpc("admin_list_venues", { p_token: token }),
       supabase.rpc("admin_list_vendors", { p_token: token }),
+      supabase.rpc("admin_list_activities", { p_token: token }),
+      supabase.rpc("admin_get_lodging", { p_token: token }),
     ]);
 
   const partyList = (parties ?? []) as Party[];
@@ -118,6 +142,36 @@ async function getDashboard() {
   const attendingParties = partyList.filter((p) => p.guests.some(isAttending));
   const travelSubmitted = attendingParties.filter(partyHasTravel).length;
   const travelNeeded = attendingParties.length - travelSubmitted;
+
+  // ---- Activities rollup (mockup §11E "Activity Booking Status") ----
+  const activities = (activityRows ?? []) as ActivityRow[];
+  const activityCapacity = activities.reduce((s, a) => s + (a.capacity ?? 0), 0);
+  const activityBooked = activities.reduce((s, a) => s + Number(a.booked_count ?? 0), 0);
+  const activityWaitlist = activities.reduce((s, a) => s + Number(a.waitlist_count ?? 0), 0);
+  const activitySpaces = Math.max(0, activityCapacity - activityBooked);
+  const activityPublished = activities.filter((a) => a.status === "published").length;
+  const activityFillPct = activityCapacity
+    ? Math.round((activityBooked / activityCapacity) * 100)
+    : 0;
+
+  // ---- Lodging rollup (mockup §11F "Lodging Snapshot") ----
+  const lodgingData = (lodging ?? {}) as LodgingSnapshot;
+  const lodgingProperties = lodgingData.properties ?? [];
+  const lodgingRooms = lodgingData.rooms ?? [];
+  const lodgingAssignments = lodgingData.assignments ?? [];
+  const roomsHeld = lodgingRooms.length;
+  const roomsReserved = new Set(
+    lodgingAssignments.filter((a) => a.room_id).map((a) => a.room_id)
+  ).size;
+  const roomsAvailable = Math.max(0, roomsHeld - roomsReserved);
+  const guestsLodging = lodgingAssignments
+    .filter((a) => a.status === "assigned")
+    .reduce((s, a) => s + Number(a.party_guest_count ?? 0), 0);
+  const occupancyPct = roomsHeld ? Math.round((roomsReserved / roomsHeld) * 100) : 0;
+  const lodgingPropertyLabel =
+    lodgingProperties.length === 1
+      ? lodgingProperties[0].name
+      : `${lodgingProperties.length} properties`;
 
   // ---- Guest needs-attention rollups (real) ----
   const missingTravelGuests = attendingParties
@@ -276,6 +330,8 @@ async function getDashboard() {
       travelSubmitted,
       travelNeeded,
       attentionCount: guestIssues.reduce((s, i) => s + i.count, 0),
+      activityBooked,
+      activityFillPct,
     },
     guestIssues,
     arrivals,
@@ -285,7 +341,53 @@ async function getDashboard() {
     childWithRsvp,
     recent,
     planning: planning.slice(0, 6),
+    activities: {
+      total: activities.length,
+      published: activityPublished,
+      capacity: activityCapacity,
+      booked: activityBooked,
+      waitlist: activityWaitlist,
+      spaces: activitySpaces,
+      fillPct: activityFillPct,
+    },
+    lodging: {
+      propertyCount: lodgingProperties.length,
+      propertyLabel: lodgingPropertyLabel,
+      roomsHeld,
+      roomsReserved,
+      roomsAvailable,
+      guestsLodging,
+      occupancyPct,
+      invited,
+    },
   };
+}
+
+/* Small SVG donut — no chart library, matches the mockup's ring treatment. */
+function Donut({ pct, center, caption }: { pct: number; center: string; caption: string }) {
+  const radius = 34;
+  const circumference = 2 * Math.PI * radius;
+  const filled = (Math.min(100, Math.max(0, pct)) / 100) * circumference;
+
+  return (
+    <div className={styles.donut}>
+      <svg viewBox="0 0 88 88" className={styles.donutSvg} aria-hidden="true">
+        <circle cx="44" cy="44" r={radius} className={styles.donutTrack} />
+        <circle
+          cx="44"
+          cy="44"
+          r={radius}
+          className={styles.donutFill}
+          strokeDasharray={`${filled} ${circumference - filled}`}
+          transform="rotate(-90 44 44)"
+        />
+      </svg>
+      <span className={styles.donutCenter}>
+        <span className={styles.donutValue}>{center}</span>
+        <span className={styles.donutCaption}>{caption}</span>
+      </span>
+    </div>
+  );
 }
 
 const TONE_DOT: Record<string, string> = {
@@ -304,7 +406,16 @@ export default async function AdminDashboardPage() {
     { key: "attending", icon: <IconLeaf size={18} />, value: String(m.attending), label: "Attending", sub: `${m.adults} adults · ${m.children} children`, tone: "good" },
     { key: "declined", icon: <IconHeart size={18} />, value: String(m.declined), label: "Declined", sub: `${m.declinedPct}% of invited`, tone: "bad" },
     { key: "awaiting", icon: <IconClock size={18} />, value: String(m.awaiting), label: "Awaiting RSVP", sub: `${m.awaitingPct}% of invited`, tone: "warn" },
-    { key: "activities", icon: <IconBasket size={18} />, value: "—", label: "Activities Booked", sub: "Not tracked yet", disabled: true },
+    {
+      key: "activities",
+      icon: <IconBasket size={18} />,
+      value: String(data.metrics.activityBooked),
+      label: "Activities Booked",
+      sub: data.activities.capacity
+        ? `${data.metrics.activityFillPct}% of capacity`
+        : "No capacity set",
+      disabled: data.activities.total === 0,
+    },
     { key: "travel", icon: <IconPlane size={18} />, value: String(m.travelSubmitted), label: "Travel Submitted", sub: `${m.travelNeeded} still needed`, tone: "info" },
     { key: "attention", icon: <IconAlert size={18} />, value: String(m.attentionCount), label: "Needs Attention", sub: "Across guests", tone: m.attentionCount > 0 ? "bad" : "good" },
   ];
@@ -475,15 +586,110 @@ export default async function AdminDashboardPage() {
           )}
         </section>
 
-        {/* Coming with later builds (honest placeholder) */}
+        {/* Activity Booking Status (mockup §11E) */}
+        <section className={styles.card}>
+          <div className={styles.cardHead}>
+            <h2 className={styles.cardTitle}>Activity Booking Status</h2>
+            <Link href="/admin/activities" className={styles.cardLink}>
+              Manage
+            </Link>
+          </div>
+          {data.activities.total === 0 ? (
+            <p className={styles.cardEmpty}>
+              No activities yet. Add the wine tasting or cooking class to track sign-ups here.
+            </p>
+          ) : (
+            <>
+              <div className={styles.donutRow}>
+                <Donut
+                  pct={data.activities.fillPct}
+                  center={String(data.activities.booked)}
+                  caption="Booked"
+                />
+                <ul className={styles.legend}>
+                  <li>
+                    <span className={`${styles.swatch} ${styles.swatchBooked}`} />
+                    <span>Booked</span>
+                    <strong>{data.activities.booked}</strong>
+                  </li>
+                  <li>
+                    <span className={`${styles.swatch} ${styles.swatchOpen}`} />
+                    <span>Spaces left</span>
+                    <strong>{data.activities.spaces}</strong>
+                  </li>
+                  <li>
+                    <span className={`${styles.swatch} ${styles.swatchWait}`} />
+                    <span>Waitlisted</span>
+                    <strong>{data.activities.waitlist}</strong>
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.cardFoot}>
+                <span>
+                  {data.activities.published} of {data.activities.total} published
+                </span>
+                <span>
+                  <strong>{data.activities.capacity}</strong> total spaces
+                </span>
+              </div>
+            </>
+          )}
+        </section>
+
+        {/* Lodging Snapshot (mockup §11F) */}
+        <section className={styles.card}>
+          <div className={styles.cardHead}>
+            <h2 className={styles.cardTitle}>Lodging Snapshot</h2>
+            <Link href="/admin/lodging" className={styles.cardLink}>
+              Manage
+            </Link>
+          </div>
+          {data.lodging.roomsHeld === 0 ? (
+            <p className={styles.cardEmpty}>
+              No rooms yet. Add a property and its rooms to see occupancy here.
+            </p>
+          ) : (
+            <>
+              <div className={styles.donutRow}>
+                <Donut
+                  pct={data.lodging.occupancyPct}
+                  center={`${data.lodging.occupancyPct}%`}
+                  caption="Occupancy"
+                />
+                <ul className={styles.legend}>
+                  <li>
+                    <span>Rooms held</span>
+                    <strong>{data.lodging.roomsHeld}</strong>
+                  </li>
+                  <li>
+                    <span>Reserved</span>
+                    <strong>{data.lodging.roomsReserved}</strong>
+                  </li>
+                  <li>
+                    <span>Available</span>
+                    <strong>{data.lodging.roomsAvailable}</strong>
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.cardFoot}>
+                <span>{data.lodging.propertyLabel}</span>
+                <span>
+                  <strong>{data.lodging.guestsLodging}</strong> of {data.lodging.invited} lodging
+                </span>
+              </div>
+            </>
+          )}
+        </section>
+
+        {/* Still blocked: per-event RSVP needs the Itinerary data model */}
         <section className={`${styles.card} ${styles.placeholderCard}`}>
           <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>RSVP by Event · Activities · Lodging</h2>
+            <h2 className={styles.cardTitle}>RSVP Progress by Event</h2>
           </div>
           <p className={styles.cardEmpty}>
-            Per-event RSVP progress, activity booking status, and the lodging snapshot appear here
-            once the Itinerary, Activities, and Lodging pages are built — they need data models that
-            don&apos;t exist yet.
+            Per-event attendance (Welcome Dinner, Ceremony, Farewell Brunch) needs the Itinerary
+            data model and per-event RSVP responses — neither exists yet, so there&apos;s nothing
+            honest to show here.
           </p>
         </section>
       </div>

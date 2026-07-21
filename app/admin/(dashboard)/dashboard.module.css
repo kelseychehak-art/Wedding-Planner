@@ -391,3 +391,106 @@
   color: var(--olive-muted);
   font-size: 11px;
 }
+
+/* ---- Donut charts (Activity Booking Status, Lodging Snapshot) ---- */
+
+.donutRow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.donut {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+}
+
+.donutSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.donutTrack {
+  fill: none;
+  stroke: var(--border-soft);
+  stroke-width: 10;
+}
+
+.donutFill {
+  fill: none;
+  stroke: var(--olive);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+.donutCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.donutValue {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.donutCaption {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+}
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+.legend li span:not([class]) {
+  flex: 1;
+  min-width: 0;
+}
+
+.legend strong {
+  font-weight: 600;
+}
+
+.swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.swatchBooked {
+  background: var(--olive);
+}
+.swatchOpen {
+  background: var(--border-soft);
+}
+.swatchWait {
+  background: var(--citrus);
+}
