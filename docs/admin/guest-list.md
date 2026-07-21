@@ -1,8 +1,8 @@
 # Admin Spec — Guest List + Dashboard (+ shared admin foundation)
 
-> **Status:** Foundation + Guest List **built 2026-07-21** (adapted — see "Implementation notes"
-> below). Dashboard redesign (§11) **deferred** to a fast-follow. Source: "Claude Code
-> Implementation Brief — Guest List" + two approved mockups.
+> **Status:** Foundation + Guest List + **Guest Dashboard (§11) built 2026-07-21** (adapted — see
+> "Implementation notes" below). Source: "Claude Code Implementation Brief — Guest List" + two
+> approved mockups.
 
 ## Implementation notes (first build, 2026-07-21)
 
@@ -18,6 +18,15 @@ Tailwind/TanStack/RHF):
   tabs with counts, **Party View + Individual View** tables, computed needs-attention rules,
   client pagination, URL-synced `view`/`tab`, inline edit/add panel reusing the existing
   party/guest/travel RPC save flow.
+
+**Guest Dashboard (§11)** — rebuilt `app/admin/(dashboard)/page.tsx` on the shared foundation:
+PageHeader + wedding-dates chip (canonical **Jun 16–21, 2027**), the shared 7-metric strip, and a
+card grid. Cards built from **real** data — Needs Attention (grouped guest issues, each links to the
+filtered Guest List), Upcoming Arrivals (grouped by `travel_info.arrival_date`), Child Guests, and
+Recently Added (by `created_at`). The prior budget/venue/vendor reminders are preserved as a
+**Planning Reminders** card. The spec's per-event RSVP progress, activity-booking donut, and lodging
+snapshot are a single honest **placeholder** card (they need the Itinerary/Activities/Lodging
+backends, which don't exist yet).
 
 Deliberate adaptations from the brief/mockup (revisit as later builds land):
 

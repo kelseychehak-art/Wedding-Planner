@@ -17,7 +17,7 @@ mockup PNGs live in [`docs/admin/mockups/`](./mockups) and are embedded in each 
 
 | Spec | Mockup(s) | Maps to admin surface | Build state today |
 |---|---|---|---|
-| [`guest-list.md`](./guest-list.md) — **foundation + Dashboard + Guest List** | [party view](./mockups/guest-list-party-view.png), [individual view](./mockups/guest-list-individual-view.png), [dashboard](./mockups/dashboard.png) | `app/admin/(dashboard)/` (Dashboard) + `guests/` | **Foundation + Guest List built 2026-07-21** (adapted; see the spec's Implementation notes). Dashboard redesign (§11) deferred. §1–10 define the shared shell every other spec reuses. |
+| [`guest-list.md`](./guest-list.md) — **foundation + Dashboard + Guest List** | [party view](./mockups/guest-list-party-view.png), [individual view](./mockups/guest-list-individual-view.png), [dashboard](./mockups/dashboard.png) | `app/admin/(dashboard)/` (Dashboard) + `guests/` | **Foundation + Guest List + Dashboard (§11) built 2026-07-21** (adapted; see the spec's Implementation notes). §1–10 define the shared shell every other spec reuses. |
 | [`travel.md`](./travel.md) | [travel](./mockups/travel.png) | `/admin/travel` | **Net-new page.** Only `POST /api/admin/travel` exists — no UI, not in nav. |
 | [`itinerary.md`](./itinerary.md) | [itinerary](./mockups/itinerary.png) | `/admin/itinerary` | Related to existing **Timeline** (milestones) but distinct — the weekend **event schedule**. |
 | [`budget.md`](./budget.md) | [budget](./mockups/budget.png) | `app/admin/(dashboard)/budget/` | Exists (`BudgetManager`, budget RPCs); richer redesign. |
