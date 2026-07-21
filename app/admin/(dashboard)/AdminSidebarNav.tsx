@@ -13,11 +13,13 @@ import {
   IconScale,
   IconDownload,
   IconSettings,
+  IconPlane,
 } from "@/components/admin/icons";
 
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/admin", Icon: IconHome },
   { label: "Guest List", href: "/admin/guests", Icon: IconUsers },
+  { label: "Travel", href: "/admin/travel", Icon: IconPlane },
   { label: "Venues", href: "/admin/venues", Icon: IconBuilding },
   { label: "Vendors", href: "/admin/vendors", Icon: IconStore },
   { label: "Budget", href: "/admin/budget", Icon: IconWallet },
