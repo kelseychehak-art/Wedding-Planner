@@ -9,7 +9,17 @@ async function getParties(): Promise<Party[]> {
   return (data ?? []) as Party[];
 }
 
-export default async function GuestsPage() {
-  const parties = await getParties();
-  return <GuestsManager initialParties={parties} />;
+export default async function GuestsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ view?: string; tab?: string }>;
+}) {
+  const [parties, params] = await Promise.all([getParties(), searchParams]);
+  return (
+    <GuestsManager
+      initialParties={parties}
+      initialView={params.view}
+      initialTab={params.tab}
+    />
+  );
 }

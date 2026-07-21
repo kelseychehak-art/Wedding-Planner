@@ -1,17 +1,8 @@
-import Link from "next/link";
 import styles from "./AdminNav.module.css";
+import AdminSidebarNav from "./AdminSidebarNav";
 import LogoutButton from "./LogoutButton";
-
-const NAV_ITEMS = [
-  { label: "Dashboard", href: "/admin" },
-  { label: "Guests", href: "/admin/guests" },
-  { label: "Venues", href: "/admin/venues" },
-  { label: "Vendors", href: "/admin/vendors" },
-  { label: "Budget", href: "/admin/budget" },
-  { label: "Timeline", href: "/admin/timeline" },
-  { label: "Decisions", href: "/admin/decisions" },
-  { label: "Exports", href: "/admin/exports" },
-];
+import Postmark from "@/components/admin/Postmark";
+import { OliveSprig } from "@/components/admin/icons";
 
 export default function AdminDashboardLayout({
   children,
@@ -21,17 +12,18 @@ export default function AdminDashboardLayout({
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <p className={styles.monogram}>K &amp; A</p>
-        <ul className={styles.nav}>
-          {NAV_ITEMS.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href} className={styles.navLink}>
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <LogoutButton />
+        <div className={styles.wordmark}>
+          <OliveSprig size={52} className={styles.wordmarkSprig} />
+          <p className={styles.wordmarkNames}>Kelsey &amp; Andrew</p>
+          <p className={styles.wordmarkEyebrow}>Tuscany 2027</p>
+        </div>
+        <AdminSidebarNav />
+        <div className={styles.sidebarFooter}>
+          <div className={styles.postmark}>
+            <Postmark size={92} />
+          </div>
+          <LogoutButton />
+        </div>
       </aside>
       <main className={styles.main}>{children}</main>
     </div>

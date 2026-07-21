@@ -1,0 +1,110 @@
+/* Connected strip: one bordered surface, cards divided by inner borders. */
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 16px 14px;
+  border: none;
+  border-right: 1px solid var(--border-soft);
+  background: transparent;
+  text-align: left;
+  font: inherit;
+}
+
+.card:last-child {
+  border-right: none;
+}
+
+.cardClickable {
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cardClickable:hover {
+  background: var(--surface-soft);
+}
+
+.cardActive {
+  background: var(--surface-soft);
+  box-shadow: inset 0 -2px 0 var(--olive);
+}
+
+.cardDisabled {
+  opacity: 0.55;
+}
+
+.icon {
+  color: var(--olive);
+  padding-top: 3px;
+  flex-shrink: 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.value {
+  font-family: var(--font-serif);
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--olive-dark);
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-top: 4px;
+}
+
+.sub {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--olive-muted);
+  margin-top: 2px;
+}
+
+/* Tones color the value + icon (labels stay ink for readability). */
+
+.toneGood {
+  color: var(--olive);
+}
+
+.toneWarn {
+  color: var(--citrus);
+}
+
+.toneBad {
+  color: var(--terracotta-dark);
+}
+
+.toneInfo {
+  color: var(--blue);
+}
+
+/* On narrow screens the strip wraps into rows; keep bottom borders tidy. */
+@media (max-width: 1099px) {
+  .card {
+    border-bottom: 1px solid var(--border-soft);
+  }
+}
