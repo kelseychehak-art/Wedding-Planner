@@ -5,6 +5,21 @@
   display: grid;
   grid-template-columns: 232px 1fr;
   background: var(--page-bg);
+
+  /*
+   * Cormorant Garamond defaults to OLD-STYLE figures: "1" is x-height and the
+   * same width as "I" (measured: 33.4px vs 34.0px), while 4 and 7 drop below
+   * the baseline. Beautiful in running prose, wrong for an admin where the
+   * numbers are the content — "1 under 18" read as "I under 18".
+   *
+   * lining-nums gives full-height figures that can't be mistaken for letters;
+   * tabular-nums keeps digits the same width so numbers stack in columns.
+   * Inherited, so this covers every number under /admin at once.
+   *
+   * Deliberately NOT applied to the guest site: old-style figures there are an
+   * editorial choice, and "June 16 – 21, 2027" is meant to read as prose.
+   */
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 @media (max-width: 767px) {

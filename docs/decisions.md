@@ -192,3 +192,18 @@ is **Mon–Sat, June 16–21 2027** with six events (Welcome Dinner, Wine Tastin
 Day & Lunch, Town Excursion, Farewell Party). Repopulate the data and extend `ScheduleEvent`/
 `ScheduleDay`/`ScheduleIcon` (add `description`, `photo`, `endTime`, more icons). See
 `docs/pages/our-weekend.md`.
+
+### D15 — Admin uses lining figures; the guest site keeps old-style (resolved 2026-07-21)
+**Decision:** Everything under `/admin` sets `font-variant-numeric: lining-nums tabular-nums`,
+inherited from the admin shell (`AdminNav.module.css` `.shell`). The **guest site is deliberately
+left on Cormorant's defaults**.
+**Why:** Cormorant Garamond ships **old-style (text) figures** — `1` is x-height and, measured at
+100px, **33.4px wide against `I` at 34.0px**. They are visually the same glyph. `4` and `7` also
+drop below the baseline. Kelsey spotted it as "1 looks like an I" on the dashboard's
+`1 under 18`. Old-style figures are lovely in running prose and wrong wherever the number *is* the
+content. `tabular-nums` additionally keeps digits a fixed width so columns of figures line up.
+**Scope:** admin only. On the guest site the numerals sit in editorial sentences — "June 16 – 21,
+2027" is meant to read as prose — so the old-style set is the right look there. If that ever changes
+it should be a deliberate design call, not a side effect of this fix.
+**Note:** `MetricStrip` previously carried a local `lining-nums` rule; that patched one component
+while every other number in the admin stayed ambiguous. The rule now lives once on the shell.

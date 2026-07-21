@@ -67,10 +67,10 @@
   min-width: 0;
 }
 
+/* Lining/tabular figures are inherited from the admin shell (AdminNav.module.css)
+   — Cormorant's default old-style "1" is indistinguishable from "I". */
 .value {
   font-family: var(--font-serif);
-  font-variant-numeric: lining-nums;
-  font-feature-settings: "lnum" 1;
   font-size: 26px;
   font-weight: 600;
   line-height: 1.1;
