@@ -1,0 +1,219 @@
+/* Shared list-page toolbar. Control metrics come from guest-list.md §12A:
+   36px tall, white, 1px border, 6px radius, 11–12px type. */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.toolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* ---- Search ---- */
+
+.searchWrap {
+  position: relative;
+  flex: 1 1 240px;
+  max-width: 300px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--olive-muted);
+  pointer-events: none;
+}
+
+.search {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 12px 0 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.search::placeholder {
+  color: var(--olive-muted);
+}
+
+/* ---- Filter dropdowns ---- */
+
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 8px 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+/* A filter that is actually narrowing the list should look different from one
+   sitting at "All" — otherwise it's easy to forget why rows are missing. */
+.filterActive {
+  border-color: var(--olive);
+  box-shadow: inset 0 -2px 0 var(--olive);
+}
+
+.filterLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--olive-muted);
+  white-space: nowrap;
+}
+
+.filterControl {
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 6px 2px;
+  max-width: 150px;
+}
+
+/* ---- Sort row ---- */
+
+.sortBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sortLabel {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+}
+
+.sortControl {
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 4px 2px;
+  cursor: pointer;
+}
+
+/* ---- Columns picker ---- */
+
+.columnsWrap {
+  position: relative;
+}
+
+.columnsBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.columnsBtn:hover {
+  background: var(--surface-soft);
+}
+
+.columnsBtnActive {
+  border-color: var(--olive);
+}
+
+.columnsCount {
+  font-size: 10px;
+  color: var(--olive-muted);
+}
+
+.columnsMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  min-width: 190px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.columnsItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.columnsItem:hover {
+  background: var(--surface-soft);
+}
+
+.columnsItemLocked {
+  cursor: default;
+  color: var(--olive-muted);
+}
+
+.columnsReset {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+  padding: 7px 8px;
+  border: none;
+  border-top: 1px solid var(--border-soft);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.columnsReset:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  .searchWrap {
+    max-width: none;
+    flex-basis: 100%;
+  }
+
+  .toolbarRight {
+    margin-left: 0;
+  }
+}

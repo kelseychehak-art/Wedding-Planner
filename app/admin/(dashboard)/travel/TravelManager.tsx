@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
+import Pagination from "@/components/admin/Pagination";
 import {
   IconPlane,
   IconBasket,
@@ -149,6 +150,8 @@ export default function TravelManager({
   const [statusFilter, setStatusFilter] = useState("");
   const [transportFilter, setTransportFilter] = useState("");
   const [editing, setEditing] = useState<Itinerary | "new" | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
 
   const partiesWithout = useMemo(() => {
     const covered = new Set(itineraries.map((i) => i.party_id));
@@ -245,6 +248,10 @@ export default function TravelManager({
       return true;
     });
   }, [itineraries, view, search, statusFilter, transportFilter]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const clampedPage = Math.min(page, pageCount);
+  const visible = filtered.slice((clampedPage - 1) * pageSize, clampedPage * pageSize);
 
   const views: { key: ViewKey; label: string; count: number }[] = [
     { key: "all", label: "All", count: itineraries.length },
@@ -400,7 +407,7 @@ export default function TravelManager({
               </tr>
             </thead>
             <tbody>
-              {filtered.map((it) => {
+              {visible.map((it) => {
                 const a = seg(it, "arrival");
                 const d = seg(it, "departure");
                 return (
@@ -489,6 +496,15 @@ export default function TravelManager({
           </table>
         </div>
       )}
+
+      <Pagination
+        total={filtered.length}
+        page={clampedPage}
+        pageSize={pageSize}
+        onPage={setPage}
+        onPageSize={setPageSize}
+        noun="travel records"
+      />
 
       <div className={styles.footCards}>
         <div className={styles.footCard}>

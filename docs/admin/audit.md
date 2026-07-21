@@ -9,9 +9,10 @@ the dev build (`/admin/guests`), so the geometry below is observed, not inferred
 
 **Legend:** 🔴 wrong or misleading · 🟠 missing vs mockup · 🟡 consistency/polish
 
-**Status:** the truth pass (items 1, 2, 3, 5, 8, 9, 10) is done and verified in the browser.
-The `submit_rsvp` data-loss bug listed under "guest-facing" is also fixed (see `decisions.md` D14).
-Items 4, 6, 7 and everything under P1/P2 remain open.
+**Status:** P0 items 1, 2, 3, 4, 5, 8, 9, 10 are done and verified in the browser, as is the
+`submit_rsvp` data-loss bug under "guest-facing" (see `decisions.md` D14). The shared toolbar and
+pagination are built and applied to Guest List, Travel, Lodging and Activities.
+**Still open:** P0 items 6 (error/loading boundaries) and 7 (keyboard rows), plus the rest of P1/P2.
 
 ---
 
@@ -111,12 +112,12 @@ more useful at a glance.
 
 ### Guest List (`guest-list-party-view.png`, spec §12)
 
-- **No Sort By control.** Spec §12B requires a `SORT BY  Name (A–Z)` row below the filters.
-- **No Columns picker** (spec §12A, far right of toolbar).
-- Missing filters: **Activities**, **Lodging**, **Information**. Present but not in the mockup: Side
-  (worth keeping).
-- **Extra `Child` column.** Spec §12C lists 9 columns and Child isn't one — child counts belong in
-  the Guest/Party cell.
+- ✅ **Sort By** (spec §12B), **Columns picker** (§12A) and the **Activities / Lodging** filters are
+  now built, on a shared `components/admin/Toolbar` reused by Travel, Lodging and Activities.
+  Still missing: the mockup's "Information" filter.
+- ⚠️ **`Child` column — the brief contradicts itself.** §12C lists 9 columns without it; the summary
+  at line 86 lists 11 columns *including* Child and Invited. Left in place, and now hideable via the
+  Columns picker, which makes the disagreement moot.
 - **Rows aren't row-cards.** Spec §12D: each party is a bordered card, `border-radius: 8px`, ~12px
   apart, 138px (2 guests) / 172px (4 guests) tall. Measured live: `border-radius: 0px`, heights
   **77px** (0 guests) to **103px** (1 guest + child) — flat rows at roughly half the intended height.

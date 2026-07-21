@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
+import Pagination from "@/components/admin/Pagination";
 import {
   IconHome,
   IconUsers,
@@ -113,6 +114,8 @@ export default function LodgingManager({
 }) {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("assignments");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
   const [search, setSearch] = useState("");
   const [propertyFilter, setPropertyFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -186,6 +189,13 @@ export default function LodgingManager({
       return true;
     });
   }, [assignments, search, propertyFilter, statusFilter]);
+
+  const pageCount = Math.max(1, Math.ceil(filteredAssignments.length / pageSize));
+  const clampedPage = Math.min(page, pageCount);
+  const visibleAssignments = filteredAssignments.slice(
+    (clampedPage - 1) * pageSize,
+    clampedPage * pageSize
+  );
 
   async function removeRecord(kind: string, id: string, label: string) {
     if (!confirm(`Delete ${label}?`)) return;
@@ -357,7 +367,7 @@ export default function LodgingManager({
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredAssignments.map((a) => (
+                  {visibleAssignments.map((a) => (
                     <tr key={a.id}>
                       <td>
                         <div className={styles.strong}>
@@ -408,6 +418,16 @@ export default function LodgingManager({
               </table>
             </div>
           )}
+          {/* Outside .tableWrap — that scrolls horizontally, and pagination
+              must stay put when the table is scrolled sideways. */}
+          <Pagination
+            total={filteredAssignments.length}
+            page={clampedPage}
+            pageSize={pageSize}
+            onPage={setPage}
+            onPageSize={setPageSize}
+            noun="assignments"
+          />
         </>
       )}
 

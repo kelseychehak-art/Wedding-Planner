@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
+import Pagination from "@/components/admin/Pagination";
 import {
   IconCalendar,
   IconUsers,
@@ -124,6 +125,8 @@ export default function ActivitiesManager({
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [editing, setEditing] = useState<Activity | "new" | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
 
   const signupWindow = useMemo(
     () => describeSignupWindow(signupOpens, signupCloses),
@@ -188,6 +191,10 @@ export default function ActivitiesManager({
       return true;
     });
   }, [activities, search, statusFilter, categoryFilter]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const clampedPage = Math.min(page, pageCount);
+  const visible = filtered.slice((clampedPage - 1) * pageSize, clampedPage * pageSize);
 
   async function remove(a: Activity) {
     if (!confirm(`Delete "${a.title}"?`)) return;
@@ -282,7 +289,7 @@ export default function ActivitiesManager({
               </tr>
             </thead>
             <tbody>
-              {filtered.map((a) => {
+              {visible.map((a) => {
                 const pct = a.capacity ? Math.round((a.booked_count / a.capacity) * 100) : null;
                 return (
                   <tr key={a.id}>
@@ -331,6 +338,15 @@ export default function ActivitiesManager({
           </table>
         </div>
       )}
+
+      <Pagination
+        total={filtered.length}
+        page={clampedPage}
+        pageSize={pageSize}
+        onPage={setPage}
+        onPageSize={setPageSize}
+        noun="activities"
+      />
 
       <p className={styles.footNote}>
         Sign-up counts come from real bookings. Guests can&rsquo;t book yet — the guest-facing

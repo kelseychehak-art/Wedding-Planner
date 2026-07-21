@@ -7,6 +7,16 @@ import { displayName, HOUSEHOLD_LABEL, householdNudges } from "./household";
 import styles from "./guests.module.css";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
+import Pagination from "@/components/admin/Pagination";
+import {
+  Toolbar,
+  ToolbarSearch,
+  FilterSelect,
+  SortBar,
+  ColumnsButton,
+  useColumnVisibility,
+  type ColumnDef,
+} from "@/components/admin/Toolbar";
 import {
   IconUsers,
   IconLeaf,
@@ -16,13 +26,10 @@ import {
   IconPlane,
   IconAlert,
   IconCheckCircle,
-  IconSearch,
   IconMail,
   IconPhone,
   IconDots,
   IconPlus,
-  IconChevronLeft,
-  IconChevronRight,
 } from "@/components/admin/icons";
 import PartyForm, {
   type PartyDraft,
@@ -135,6 +142,74 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "activities", label: "Activity Follow-up" },
   { key: "attending", label: "Attending" },
   { key: "declined", label: "Declined" },
+];
+
+/*
+ * Party-view columns. Guest/Party and Actions are locked: a table with no
+ * identifying column, or no way to act on a row, isn't usable.
+ */
+const PARTY_COLUMNS: ColumnDef[] = [
+  { key: "guest", label: "Guest / Party", locked: true },
+  { key: "child", label: "Child" },
+  { key: "rsvp", label: "RSVP" },
+  { key: "events", label: "Weekend Events" },
+  { key: "activities", label: "Activities" },
+  { key: "travel", label: "Travel" },
+  { key: "lodging", label: "Lodging" },
+  { key: "contact", label: "Contact" },
+  { key: "attention", label: "Needs Attention" },
+  { key: "actions", label: "Actions", locked: true },
+];
+
+const INDIVIDUAL_COLUMNS: ColumnDef[] = [
+  { key: "guest", label: "Guest", locked: true },
+  { key: "party", label: "Party" },
+  { key: "rsvp", label: "RSVP" },
+  { key: "events", label: "Weekend Events" },
+  { key: "activities", label: "Activities" },
+  { key: "travel", label: "Travel" },
+  { key: "lodging", label: "Lodging" },
+  { key: "dietary", label: "Dietary / Notes" },
+  { key: "attention", label: "Needs Attention" },
+  { key: "actions", label: "Actions", locked: true },
+];
+
+const OPT_RSVP = [
+  { value: "All", label: "All" },
+  { value: "Attending", label: "Attending" },
+  { value: "Awaiting", label: "Awaiting" },
+  { value: "Declined", label: "Declined" },
+];
+const OPT_TRAVEL = [
+  { value: "All", label: "All" },
+  { value: "Submitted", label: "Submitted" },
+  { value: "Missing", label: "Missing" },
+];
+const OPT_ACTIVITIES = [
+  { value: "All", label: "All" },
+  { value: "Booked", label: "Booked something" },
+  { value: "None", label: "Nothing booked" },
+];
+const OPT_LODGING = [
+  { value: "All", label: "All" },
+  { value: "Assigned", label: "Room assigned" },
+  { value: "Unassigned", label: "No room yet" },
+];
+const OPT_SIDE = [
+  { value: "All", label: "All" },
+  { value: "Kelsey", label: "Kelsey" },
+  { value: "Andrew", label: "Andrew" },
+  { value: "Shared", label: "Shared" },
+];
+
+type SortKey = "name" | "name-desc" | "guests" | "rsvp" | "attention";
+
+const SORT_OPTIONS = [
+  { value: "name", label: "Name (A–Z)" },
+  { value: "name-desc", label: "Name (Z–A)" },
+  { value: "guests", label: "Party size" },
+  { value: "rsvp", label: "Awaiting RSVP first" },
+  { value: "attention", label: "Most issues first" },
 ];
 
 /** Attending, but hasn't signed up for anything yet. */
@@ -257,10 +332,19 @@ export default function GuestsManager({
   const [rsvpFilter, setRsvpFilter] = useState("All");
   const [travelFilter, setTravelFilter] = useState("All");
   const [sideFilter, setSideFilter] = useState("All");
+  const [activityFilter, setActivityFilter] = useState("All");
+  const [lodgingFilter, setLodgingFilter] = useState("All");
+  const [sort, setSort] = useState<SortKey>("name");
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(25);
   const [menuId, setMenuId] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ party: Party; guest: Guest | null } | null>(null);
+
+  const columns = view === "party" ? PARTY_COLUMNS : INDIVIDUAL_COLUMNS;
+  const cols = useColumnVisibility(
+    view === "party" ? "admin.guests.columns.party" : "admin.guests.columns.individual",
+    columns
+  );
 
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<PartyDraft>(emptyPartyDraft());
@@ -405,6 +489,14 @@ export default function GuestsManager({
       return false;
     if (travelFilter === "Submitted" && !partyHasTravel(p)) return false;
     if (travelFilter === "Missing" && partyHasTravel(p)) return false;
+
+    const booked = p.guests.some((g) => (g.activities?.length ?? 0) > 0);
+    if (activityFilter === "Booked" && !booked) return false;
+    if (activityFilter === "None" && booked) return false;
+
+    const hasRoom = (p.lodging?.length ?? 0) > 0 || Boolean(p.travel?.room_assignment);
+    if (lodgingFilter === "Assigned" && !hasRoom) return false;
+    if (lodgingFilter === "Unassigned" && hasRoom) return false;
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       const haystack = [
@@ -420,11 +512,28 @@ export default function GuestsManager({
     return true;
   }
 
-  const filteredParties = useMemo(
-    () => parties.filter((p) => partyMatchesFilters(p) && partyMatchesTab(p, tab)),
+  const filteredParties = useMemo(() => {
+    const rows = parties.filter((p) => partyMatchesFilters(p) && partyMatchesTab(p, tab));
+    const byName = (a: Party, c: Party) => displayName(a).localeCompare(displayName(c));
+    switch (sort) {
+      case "name-desc":
+        return rows.sort((a, c) => byName(c, a));
+      case "guests":
+        return rows.sort((a, c) => c.guests.length - a.guests.length || byName(a, c));
+      case "rsvp":
+        return rows.sort(
+          (a, c) =>
+            c.guests.filter(isAwaiting).length - a.guests.filter(isAwaiting).length || byName(a, c)
+        );
+      case "attention":
+        return rows.sort(
+          (a, c) => partyAttention(c).length - partyAttention(a).length || byName(a, c)
+        );
+      default:
+        return rows.sort(byName);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [parties, tab, search, rsvpFilter, travelFilter, sideFilter]
-  );
+  }, [parties, tab, search, rsvpFilter, travelFilter, sideFilter, activityFilter, lodgingFilter, sort]);
 
   const guestRows = useMemo(() => {
     const rows: { guest: Guest; party: Party }[] = [];
@@ -434,9 +543,18 @@ export default function GuestsManager({
         if (guestMatchesTab(g, p, tab)) rows.push({ guest: g, party: p });
       }
     }
-    return rows;
+    const byName = (a: { guest: Guest }, c: { guest: Guest }) =>
+      (a.guest.first_name || "").localeCompare(c.guest.first_name || "");
+    if (sort === "name-desc") return rows.sort((a, c) => byName(c, a));
+    if (sort === "attention")
+      return rows.sort(
+        (a, c) =>
+          guestAttention(c.guest, c.party).length - guestAttention(a.guest, a.party).length ||
+          byName(a, c)
+      );
+    return rows.sort(byName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [parties, tab, search, rsvpFilter, travelFilter, sideFilter]);
+  }, [parties, tab, search, rsvpFilter, travelFilter, sideFilter, activityFilter, lodgingFilter, sort]);
 
   const tabCounts = useMemo(() => {
     const counts = {} as Record<TabKey, number>;
@@ -617,23 +735,46 @@ export default function GuestsManager({
         onSelect={metricSelect}
       />
 
-      <div className={styles.toolbar}>
-        <div className={styles.searchWrap}>
-          <IconSearch size={14} className={styles.searchIcon} />
-          <input
-            className={styles.searchInput}
-            placeholder="Search guests or parties…"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-          />
-        </div>
+      <Toolbar
+        right={
+          <>
+            <div className={styles.viewToggle}>
+              <button
+                type="button"
+                className={view === "party" ? styles.viewBtnActive : styles.viewBtn}
+                onClick={() => changeView("party")}
+              >
+                Party View
+              </button>
+              <button
+                type="button"
+                className={view === "individual" ? styles.viewBtnActive : styles.viewBtn}
+                onClick={() => changeView("individual")}
+              >
+                Individual View
+              </button>
+            </div>
+            <ColumnsButton
+              columns={columns}
+              hidden={cols.hidden}
+              onToggle={cols.toggle}
+              onReset={cols.reset}
+            />
+          </>
+        }
+      >
+        <ToolbarSearch
+          value={search}
+          placeholder="Search guests or parties…"
+          onChange={(v) => {
+            setSearch(v);
+            setPage(1);
+          }}
+        />
         <FilterSelect
           label="RSVP"
           value={rsvpFilter}
-          options={["All", "Attending", "Awaiting", "Declined"]}
+          options={OPT_RSVP}
           onChange={(v) => {
             setRsvpFilter(v);
             setPage(1);
@@ -642,40 +783,42 @@ export default function GuestsManager({
         <FilterSelect
           label="Travel"
           value={travelFilter}
-          options={["All", "Submitted", "Missing"]}
+          options={OPT_TRAVEL}
           onChange={(v) => {
             setTravelFilter(v);
             setPage(1);
           }}
         />
         <FilterSelect
+          label="Activities"
+          value={activityFilter}
+          options={OPT_ACTIVITIES}
+          onChange={(v) => {
+            setActivityFilter(v);
+            setPage(1);
+          }}
+        />
+        <FilterSelect
+          label="Lodging"
+          value={lodgingFilter}
+          options={OPT_LODGING}
+          onChange={(v) => {
+            setLodgingFilter(v);
+            setPage(1);
+          }}
+        />
+        <FilterSelect
           label="Side"
           value={sideFilter}
-          options={["All", "Kelsey", "Andrew", "Shared"]}
+          options={OPT_SIDE}
           onChange={(v) => {
             setSideFilter(v);
             setPage(1);
           }}
         />
-        <div className={styles.viewToggle}>
-          <button
-            type="button"
-            className={view === "party" ? styles.viewBtnActive : styles.viewBtn}
-            onClick={() => changeView("party")}
-          >
-            Party View
-          </button>
-          <button
-            type="button"
-            className={
-              view === "individual" ? styles.viewBtnActive : styles.viewBtn
-            }
-            onClick={() => changeView("individual")}
-          >
-            Individual View
-          </button>
-        </div>
-      </div>
+      </Toolbar>
+
+      <SortBar value={sort} options={SORT_OPTIONS} onChange={(v) => setSort(v as SortKey)} />
 
       <div className={styles.tabs}>
         {TABS.map((t) => (
@@ -718,6 +861,8 @@ export default function GuestsManager({
               setRsvpFilter("All");
               setTravelFilter("All");
               setSideFilter("All");
+              setActivityFilter("All");
+              setLodgingFilter("All");
               changeTab("all");
             }}
           >
@@ -728,6 +873,7 @@ export default function GuestsManager({
         <PartyTable
           parties={pageParties}
           events={events}
+          show={cols.isVisible}
           onOpen={(p) => setDetail({ party: p, guest: null })}
           menuId={menuId}
           setMenuId={setMenuId}
@@ -738,6 +884,7 @@ export default function GuestsManager({
         <IndividualTable
           rows={pageGuests}
           events={events}
+          show={cols.isVisible}
           onOpen={(g, p) => setDetail({ party: p, guest: g })}
           menuId={menuId}
           setMenuId={setMenuId}
@@ -759,93 +906,15 @@ export default function GuestsManager({
         />
       )}
 
-      {totalRows > 0 && (
-        <div className={styles.pagination}>
-          <span className={styles.pageInfo}>
-            {startIdx + 1}–{Math.min(startIdx + pageSize, totalRows)} of{" "}
-            {totalRows} {view === "party" ? "parties" : "guests"}
-          </span>
-          <div className={styles.pageSizeWrap}>
-            <span>Rows per page:</span>
-            <select
-              className={styles.pageSizeSelect}
-              value={pageSize}
-              onChange={(e) => {
-                setPageSize(Number(e.target.value));
-                setPage(1);
-              }}
-            >
-              {[10, 20, 50].map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.pageButtons}>
-            <button
-              type="button"
-              className={styles.pageBtn}
-              disabled={clampedPage <= 1}
-              onClick={() => setPage(clampedPage - 1)}
-              aria-label="Previous page"
-            >
-              <IconChevronLeft size={14} />
-            </button>
-            {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
-              <button
-                key={n}
-                type="button"
-                className={n === clampedPage ? styles.pageBtnActive : styles.pageBtn}
-                onClick={() => setPage(n)}
-              >
-                {n}
-              </button>
-            ))}
-            <button
-              type="button"
-              className={styles.pageBtn}
-              disabled={clampedPage >= pageCount}
-              onClick={() => setPage(clampedPage + 1)}
-              aria-label="Next page"
-            >
-              <IconChevronRight size={14} />
-            </button>
-          </div>
-        </div>
-      )}
+      <Pagination
+        total={totalRows}
+        page={clampedPage}
+        pageSize={pageSize}
+        onPage={setPage}
+        onPageSize={setPageSize}
+        noun={view === "party" ? "parties" : "guests"}
+      />
     </div>
-  );
-}
-
-/* ---- Toolbar filter select ---- */
-
-function FilterSelect({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  options: string[];
-  onChange: (v: string) => void;
-}) {
-  return (
-    <label className={styles.filterSelect}>
-      <span className={styles.filterLabel}>{label}:</span>
-      <select
-        className={styles.filterControl}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
-    </label>
   );
 }
 
@@ -1120,6 +1189,7 @@ function RowMenu({
 function PartyTable({
   parties,
   events,
+  show,
   onOpen,
   menuId,
   setMenuId,
@@ -1128,6 +1198,7 @@ function PartyTable({
 }: {
   parties: Party[];
   events: WeekendEvent[];
+  show: (key: string) => boolean;
   onOpen: (p: Party) => void;
   menuId: string | null;
   setMenuId: (id: string | null) => void;
@@ -1140,8 +1211,9 @@ function PartyTable({
         <thead>
           <tr>
             <th className={styles.thGuest}>Guest / Party</th>
-            <th>Child</th>
-            <th>RSVP</th>
+            {show("child") && <th>Child</th>}
+            {show("rsvp") && <th>RSVP</th>}
+            {show("events") && (
             <th>
               Weekend Events
               {events.length > 0 && (
@@ -1155,11 +1227,12 @@ function PartyTable({
                 </span>
               )}
             </th>
-            <th>Activities</th>
-            <th>Travel</th>
-            <th>Lodging</th>
-            <th>Contact</th>
-            <th>Needs Attention</th>
+            )}
+            {show("activities") && <th>Activities</th>}
+            {show("travel") && <th>Travel</th>}
+            {show("lodging") && <th>Lodging</th>}
+            {show("contact") && <th>Contact</th>}
+            {show("attention") && <th>Needs Attention</th>}
             <th className={styles.thActions}>
               <span className={styles.visuallyHidden}>Actions</span>
             </th>
@@ -1201,6 +1274,7 @@ function PartyTable({
                     ))}
                   </ul>
                 </td>
+                {show("child") && (
                 <td>
                   {children > 0 ? (
                     <span>
@@ -1210,6 +1284,8 @@ function PartyTable({
                     <span className={styles.dim}>—</span>
                   )}
                 </td>
+                )}
+                {show("rsvp") && (
                 <td>
                   <div className={styles.rsvpRollup}>
                     {attending > 0 && (
@@ -1241,21 +1317,33 @@ function PartyTable({
                     ))}
                   </ul>
                 </td>
+                )}
+                {show("events") && (
                 <td>
                   <WeekendEventsCell party={p} events={events} />
                 </td>
+                )}
+                {show("activities") && (
                 <td>
                   <ActivitiesCell party={p} />
                 </td>
+                )}
+                {show("travel") && (
                 <td>
                   <TravelCell party={p} />
                 </td>
+                )}
+                {show("lodging") && (
                 <td>
                   <LodgingCell party={p} />
                 </td>
+                )}
+                {show("contact") && (
                 <td>
                   <ContactCell party={p} />
                 </td>
+                )}
+                {show("attention") && (
                 <td>
                   {p.guests.length === 0 ? (
                     <span className={styles.dim}>No guests yet</span>
@@ -1272,6 +1360,7 @@ function PartyTable({
                     />
                   )}
                 </td>
+                )}
                 <td className={styles.tdActions} onClick={(e) => e.stopPropagation()}>
                   <RowMenu
                     open={menuId === p.id}
@@ -1294,6 +1383,7 @@ function PartyTable({
 function IndividualTable({
   rows,
   events,
+  show,
   onOpen,
   menuId,
   setMenuId,
@@ -1302,6 +1392,7 @@ function IndividualTable({
 }: {
   rows: { guest: Guest; party: Party }[];
   events: WeekendEvent[];
+  show: (key: string) => boolean;
   onOpen: (g: Guest, p: Party) => void;
   menuId: string | null;
   setMenuId: (id: string | null) => void;
@@ -1314,14 +1405,14 @@ function IndividualTable({
         <thead>
           <tr>
             <th className={styles.thGuest}>Guest</th>
-            <th>Party</th>
-            <th>RSVP</th>
-            <th>Weekend Events</th>
-            <th>Activities</th>
-            <th>Travel</th>
-            <th>Lodging</th>
-            <th>Dietary / Notes</th>
-            <th>Needs Attention</th>
+            {show("party") && <th>Party</th>}
+            {show("rsvp") && <th>RSVP</th>}
+            {show("events") && <th>Weekend Events</th>}
+            {show("activities") && <th>Activities</th>}
+            {show("travel") && <th>Travel</th>}
+            {show("lodging") && <th>Lodging</th>}
+            {show("dietary") && <th>Dietary / Notes</th>}
+            {show("attention") && <th>Needs Attention</th>}
             <th className={styles.thActions}>
               <span className={styles.visuallyHidden}>Actions</span>
             </th>
@@ -1352,13 +1443,16 @@ function IndividualTable({
                     {g.is_child ? "Child" : "Adult"}
                   </span>
                 </td>
+                {show("party") && (
                 <td>
-                  <span className={styles.memberName}>{p.name}</span>
+                  <span className={styles.memberName}>{displayName(p)}</span>
                   <span className={styles.partyMeta}>
                     {p.guests.length}{" "}
                     {p.guests.length === 1 ? "guest" : "guests"}
                   </span>
                 </td>
+                )}
+                {show("rsvp") && (
                 <td>
                   <span
                     className={`${styles.status} ${
@@ -1372,18 +1466,28 @@ function IndividualTable({
                         : g.rsvp_status}
                   </span>
                 </td>
+                )}
+                {show("events") && (
                 <td>
                   <GuestEventsCell guest={g} events={events} />
                 </td>
+                )}
+                {show("activities") && (
                 <td>
                   <GuestActivitiesCell guest={g} />
                 </td>
+                )}
+                {show("travel") && (
                 <td>
                   <TravelCell party={p} />
                 </td>
+                )}
+                {show("lodging") && (
                 <td>
                   <LodgingCell party={p} />
                 </td>
+                )}
+                {show("dietary") && (
                 <td>
                   {dietary.length > 0 ? (
                     <div className={styles.dietaryCell}>
@@ -1395,9 +1499,12 @@ function IndividualTable({
                     <span className={styles.dim}>—</span>
                   )}
                 </td>
+                )}
+                {show("attention") && (
                 <td>
                   <AttentionCell items={guestAttention(g, p)} />
                 </td>
+                )}
                 <td className={styles.tdActions} onClick={(e) => e.stopPropagation()}>
                   <RowMenu
                     open={menuId === menuKey}
