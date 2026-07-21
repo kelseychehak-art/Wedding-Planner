@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import DetailDrawer from "./DetailDrawer";
+import { displayName, HOUSEHOLD_LABEL, householdNudges } from "./household";
 import styles from "./guests.module.css";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
@@ -40,7 +41,10 @@ export type Guest = {
   id: string;
   party_id: string;
   first_name: string;
+  last_name: string | null;
   is_child: boolean;
+  is_plus_one: boolean;
+  plus_one_of: string | null;
   rsvp_status: string;
   meal_choice: string | null;
   dietary_restrictions: string | null;
@@ -66,6 +70,10 @@ export type Party = {
   mailing_address: string | null;
   side: string | null;
   notes: string | null;
+  household_type: string;
+  household_surname: string | null;
+  display_name_override: string | null;
+  formal_name_override: string | null;
   guests: Guest[];
   travel: Travel;
 };
@@ -111,6 +119,10 @@ function partyToDraft(p: Party): PartyDraft {
   return {
     id: p.id,
     name: p.name,
+    household_type: p.household_type ?? "couple",
+    household_surname: p.household_surname ?? "",
+    display_name_override: p.display_name_override ?? "",
+    formal_name_override: p.formal_name_override ?? "",
     email: p.email ?? "",
     phone: p.phone ?? "",
     mailing_address: p.mailing_address ?? "",
@@ -119,7 +131,9 @@ function partyToDraft(p: Party): PartyDraft {
     guests: p.guests.map((g) => ({
       id: g.id,
       first_name: g.first_name,
+      last_name: g.last_name ?? "",
       is_child: g.is_child,
+      is_plus_one: g.is_plus_one ?? false,
       rsvp_status: g.rsvp_status,
       meal_choice: g.meal_choice ?? "",
       dietary_restrictions: g.dietary_restrictions ?? "",
@@ -472,6 +486,10 @@ export default function GuestsManager({
         mailing_address: party.mailing_address,
         side: party.side,
         notes: party.notes,
+        household_type: party.household_type ?? "couple",
+        household_surname: party.household_surname ?? null,
+        display_name_override: party.display_name_override ?? null,
+        formal_name_override: party.formal_name_override ?? null,
         guests: savedGuests,
         travel,
       };
@@ -914,8 +932,11 @@ function PartyTable({
                 onClick={() => onOpen(p)}
               >
                 <td className={styles.tdGuest}>
-                  <span className={styles.partyName}>{p.name}</span>
+                  <span className={styles.partyName}>{displayName(p)}</span>
                   <span className={styles.partyMeta}>
+                    <span className={styles.householdTag}>
+                      {HOUSEHOLD_LABEL[p.household_type] ?? p.household_type}
+                    </span>
                     {p.guests.length}{" "}
                     {p.guests.length === 1 ? "guest" : "guests"}
                     {p.side ? ` · ${p.side}` : ""}
@@ -929,7 +950,7 @@ function PartyTable({
                           )}
                         </span>
                         <span className={styles.memberKind}>
-                          {g.is_child ? "Child" : "Adult"}
+                          {g.is_plus_one ? "Plus-one" : g.is_child ? "Child" : "Adult"}
                         </span>
                       </li>
                     ))}
@@ -990,7 +1011,16 @@ function PartyTable({
                   {p.guests.length === 0 ? (
                     <span className={styles.dim}>No guests yet</span>
                   ) : (
-                    <AttentionCell items={partyAttention(p)} />
+                    <AttentionCell
+                      items={[
+                        ...partyAttention(p),
+                        ...householdNudges(p).map((n, i) => ({
+                          key: `household-${i}`,
+                          tone: "warn" as const,
+                          label: n.message,
+                        })),
+                      ]}
+                    />
                   )}
                 </td>
                 <td className={styles.tdActions} onClick={(e) => e.stopPropagation()}>

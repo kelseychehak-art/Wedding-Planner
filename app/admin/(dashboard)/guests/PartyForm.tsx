@@ -10,7 +10,9 @@ import styles from "./guests.module.css";
 export type GuestDraft = {
   id?: string;
   first_name: string;
+  last_name: string;
   is_child: boolean;
+  is_plus_one: boolean;
   rsvp_status: string;
   meal_choice: string;
   dietary_restrictions: string;
@@ -21,6 +23,10 @@ export type GuestDraft = {
 export type PartyDraft = {
   id?: string;
   name: string;
+  household_type: string;
+  household_surname: string;
+  display_name_override: string;
+  formal_name_override: string;
   email: string;
   phone: string;
   mailing_address: string;
@@ -35,13 +41,23 @@ export type PartyDraft = {
   removedGuestIds: string[];
 };
 
+export const HOUSEHOLD_TYPE_OPTIONS = [
+  { key: "couple", label: "Couple", hint: "Two adults, one invitation" },
+  { key: "family", label: "Family", hint: "Adults plus children at home" },
+  { key: "single", label: "Single", hint: "One guest, no plus-one" },
+  { key: "single_plus_guest", label: "Single + guest", hint: "One guest with a plus-one" },
+  { key: "group", label: "Group", hint: "Housemates sharing an invitation" },
+];
+
 export const RSVP_STATUSES = ["Invited", "Confirmed", "Declined", "Pending"];
 export const SIDES = ["Kelsey", "Andrew", "Shared"];
 
 export function emptyGuestDraft(): GuestDraft {
   return {
     first_name: "",
+    last_name: "",
     is_child: false,
+    is_plus_one: false,
     rsvp_status: "Invited",
     meal_choice: "",
     dietary_restrictions: "",
@@ -53,6 +69,10 @@ export function emptyGuestDraft(): GuestDraft {
 export function emptyPartyDraft(): PartyDraft {
   return {
     name: "",
+    household_type: "couple",
+    household_surname: "",
+    display_name_override: "",
+    formal_name_override: "",
     email: "",
     phone: "",
     mailing_address: "",
@@ -104,16 +124,66 @@ export default function PartyForm({
 
   return (
     <div>
-      <p className={styles.formSection}>Party</p>
+      <p className={styles.formSection}>Household</p>
       <div className={styles.fieldGrid}>
+        <div className={styles.field}>
+          <label className={styles.label}>Household Type</label>
+          <select
+            className={styles.input}
+            value={draft.household_type}
+            onChange={(e) => set("household_type", e.target.value)}
+          >
+            {HOUSEHOLD_TYPE_OPTIONS.map((t) => (
+              <option key={t.key} value={t.key}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+          <span className={styles.fieldHint}>
+            {HOUSEHOLD_TYPE_OPTIONS.find((t) => t.key === draft.household_type)?.hint}
+          </span>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Household Surname</label>
+          <input
+            className={styles.input}
+            value={draft.household_surname}
+            placeholder="Ferguson"
+            onChange={(e) => set("household_surname", e.target.value)}
+          />
+          <span className={styles.fieldHint}>Used for &ldquo;The Ferguson Family&rdquo;.</span>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Display Name (optional)</label>
+          <input
+            className={styles.input}
+            value={draft.display_name_override}
+            placeholder="auto from guests"
+            onChange={(e) => set("display_name_override", e.target.value)}
+          />
+          <span className={styles.fieldHint}>Overrides the derived name.</span>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Formal Name (optional)</label>
+          <input
+            className={styles.input}
+            value={draft.formal_name_override}
+            placeholder="for envelopes"
+            onChange={(e) => set("formal_name_override", e.target.value)}
+          />
+          <span className={styles.fieldHint}>Used on invitations.</span>
+        </div>
         <div className={`${styles.field} ${styles.fieldWide}`}>
-          <label className={styles.label}>Party Name</label>
+          <label className={styles.label}>Legacy Party Name</label>
           <input
             className={styles.input}
             value={draft.name}
             placeholder="e.g. The Smith Family"
             onChange={(e) => set("name", e.target.value)}
           />
+          <span className={styles.fieldHint}>
+            Kept as a fallback for parties with no guests entered yet.
+          </span>
         </div>
         <div className={styles.field}>
           <label className={styles.label}>Side</label>
@@ -164,6 +234,14 @@ export default function PartyForm({
                 className={styles.input}
                 value={g.first_name}
                 onChange={(e) => setGuest(idx, { first_name: e.target.value })}
+              />
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label}>Last Name</label>
+              <input
+                className={styles.input}
+                value={g.last_name}
+                onChange={(e) => setGuest(idx, { last_name: e.target.value })}
               />
             </div>
             <div className={styles.field}>
@@ -220,6 +298,13 @@ export default function PartyForm({
                 onChange={(e) => setGuest(idx, { is_child: e.target.checked })}
               />
               <label htmlFor={`child-${idx}`}>Child</label>
+              <input
+                id={`plusone-${idx}`}
+                type="checkbox"
+                checked={g.is_plus_one}
+                onChange={(e) => setGuest(idx, { is_plus_one: e.target.checked })}
+              />
+              <label htmlFor={`plusone-${idx}`}>Plus-one</label>
             </div>
             <div className={styles.removeGuestWrap}>
               <button type="button" className={styles.removeGuest} onClick={() => removeGuest(idx)}>

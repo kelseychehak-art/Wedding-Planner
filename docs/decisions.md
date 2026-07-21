@@ -102,6 +102,25 @@ Wedding Details) plus a shared `Money` component that takes an amount + its nati
 renders both. Venue prices are stored in EUR (`venues.currency`); the budget total is USD.
 **Note:** the rate is a manually maintained planning estimate, not a live FX feed — label it as such.
 
+### D13 — Guest list groups by household, with derived names (resolved 2026-07-21)
+**Decision:** The guest list's primary unit is the **household** (the existing `parties` table),
+matching what Zola/Joy/The Knot all do — one invitation suite per household. Each party gains a
+**`household_type`** (couple / family / single / single + guest / group) and names are
+**auto-derived from its guests**, not typed:
+- *display* name for the admin — "The Ferguson Family", "Cathryn & Josh", "Will Hart & guest"
+- *formal* name for envelopes — composed from full names
+Both can be overridden per party; the override wins and is what stationery should use. Guests gain
+`last_name`, `is_plus_one` and `plus_one_of`.
+**Rationale:** party names were free text ("Carly + Ryan"), which drifts as guests change and gives
+no formal name for addressing. Deriving keeps them correct automatically; the invitation count is
+simply the number of households with guests, which is what you order stationery against.
+**Etiquette nudges** (surfaced in Needs Attention, never enforced), following the conventions those
+tools encode: adult children living at home usually get their own invitation; an unnamed plus-one
+needs a name before invitations go out; a single-guest party grouped as a couple is probably wrong.
+**Stage 2 (agreed, not yet built): tags** — Joy-style free-form labels ("Kelsey's college friends",
+"wedding party") cutting across households, for filtering and later for controlling which guests
+see which events. Additive; it cannot disturb the household structure.
+
 ---
 
 ## Open items (resolve before/at build time)
