@@ -21,6 +21,7 @@ import {
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/admin", Icon: IconHome },
   { label: "Guest List", href: "/admin/guests", Icon: IconUsers },
+  { label: "Itinerary", href: "/admin/itinerary", Icon: IconCalendar },
   { label: "Travel", href: "/admin/travel", Icon: IconPlane },
   { label: "Venues", href: "/admin/venues", Icon: IconBuilding },
   { label: "Vendors", href: "/admin/vendors", Icon: IconStore },

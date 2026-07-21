@@ -494,3 +494,90 @@
 .swatchWait {
   background: var(--citrus);
 }
+
+/* ---- RSVP Progress by Event table ---- */
+
+.wideCard {
+  grid-column: 1 / -1;
+}
+
+.eventTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+}
+
+.eventTable th {
+  text-align: left;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+  padding: 0 12px 8px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.eventTable td {
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--ink);
+  vertical-align: middle;
+}
+
+.eventTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.eventName {
+  font-weight: 600;
+}
+
+.eventWhen {
+  font-size: 11px;
+  color: var(--olive-muted);
+  margin-top: 2px;
+}
+
+.numGood {
+  font-weight: 600;
+  color: var(--olive-dark);
+}
+.numWarn {
+  font-weight: 600;
+  color: #7a5a08;
+}
+.numBad {
+  font-weight: 600;
+  color: var(--terracotta-dark);
+}
+
+.rateRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+}
+
+.rateTrack {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border-soft);
+  overflow: hidden;
+}
+
+.rateFill {
+  display: block;
+  height: 100%;
+  background: var(--olive);
+  border-radius: 999px;
+}
+
+.ratePct {
+  font-size: 11.5px;
+  color: var(--olive-muted);
+  min-width: 34px;
+  text-align: right;
+}

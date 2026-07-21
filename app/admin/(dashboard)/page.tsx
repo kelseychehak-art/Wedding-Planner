@@ -67,6 +67,18 @@ type ActivityRow = {
   waitlist_count: number;
 };
 
+type ItineraryPayload = {
+  events?: {
+    id: string;
+    title: string;
+    starts_at: string | null;
+    rsvp_enabled: boolean;
+    attending_count: number;
+    awaiting_count: number;
+    declined_count: number;
+  }[];
+};
+
 type LodgingSnapshot = {
   properties?: { id: string; name: string }[];
   rooms?: { id: string }[];
@@ -118,6 +130,7 @@ async function getDashboard() {
     { data: vendors },
     { data: activityRows },
     { data: lodging },
+    { data: itinerary },
   ] =
     await Promise.all([
       supabase.rpc("admin_list_guests", { p_token: token }),
@@ -126,6 +139,7 @@ async function getDashboard() {
       supabase.rpc("admin_list_vendors", { p_token: token }),
       supabase.rpc("admin_list_activities", { p_token: token }),
       supabase.rpc("admin_get_lodging", { p_token: token }),
+      supabase.rpc("admin_get_itinerary", { p_token: token }),
     ]);
 
   const partyList = (parties ?? []) as Party[];
@@ -172,6 +186,28 @@ async function getDashboard() {
     lodgingProperties.length === 1
       ? lodgingProperties[0].name
       : `${lodgingProperties.length} properties`;
+
+  // ---- RSVP progress by event (mockup §11A) ----
+  const itineraryEvents = ((itinerary ?? {}) as ItineraryPayload).events ?? [];
+  const eventProgress = itineraryEvents
+    .filter((e) => e.rsvp_enabled)
+    .map((e) => {
+      const a = Number(e.attending_count ?? 0);
+      const w = Number(e.awaiting_count ?? 0);
+      const d = Number(e.declined_count ?? 0);
+      const responded = a + d;
+      const total = responded + w;
+      return {
+        id: e.id,
+        title: e.title,
+        when: e.starts_at ? relTime(e.starts_at) : "",
+        attending: a,
+        awaiting: w,
+        declined: d,
+        rate: total ? Math.round((responded / total) * 100) : 0,
+      };
+    })
+    .slice(0, 8);
 
   // ---- Guest needs-attention rollups (real) ----
   const missingTravelGuests = attendingParties
@@ -341,6 +377,7 @@ async function getDashboard() {
     childWithRsvp,
     recent,
     planning: planning.slice(0, 6),
+    eventProgress,
     activities: {
       total: activities.length,
       published: activityPublished,
@@ -681,16 +718,56 @@ export default async function AdminDashboardPage() {
           )}
         </section>
 
-        {/* Still blocked: per-event RSVP needs the Itinerary data model */}
-        <section className={`${styles.card} ${styles.placeholderCard}`}>
+        {/* RSVP Progress by Event (mockup §11A) */}
+        <section className={`${styles.card} ${styles.wideCard}`}>
           <div className={styles.cardHead}>
             <h2 className={styles.cardTitle}>RSVP Progress by Event</h2>
+            <Link href="/admin/itinerary" className={styles.cardLink}>
+              View all
+            </Link>
           </div>
-          <p className={styles.cardEmpty}>
-            Per-event attendance (Welcome Dinner, Ceremony, Farewell Brunch) needs the Itinerary
-            data model and per-event RSVP responses — neither exists yet, so there&apos;s nothing
-            honest to show here.
-          </p>
+          {data.eventProgress.length === 0 ? (
+            <p className={styles.cardEmpty}>
+              No events yet. Add the Welcome Dinner, Ceremony, and Farewell Brunch in Itinerary to
+              track per-event attendance here.
+            </p>
+          ) : (
+            <table className={styles.eventTable}>
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Attending</th>
+                  <th>Awaiting</th>
+                  <th>Declined</th>
+                  <th>Response rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.eventProgress.map((e) => (
+                  <tr key={e.id}>
+                    <td>
+                      <div className={styles.eventName}>{e.title}</div>
+                      {e.when && <div className={styles.eventWhen}>{e.when}</div>}
+                    </td>
+                    <td className={styles.numGood}>{e.attending}</td>
+                    <td className={styles.numWarn}>{e.awaiting}</td>
+                    <td className={styles.numBad}>{e.declined}</td>
+                    <td>
+                      <div className={styles.rateRow}>
+                        <span className={styles.rateTrack}>
+                          <span
+                            className={styles.rateFill}
+                            style={{ width: `${e.rate}%` }}
+                          />
+                        </span>
+                        <span className={styles.ratePct}>{e.rate}%</span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </section>
       </div>
     </div>
