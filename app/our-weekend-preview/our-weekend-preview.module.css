@@ -1,0 +1,364 @@
+/* PROTOTYPE styles — Our Weekend in the admin idiom. Calm canvas, one shared
+   card system (paper + soft border + subtle shadow), uppercase micro-labels,
+   serif reserved for titles and names. No photo background, no postage stamp. */
+
+.page {
+  min-height: 100vh;
+  background: var(--color-ivory);
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 8px clamp(20px, 4vw, 48px) 72px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 4px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+}
+
+.back:hover {
+  color: var(--color-terracotta);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  text-align: center;
+  padding: clamp(24px, 4vh, 44px) 0 clamp(28px, 4vh, 40px);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted-ink);
+}
+
+.sprig {
+  display: block;
+  width: 92px;
+  height: auto;
+  margin: 12px auto 6px;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(34px, 4vw, 48px);
+  line-height: 1.02;
+  color: var(--color-olive-dark);
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-muted-ink);
+  max-width: 540px;
+  margin: 12px auto 0;
+}
+
+/* ---------- Shared card (the whole point) ---------- */
+
+.card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-card);
+  padding: 18px 20px;
+  min-width: 0;
+}
+
+.microLabel {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted-ink);
+  margin-bottom: 12px;
+}
+
+.microNote {
+  color: var(--color-citrus-gold);
+}
+
+.mutedBody {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-muted-ink);
+}
+
+/* ---------- Layout ---------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: 292px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 20px;
+}
+
+/* At a Glance */
+
+.glanceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.glanceRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.glanceRow:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.glanceDay {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted-ink);
+}
+
+.glanceEvent {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-olive-dark);
+}
+
+.glanceTime {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-muted-ink);
+}
+
+.downloadBtn {
+  width: 100%;
+  margin-top: 14px;
+}
+
+/* ---------- Timeline ---------- */
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dayCard {
+  padding: 16px 18px;
+}
+
+.dayHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.dayIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 50%;
+  background: var(--color-ivory);
+  color: var(--color-olive);
+}
+
+.dayLabel {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-terracotta-dark);
+}
+
+.dayInner {
+  display: grid;
+  grid-template-columns: 208px 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.dayPhoto {
+  width: 100%;
+  height: 152px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.dayContent {
+  min-width: 0;
+}
+
+.dayTitle {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-olive-dark);
+}
+
+.dayDesc {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-ink);
+  margin: 6px 0 12px;
+}
+
+.dayMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-muted-ink);
+}
+
+.metaIcon {
+  width: 14px;
+  height: 14px;
+  color: var(--color-olive);
+  flex-shrink: 0;
+}
+
+/* ---------- Closing band ---------- */
+
+.band {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.band .card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 20px;
+}
+
+.bandLabel {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+  margin-top: 2px;
+}
+
+.hashtag {
+  color: var(--color-terracotta);
+  font-weight: 700;
+}
+
+/* ---------- Slim closing ---------- */
+
+.closing {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.closingDivider {
+  display: block;
+  width: min(240px, 60%);
+  height: auto;
+  margin: 0 auto 10px;
+}
+
+.closingNames {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--color-olive-dark);
+}
+
+.closingNames span {
+  color: var(--color-terracotta);
+  margin: 0 4px;
+}
+
+.closingMeta {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted-ink);
+  margin-top: 8px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 899px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .band {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .dayInner {
+    grid-template-columns: 1fr;
+  }
+
+  .dayPhoto {
+    height: 180px;
+  }
+}
