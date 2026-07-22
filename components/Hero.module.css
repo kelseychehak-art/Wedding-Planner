@@ -1,58 +1,38 @@
+/* Split invitation hero — type on cream left, photograph panel right.
+   Stacks at 899px (existing PageHero breakpoint; don't invent new ones). */
+
 .hero {
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(430px, 42%) 1fr;
   width: 100%;
-  min-height: max(760px, calc(100svh - 78px));
+  min-height: max(720px, calc(100svh - 78px));
   overflow: hidden;
   isolation: isolate;
+  background: var(--page-bg);
 }
 
-.bg {
-  object-fit: cover;
-  object-position: center bottom;
-  z-index: 0;
-}
+/* ---- Invitation panel ---- */
 
-/* Cream veil — separate layer so the text never fades. Keeps the top-center
-   light for legibility; landscape reads through the lower half. */
-.veil {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      ellipse 92% 62% at 50% 23%,
-      rgba(250, 247, 242, 0.98) 0%,
-      rgba(250, 247, 242, 0.81) 30%,
-      rgba(250, 247, 242, 0.24) 55%,
-      rgba(250, 247, 242, 0) 76%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(250, 247, 242, 0.97) 0%,
-      rgba(250, 247, 242, 0.9) 18%,
-      rgba(250, 247, 242, 0.58) 42%,
-      rgba(250, 247, 242, 0.12) 68%,
-      rgba(250, 247, 242, 0.08) 100%
-    );
-}
-
-.content {
+.invite {
   position: relative;
-  z-index: 4;
-  width: min(840px, 100% - 48px);
-  margin: 0 auto;
-  padding-top: clamp(64px, 8vh, 100px);
-  padding-bottom: 130px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(36px, 5vh, 64px) clamp(24px, 3.4vw, 56px) clamp(180px, 24vh, 250px);
+}
+
+.inviteInner {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  width: min(520px, 100%);
 }
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -60,49 +40,35 @@
 }
 
 .sprig {
-  width: 210px;
+  width: 170px;
   height: auto;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .country {
   font-family: var(--font-heading);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(90px, 8.4vw, 156px);
+  font-size: clamp(76px, 7.4vw, 128px);
   letter-spacing: -0.02em;
   line-height: 0.96;
   color: var(--color-olive-dark);
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .divider {
   display: block;
-  width: min(440px, 82%);
+  width: min(360px, 86%);
   height: auto;
   margin: 14px 0 4px;
-}
-
-.handwrittenHeart {
-  width: 18px;
-  height: auto;
-}
-
-.rule {
-  height: 1px;
-  background: var(--color-citrus-gold);
-}
-
-.divider > svg {
-  justify-self: center;
 }
 
 .couple {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: clamp(48px, 4.6vw, 74px);
-  line-height: 1.05;
+  font-size: clamp(38px, 3.5vw, 56px);
+  line-height: 1.08;
   color: var(--color-ink);
   margin-top: 10px;
 }
@@ -111,82 +77,110 @@
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: clamp(56px, 5.2vw, 84px);
-  line-height: 1;
+  font-size: clamp(44px, 4vw, 64px);
+  line-height: 1.04;
   color: var(--color-ink);
 }
 
 .meta {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--color-olive-dark);
-  margin-top: 26px;
+  margin-top: 22px;
 }
 
 .cta {
-  width: min(420px, 100%);
-  min-height: 58px;
+  width: min(360px, 100%);
+  min-height: 54px;
   border-radius: 3px;
-  margin-top: 28px;
+  margin-top: 26px;
+}
+
+/* Terracotta script on cream — off the photo at last, so it actually reads. */
+.handwritten {
+  font-family: var(--font-script);
+  font-size: 28px;
+  line-height: 1.1;
+  color: var(--color-terracotta);
+  margin-top: 30px;
 }
 
 .stamp {
   position: absolute;
-  z-index: 3;
-  top: clamp(54px, 6vw, 86px);
-  right: clamp(64px, 8vw, 145px);
-  width: clamp(145px, 12vw, 192px);
+  z-index: 2;
+  left: clamp(20px, 3vw, 44px);
+  bottom: clamp(22px, 4vh, 40px);
+  width: clamp(120px, 10vw, 165px);
   pointer-events: none;
 }
 
-.handwritten {
+/* ---- Photo panel ---- */
+
+.photoPanel {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  border-top-left-radius: clamp(56px, 7vw, 104px);
+}
+
+.photo {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Gold hairline tracing the panel's curve, as in the mockup. */
+.photoEdge {
   position: absolute;
-  z-index: 4;
-  left: 0;
-  right: 0;
-  bottom: clamp(28px, 5vh, 54px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  inset: 12px;
+  border: 1px solid var(--color-citrus-gold);
+  border-top-left-radius: clamp(46px, 6.4vw, 94px);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  opacity: 0.75;
   pointer-events: none;
 }
 
-.handwrittenText {
-  font-family: var(--font-script);
-  font-size: 30px;
-  line-height: 1.1;
-  color: var(--color-terracotta);
-}
+/* ---- Stacked (tablet portrait and phones) ---- */
 
-@media (max-width: 767px) {
+@media (max-width: 899px) {
   .hero {
-    min-height: calc(100svh - 62px);
+    grid-template-columns: 1fr;
+    min-height: 0;
   }
 
-  .content {
-    padding-top: 44px;
-    padding-bottom: 40px;
+  .invite {
+    padding: 44px 24px 40px;
   }
 
+  /* The stamp would collide with the centered stack on narrow screens. */
   .stamp {
-    width: 96px;
-    top: 26px;
-    right: 20px;
+    display: none;
   }
 
   .handwritten {
-    position: static;
-    margin: 20px 0 40px;
+    margin-top: 24px;
+    font-size: 23px; /* 28px runs edge-to-edge at 375px */
   }
-}
 
-@media (max-width: 420px) {
-  .stamp {
-    display: none;
+  .photoPanel {
+    /* Match the crop's own 0.88 aspect so nothing further is cut; cap the
+       height so the photo doesn't swallow the whole first screen. */
+    aspect-ratio: 88 / 100;
+    max-height: 64svh;
+    width: 100%;
+    min-height: 0;
+    border-top-left-radius: 44px;
+    border-top-right-radius: 44px;
+  }
+
+  .photoEdge {
+    inset: 10px;
+    border-top-left-radius: 36px;
+    border-top-right-radius: 36px;
   }
 }

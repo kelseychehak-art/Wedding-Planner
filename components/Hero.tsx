@@ -5,57 +5,84 @@ import Art from "./Art";
 import PostageStamp from "./PostageStamp";
 
 /**
- * Full-bleed editorial "invitation cover" — docs/homepage-spec.md.
- * A full-cover landscape + cream veil, a centered title stack, a tilted villa
- * stamp upper-right, and a handwritten line near the bottom fade.
- * [SWAP] final image = images/tuscan-homepage-landscape.jpg; illustrations pending.
+ * Split "invitation cover" hero — type on cream (left), photograph in its own
+ * panel (right), per Kelsey's Jul 21 mockup. Replaces the full-bleed cover:
+ * every candidate photo was mid-toned and busy exactly where the date sat, so
+ * the type now lives on cream where nothing can fight it, and the photo gets
+ * to be a photo.
+ *
+ * [SWAP] Change HERO_PHOTO to switch candidates. Files are pre-cropped to the
+ * panel's ~0.88 aspect and retina-sized (1584x1800) in public/assets/hero/.
  */
+
+const CANDIDATES = {
+  "nick-george": {
+    src: "/assets/hero/split-nick-george.jpg",
+    alt: "A stone villa with green shutters among umbrella pines and cypresses, with a pool below",
+  },
+  "rafael-peier": {
+    src: "/assets/hero/split-rafael-peier.jpg",
+    alt: "A Tuscan farmhouse on a hillside above olive groves and vineyard rows",
+  },
+  alessandro: {
+    src: "/assets/hero/split-alessandro.jpg",
+    alt: "An open window looking onto a pool, a cypress tree, and sunflower fields",
+  },
+} as const;
+
+const HERO_PHOTO: keyof typeof CANDIDATES = "rafael-peier";
 
 export default function Hero() {
   const { wedding, couple } = siteContent;
+  const photo = CANDIDATES[HERO_PHOTO];
 
   return (
     <section id="top" className={styles.hero}>
-      <Image
-        src="/assets/hero/villa-estate.jpg"
-        alt="The Tuscan countryside — cypress trees, olive groves, and a villa on the hillside"
-        fill
-        priority
-        sizes="100vw"
-        className={styles.bg}
-      />
-      <div className={styles.veil} />
+      {/* ---- Invitation panel ---- */}
+      <div className={styles.invite}>
+        <div className={styles.inviteInner}>
+          <p className={styles.eyebrow}>{wedding.eyebrow}</p>
+          <Art name="lemon-branch" className={styles.sprig} />
+          <h1 className={styles.country}>{wedding.destination}</h1>
 
-      <span className={styles.stamp} aria-hidden="true">
-        <PostageStamp rotate={6} />
-      </span>
+          <Art name="div-gold-heart" className={styles.divider} />
 
-      <div className={styles.content}>
-        <p className={styles.eyebrow}>{wedding.eyebrow}</p>
-        <Art name="lemon-branch" className={styles.sprig} />
-        <h1 className={styles.country}>{wedding.destination}</h1>
+          <p className={styles.couple}>{couple.displayName}&rsquo;s</p>
+          <p className={styles.event}>{wedding.eventName}</p>
 
-        <Art name="div-gold-heart" className={styles.divider} />
+          <p className={styles.meta}>
+            {wedding.dateLabel}
+            <br />
+            {wedding.locationLabel}
+          </p>
 
-        <p className={styles.couple}>{couple.displayName}&rsquo;s</p>
-        <p className={styles.event}>{wedding.eventName}</p>
+          <a href="/rsvp" className={`btn-primary ${styles.cta}`}>
+            RSVP / Login to Get Started
+          </a>
 
-        <p className={styles.meta}>
-          {wedding.dateLabel}
-          <br />
-          {wedding.locationLabel}
-        </p>
+          {/* On cream now, not over the photo — it finally reads. */}
+          <p className={styles.handwritten} aria-hidden="true">
+            We can&rsquo;t wait to celebrate with you
+          </p>
+        </div>
 
-        <a href="/rsvp" className={`btn-primary ${styles.cta}`}>
-          RSVP / Login to Get Started
-        </a>
+        <span className={styles.stamp} aria-hidden="true">
+          <PostageStamp rotate={-7} />
+        </span>
       </div>
 
-      <div className={styles.handwritten} aria-hidden="true">
-        <span className={styles.handwrittenText}>
-          We can&rsquo;t wait to celebrate with you
-        </span>
-        <Art name="heart" className={styles.handwrittenHeart} />
+      {/* ---- Photo panel ---- */}
+      <div className={styles.photoPanel}>
+        <Image
+          src={photo.src}
+          alt={photo.alt}
+          fill
+          priority
+          sizes="(max-width: 899px) 100vw, 58vw"
+          className={styles.photo}
+        />
+        {/* Gold hairline tracing the panel's curve, as in the mockup. */}
+        <span className={styles.photoEdge} aria-hidden="true" />
       </div>
     </section>
   );
