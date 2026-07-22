@@ -21,6 +21,20 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+/*
+ * Background options, swappable from the URL (?bg=rafael) so they can be
+ * compared without rebuilding. "rafael" is the homepage hero photo — the
+ * consistent default. "none" is the plain-ivory version.
+ */
+const BACKGROUNDS: Record<string, string | null> = {
+  rafael: "/assets/hero/rafael-peier-zHpuoOCn7pY-unsplash.jpg",
+  valdorcia: "/assets/hero/valdorcia.jpg",
+  olive: "/assets/photos/olive-hills.jpg",
+  cypress: "/assets/photos/cypress-drive.jpg",
+  villa: "/assets/hero/villa-estate.jpg",
+  none: null,
+};
+
 const ICON_NAME: Record<ScheduleIcon, IllustrationName> = {
   dinner: "wineGlass",
   wine: "wineBottle",
@@ -53,12 +67,29 @@ function PinIcon() {
   );
 }
 
-export default function OurWeekendPreviewPage() {
+export default async function OurWeekendPreviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bg?: string }>;
+}) {
   const { couple, wedding } = siteContent;
+  const { bg } = await searchParams;
+  /* Default to the homepage photo so the site coheres; ?bg=none for plain. */
+  const bgImage = bg && bg in BACKGROUNDS ? BACKGROUNDS[bg] : BACKGROUNDS.rafael;
 
   return (
     <div className={styles.page}>
       <SiteHeader />
+
+      {bgImage && (
+        <div
+          className={styles.bg}
+          aria-hidden="true"
+          style={{
+            backgroundImage: `linear-gradient(180deg, rgba(250,247,242,0.60), rgba(250,247,242,0.72)), url('${bgImage}')`,
+          }}
+        />
+      )}
 
       <main className={styles.container}>
         <a href="/" className={styles.back}>

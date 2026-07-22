@@ -4,7 +4,28 @@
 
 .page {
   min-height: 100vh;
+  /* Transparent so the fixed faded photo shows through in the gutters; when
+     no ?bg is set, fall back to plain ivory. */
   background: var(--color-ivory);
+}
+
+/* Faded Tuscan photo, fixed behind everything, washed to cream so it whispers
+   in the margins. The image + wash are set inline (per ?bg choice); this only
+   positions and covers. */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Content sits above the fixed background. */
+.page > :global(header),
+.container {
+  position: relative;
+  z-index: 1;
 }
 
 .container {
