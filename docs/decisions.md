@@ -228,3 +228,27 @@ plus-one stays a deliberate act.
 **Nudges:** an unfilled seat raises "counted but not named yet" (it needs a name before stationery).
 The "only one guest but grouped as X" nudge now compares against the **head count**, so a single +
 guest with one named guest and one granted seat is correctly considered complete.
+
+### D17 — Communications drafts and schedules; it never claims to send (resolved 2026-07-21)
+**Decision:** `/admin/communications` writes messages, resolves recipients, schedules them and keeps
+the history. It **does not send**, and it shows **no delivery or open-rate figures**. A banner at the
+top of the page says so in plain words. Statuses are `draft · scheduled · sent · cancelled`, where
+**`sent` means a human sent it elsewhere and logged it here** (with an optional "sent using: Gmail").
+**Why:** no email or SMS provider is connected, and the brief (§K "Provider boundaries") is explicit
+that sending must stay a labelled draft/queue action until one is. A Sent pill that means "we hope
+so" is worse than no page at all — the whole value of this screen is being able to trust that the
+people it says were contacted actually were.
+**Consequences:**
+- **No `communication_recipients` table.** The brief specifies one for per-recipient delivery status.
+  Nothing can write those rows, so the table would only invite invented numbers. It arrives with the
+  provider.
+- **No Open Rate column**, though the mockup has one. A column that reads "—" on every row forever is
+  dead weight; the honest version is not having it.
+- **Metrics replaced.** The mockup's `96% Delivered` and `1 Failed` became **Reachable** and
+  **No Contact Details** — which, at 0 of 20 households reachable today, is the single most useful
+  thing the page can tell you.
+**Recipients are households, not guests.** Email and phone live on `parties`; guests have neither.
+So a rule matches households and the UI always states both numbers — "12 households · 31 guests".
+**Rules stay dynamic.** A saved group stores the rule, never a list of ids, and re-resolves every
+time it is read. Only when a message is marked sent is the count frozen onto the row, so history
+stops moving. See `app/admin/(dashboard)/communications/recipients.ts`.

@@ -1,7 +1,21 @@
 # Admin Spec — Communications
 
-> **Status:** Captured 2026-07-20 — **not yet built.** Source: bundled "Claude Code Implementation
-> Brief — Admin Communications Page" (brief 3 of 4) + approved mockup.
+> **Status:** Captured 2026-07-20; **built 2026-07-21** (`app/admin/(dashboard)/communications/`).
+> Source: bundled "Claude Code Implementation Brief — Admin Communications Page" (brief 3 of 4) +
+> approved mockup.
+>
+> **What was built:** five tabs (Messages · Scheduled · Templates · Groups · History) with `?tab=`
+> in the URL; metric strip; search + channel/status filters + pagination; a composer covering
+> channel → recipients → content → schedule → preview, with merge tokens and a validation panel;
+> **live recipient resolution** against the guest list, including who gets left out for want of an
+> address; saved dynamic recipient groups; ten seeded system templates.
+>
+> **What was deliberately NOT built — see `docs/decisions.md` D17:** any send path, the
+> `communication_recipients` delivery table, per-recipient delivery statuses, and the Open Rate
+> column. There is no provider, so none of those can hold a true value. `sent` on a message means
+> *a human sent it elsewhere and logged it here*. Also not built: static (hand-picked) groups —
+> `RecipientRule.partyIds` exists in the type and resolver but has no UI yet — quiet hours, and
+> unsubscribe handling, all of which only bite once sending is real.
 > **Maps to:** net-new page `/admin/communications`. No admin communications page exists today.
 > (Per-vendor / per-venue "communication" log RPCs exist — `admin_add_vendor_communication`,
 > `admin_add_venue_communication` — but those are vendor-relationship notes, a different concept

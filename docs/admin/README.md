@@ -1,12 +1,13 @@
 # Admin back-office specs — index
 
-**Status: captured; first build landed.** The shared admin foundation + Guest List shipped
-2026-07-21 (see `guest-list.md`); the other eight specs are not yet built.
-This folder holds design/implementation briefs for the
-private wedding-planning **admin** back-office (`/admin/*`). They were provided as reference for a
-future build — nothing here has been implemented yet. `CLAUDE.md` still scopes the current mockup
-rebuild to the **guest-facing** site; these admin briefs are captured here so they're durable and
-ready when that work is greenlit.
+**Status: seven of nine built** (all 2026-07-21). The shared foundation + Dashboard + Guest List
+came first, then Settings, Travel, Itinerary, Activities, Lodging and Communications. **Budget and
+Vendors exist as earlier, simpler pages** — their specs describe expansions not yet applied.
+This folder holds design/implementation briefs for the private wedding-planning **admin**
+back-office (`/admin/*`). Each is adapted rather than followed literally: the briefs assume Tailwind
++ TanStack + direct Supabase reads, this repo uses **CSS Modules + `admin_*` RPCs**. Where a brief
+assumes an integration that doesn't exist (a messaging provider, Gmail ingestion), the build stops
+short of claiming it works — see `communications.md`.
 
 Each spec is the **verbatim source brief** (converted from the original `.docx`, code blocks
 preserved) with a short **header block** prepended that records status, which admin route it maps
@@ -24,7 +25,7 @@ mockup PNGs live in [`docs/admin/mockups/`](./mockups) and are embedded in each 
 | [`settings.md`](./settings.md) | [settings](./mockups/settings.png) | `/admin/settings` | **Net-new page.** Only `POST /api/admin/budget/settings` exists today. |
 | [`activities.md`](./activities.md) | [activities](./mockups/activities.png) | `/admin/activities` | **Net-new page.** Public `/activities` route exists on the guest site; this is the admin counterpart. |
 | [`lodging.md`](./lodging.md) | [lodging](./mockups/lodging.png) | `/admin/lodging` | **Net-new page.** Admin **Venues** exists (venue selection) — distinct from guest room-assignment. |
-| [`communications.md`](./communications.md) | [communications](./mockups/communications.png) | `/admin/communications` | **Net-new page.** No messaging provider wired — sending must be draft/queue only. |
+| [`communications.md`](./communications.md) | [communications](./mockups/communications.png) | `/admin/communications` | **Built 2026-07-21** — messages, templates, saved recipient groups, live recipient resolution. **No messaging provider wired, so nothing sends**: draft / schedule / mark-as-sent only, and no delivery or open-rate figures. See D17. |
 | [`vendors.md`](./vendors.md) | [vendors](./mockups/vendors.png) | `app/admin/(dashboard)/vendors/` | Exists (`VendorForm`, vendor RPCs); **large expansion** (proposals, contracts, payments, tasks, Gmail). |
 
 Notes: the **Guest Dashboard** mockup has no standalone brief — it's specced inside `guest-list.md`

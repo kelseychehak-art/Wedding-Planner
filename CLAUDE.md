@@ -95,7 +95,7 @@ photograph are still pending. Until they land:
   [`travel.md`](./docs/pages/travel.md), [`stay.md`](./docs/pages/stay.md),
   [`activities.md`](./docs/pages/activities.md), [`faq.md`](./docs/pages/faq.md).
   (Things to Do + RSVP specs pending their mockups.)
-- **Admin back-office specs (foundation + Guest List built 2026-07-21; rest captured)** —
+- **Admin back-office specs (seven of nine built 2026-07-21; Budget + Vendors expansions pending)** —
   [`docs/admin/README.md`](./docs/admin/README.md) (index), plus nine specs:
   [`guest-list.md`](./docs/admin/guest-list.md) (foundation + Dashboard + Guest List),
   [`travel.md`](./docs/admin/travel.md), [`itinerary.md`](./docs/admin/itinerary.md),

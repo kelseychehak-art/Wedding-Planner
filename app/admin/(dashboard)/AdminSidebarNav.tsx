@@ -16,6 +16,7 @@ import {
   IconPlane,
   IconBed,
   IconLeaf,
+  IconMail,
 } from "@/components/admin/icons";
 
 /*
@@ -38,6 +39,7 @@ const NAV_GROUPS: {
       { label: "Guest List", href: "/admin/guests", Icon: IconUsers },
       { label: "Travel", href: "/admin/travel", Icon: IconPlane },
       { label: "Lodging", href: "/admin/lodging", Icon: IconBed },
+      { label: "Communications", href: "/admin/communications", Icon: IconMail },
     ],
   },
   {
