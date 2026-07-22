@@ -278,3 +278,32 @@ deleting real spend.
 **Also fixed here:** `admin_upsert_vendor`'s UPDATE assigned every column unconditionally, so a form
 that omitted a field wrote NULL over it — the same defect as D14. Every column now guards on
 `p_vendor ? 'key'`.
+
+### D19 — The Venues page is the chosen venue's home, and no fact exists without a source (2026-07-22)
+**Decision:** `/admin/venues` stopped being a comparison tool and became **Tenuta di Forte Sorgnano's
+dossier** — everything known about it, grouped into sections, with the source of each fact visible.
+The other 23 venues are collapsed into "also considered" at the foot of the page, **not deleted**:
+Kelsey is leaning, not signed, and five other complete quotes are the fallback if the date goes or
+the exclusivity fee lands badly.
+
+**Three tables, all obeying the AI spec addendum's safety rules:**
+- **`venue_facts`** — one row per fact, carrying `source_type` (website / brochure / contract /
+  quote / email / site visit / manual), the URL or document, a **locator** (page, section) and the
+  **verbatim words it was read from**. Status runs `suggested → needs_review → confirmed /
+  corrected / conflicting`.
+- **`venue_images`** — `permission_status` (not asked / asked / granted / **press kit** / declined /
+  own photo), source URL, credit, dimensions, and separate `use_web` / `use_print` flags.
+- **`venue_questions`** — what still needs asking, priority-ranked.
+
+**The property that matters:** re-reading a fact a human has already **confirmed** does not
+overwrite it. The upsert flips the row to `conflicting` and appends the new reading to the notes.
+AI can suggest; only a person can settle.
+
+**On images.** Venue photographs belong to the venue or its photographer, so the library tracks
+where each came from and whether it has been cleared — nothing uncleared reaches the guest site.
+The page steers toward asking for the **press kit**, which settles permission and yields
+print-resolution files in one email; scraped web images are 72dpi and unusable for stationery.
+
+**Not built:** a runtime "Extract with AI" button. That needs an Anthropic API key and the SDK,
+neither of which this repo has. Extraction is done by hand in-session for now, writing into the same
+schema — so wiring the button later changes nothing about the data.

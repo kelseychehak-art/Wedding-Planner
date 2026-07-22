@@ -1,90 +1,40 @@
-import Link from "next/link";
 import { getAdminToken } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
-import { getEurUsdRate, DEFAULT_EUR_USD_RATE } from "@/lib/admin-rate";
-import styles from "./venues.module.css";
-import VenueList, { type VenueRow } from "./VenueList";
+import VenueHome, { type Dossier, type OtherVenue } from "./VenueHome";
 
-const STAGES = [
-  "Researching",
-  "Contacted",
-  "Waiting",
-  "In conversation",
-  "Proposal received",
-  "Top contender",
-  "Site visit",
-  "Selected",
-  "Eliminated",
-];
-
-async function getVenues(): Promise<{ venues: VenueRow[]; eurUsdRate: number }> {
+/*
+ * The Venues page is now the chosen venue's home rather than a comparison
+ * tool — the choice has been made, so the page's job changed from "which one?"
+ * to "everything we know about this one, and where each fact came from".
+ *
+ * The venues that weren't chosen are still here, collapsed at the bottom. The
+ * research behind them is real, and a venue can still fall through.
+ */
+async function getDossier(): Promise<Dossier | null> {
   const token = await getAdminToken();
-  if (!token) return { venues: [], eurUsdRate: DEFAULT_EUR_USD_RATE };
-  const [{ data }, eurUsdRate] = await Promise.all([
-    supabase.rpc("admin_list_venues", { p_token: token }),
-    getEurUsdRate(token),
-  ]);
-  return { venues: (data ?? []) as VenueRow[], eurUsdRate };
+  if (!token) return null;
+  const { data } = await supabase.rpc("admin_get_venue_dossier", { p_token: token });
+  return (data ?? null) as Dossier | null;
 }
 
-export default async function AdminVenuesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ stage?: string }>;
-}) {
-  const { stage: activeStage } = await searchParams;
-  const { venues, eurUsdRate } = await getVenues();
-  const filtered = activeStage ? venues.filter((v) => v.stage === activeStage) : venues;
+/* Only needed for the "nothing chosen yet" state, so it's fetched separately. */
+async function getCandidates(): Promise<OtherVenue[]> {
+  const token = await getAdminToken();
+  if (!token) return [];
+  const { data } = await supabase.rpc("admin_list_venues", { p_token: token });
+  return ((data ?? []) as Record<string, unknown>[]).map((v) => ({
+    id: String(v.id),
+    name: String(v.name),
+    location: (v.location as string) ?? null,
+    stage: String(v.stage ?? ""),
+    verdict: (v.research_verdict as string) ?? null,
+    budget_fit: (v.budget_fit as string) ?? null,
+  }));
+}
 
-  return (
-    <div>
-      <div className={styles.headerRow}>
-        <div>
-          <h1 className={styles.heading}>Venues</h1>
-          <p className={styles.subheading}>{venues.length} in the pipeline</p>
-        </div>
-        <div className={styles.headerActions}>
-          <Link href="/admin/venues/compare" className="btn-outline">
-            Compare
-          </Link>
-          <Link href="/admin/venues/new" className="btn-primary">
-            Add Venue
-          </Link>
-        </div>
-      </div>
+export default async function AdminVenuesPage() {
+  const dossier = await getDossier();
+  const candidates = dossier?.venue ? [] : await getCandidates();
 
-      <div className={styles.stageFilters}>
-        <Link
-          href="/admin/venues"
-          className={`${styles.stageFilter} ${!activeStage ? styles.stageFilterActive : ""}`}
-        >
-          All ({venues.length})
-        </Link>
-        {STAGES.map((stage) => {
-          const count = venues.filter((v) => v.stage === stage).length;
-          return (
-            <Link
-              key={stage}
-              href={`/admin/venues?stage=${encodeURIComponent(stage)}`}
-              className={`${styles.stageFilter} ${
-                activeStage === stage ? styles.stageFilterActive : ""
-              }`}
-            >
-              {stage} ({count})
-            </Link>
-          );
-        })}
-      </div>
-
-      {filtered.length === 0 ? (
-        <p className={styles.empty}>
-          {venues.length === 0
-            ? "No venues yet. Add the first one to start tracking your search."
-            : "No venues at this stage."}
-        </p>
-      ) : (
-        <VenueList venues={filtered} eurUsdRate={eurUsdRate} />
-      )}
-    </div>
-  );
+  return <VenueHome dossier={dossier} candidates={candidates} />;
 }
