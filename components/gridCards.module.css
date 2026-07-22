@@ -57,9 +57,12 @@
 
 .cardTitle {
   font-family: var(--font-sans);
-  font-size: 18px;
+  /* Uppercase at 18px/0.1em wrapped "RECOMMENDED BOOKING WINDOW" onto two
+     lines while its neighbours stayed on one, so a three-card row sat on a
+     ragged baseline. 16px/0.08em fits the longest label in one column. */
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-olive-dark);
   line-height: 1.3;

@@ -28,12 +28,15 @@
   /* ~7% even margins each side (percentage → no scrollbar asymmetry),
      capped so it doesn't get absurdly wide on large monitors. */
   width: min(1720px, 86%);
-  margin: clamp(18px, 3vw, 40px) auto;
+  /* Vertical space keys to viewport HEIGHT, not width. Keyed to vw, a short
+     wide laptop window got the generous spacing meant for a tall one, and the
+     decorative header ate 61% of the screen before any content appeared. */
+  margin: clamp(14px, 2.4vh, 28px) auto;
   background: var(--color-paper);
   border: 1px solid var(--color-border-soft);
   box-shadow: 0 12px 38px rgba(48, 52, 45, 0.1), 0 2px 8px rgba(48, 52, 45, 0.05);
   border-radius: var(--radius-card);
-  padding: clamp(22px, 3vw, 40px) clamp(24px, 4vw, 56px) clamp(28px, 4vw, 48px);
+  padding: clamp(20px, 3.2vh, 34px) clamp(24px, 4vw, 56px) clamp(24px, 3.6vh, 40px);
 }
 
 @media (max-width: 767px) {
@@ -83,7 +86,7 @@
 }
 
 .sprig {
-  width: clamp(118px, 11vw, 152px);
+  width: clamp(84px, 8vw, 116px);
   height: auto;
 }
 
@@ -113,9 +116,9 @@
 
 .divider {
   display: block;
-  width: min(320px, 66%);
+  width: min(260px, 54%);
   height: auto;
-  margin: 12px 0 0;
+  margin: 10px 0 0;
 }
 
 .subtitle {
@@ -130,7 +133,7 @@
 /* ---------- Page body ---------- */
 
 .body {
-  margin-top: clamp(24px, 3.5vw, 40px);
+  margin-top: clamp(18px, 3vh, 32px);
 }
 
 /* ---------- Inner footer band ---------- */
