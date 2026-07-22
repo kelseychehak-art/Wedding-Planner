@@ -67,15 +67,19 @@ function PinIcon() {
   );
 }
 
+const THEMES = new Set(["sunlit", "amalfi"]);
+
 export default async function OurWeekendPreviewPage({
   searchParams,
 }: {
-  searchParams: Promise<{ bg?: string }>;
+  searchParams: Promise<{ bg?: string; theme?: string }>;
 }) {
   const { couple, wedding } = siteContent;
-  const { bg } = await searchParams;
+  const { bg, theme } = await searchParams;
   /* Default to the homepage photo so the site coheres; ?bg=none for plain. */
   const bgImage = bg && bg in BACKGROUNDS ? BACKGROUNDS[bg] : BACKGROUNDS.rafael;
+  /* Colour direction: ?theme=sunlit (warm terracotta+gold) or amalfi (blue). */
+  const activeTheme = theme && THEMES.has(theme) ? theme : "sunlit";
 
   return (
     <div className={styles.page}>
@@ -91,15 +95,15 @@ export default async function OurWeekendPreviewPage({
         />
       )}
 
-      <main className={styles.container}>
+      <main className={styles.container} data-theme={activeTheme}>
         <a href="/" className={styles.back}>
           <span aria-hidden="true">←</span> Back to Home
         </a>
 
-        {/* ---------- Restrained hero ---------- */}
+        {/* ---------- Hero ---------- */}
         <header className={styles.hero}>
           <p className={styles.eyebrow}>
-            {wedding.dateLabel} · {wedding.locationLabel}
+            {wedding.dateLabel} &middot; {wedding.locationLabel}
           </p>
           <Art name="lemon-branch" className={styles.sprig} />
           <h1 className={styles.title}>Weekend Schedule</h1>
@@ -219,14 +223,14 @@ export default async function OurWeekendPreviewPage({
           </div>
         </div>
 
-        {/* ---------- Slim closing ---------- */}
+        {/* ---------- Colored closing band (the "pop" block) ---------- */}
         <footer className={styles.closing}>
-          <Art name="div-gold-heart" className={styles.closingDivider} />
+          <p className={styles.closingEyebrow}>We can&rsquo;t wait to celebrate with you</p>
           <p className={styles.closingNames}>
-            {couple.bride} <span aria-hidden="true">♥</span> {couple.groom}
+            {couple.bride} <span aria-hidden="true">&amp;</span> {couple.groom}
           </p>
           <p className={styles.closingMeta}>
-            {wedding.dateLabel} · {wedding.locationLabel}
+            {wedding.dateLabel} &middot; {wedding.locationLabel}
           </p>
         </footer>
       </main>

@@ -32,6 +32,41 @@
   max-width: 1120px;
   margin: 0 auto;
   padding: 8px clamp(20px, 4vw, 48px) 72px;
+
+  /* Colour direction, swapped by data-theme. Everything decorative reads from
+     these so a whole palette flips at once. Default = warm/sunlit. */
+  --disp: var(--color-terracotta-dark);   /* display headings */
+  --accent: var(--color-terracotta);       /* day labels, small accents */
+  --label: #a9762a;                         /* uppercase micro-labels (legible gold) */
+  --chip-bg: rgba(224, 100, 84, 0.12);      /* eyebrow pill */
+  --chip-fg: var(--color-terracotta-dark);
+  --band-bg: var(--color-olive-dark);       /* solid closing block */
+  --band-fg: #f5efe4;
+  --band-accent: var(--color-citrus-gold);
+}
+
+/* Warm Tuscan — terracotta headings, gold labels, olive band. */
+.container[data-theme="sunlit"] {
+  --disp: var(--color-terracotta-dark);
+  --accent: var(--color-terracotta);
+  --label: #a9762a;
+  --chip-bg: rgba(224, 100, 84, 0.12);
+  --chip-fg: var(--color-terracotta-dark);
+  --band-bg: var(--color-olive-dark);
+  --band-fg: #f5efe4;
+  --band-accent: var(--color-citrus-gold);
+}
+
+/* Amalfi — blue headings, terracotta accents, blue band (the Caslon-italic look). */
+.container[data-theme="amalfi"] {
+  --disp: var(--color-sky-blue-deep);
+  --accent: var(--color-terracotta);
+  --label: var(--color-sky-blue-deep);
+  --chip-bg: rgba(79, 119, 163, 0.13);
+  --chip-fg: var(--color-sky-blue-deep);
+  --band-bg: var(--color-sky-blue-deep);
+  --band-fg: #f5efe4;
+  --band-accent: var(--color-citrus-gold);
 }
 
 .back {
@@ -59,12 +94,16 @@
 }
 
 .eyebrow {
+  display: inline-block;
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-muted-ink);
+  color: var(--chip-fg);
+  background: var(--chip-bg);
+  padding: 6px 14px;
+  border-radius: 999px;
 }
 
 .sprig {
@@ -80,7 +119,7 @@
   font-weight: 500;
   font-size: clamp(34px, 4vw, 48px);
   line-height: 1.02;
-  color: var(--color-olive-dark);
+  color: var(--disp);
 }
 
 .subtitle {
@@ -109,12 +148,12 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-muted-ink);
+  color: var(--label);
   margin-bottom: 12px;
 }
 
 .microNote {
-  color: var(--color-citrus-gold);
+  color: var(--accent);
 }
 
 .mutedBody {
@@ -175,7 +214,7 @@
   font-family: var(--font-serif);
   font-size: 18px;
   font-weight: 600;
-  color: var(--color-olive-dark);
+  color: var(--disp);
 }
 
 .glanceTime {
@@ -230,7 +269,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-terracotta-dark);
+  color: var(--accent);
 }
 
 .dayInner {
@@ -255,7 +294,7 @@
   font-family: var(--font-serif);
   font-size: 22px;
   font-weight: 600;
-  color: var(--color-olive-dark);
+  color: var(--disp);
 }
 
 .dayDesc {
@@ -312,7 +351,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-olive-dark);
+  color: var(--label);
   margin-top: 2px;
 }
 
@@ -323,29 +362,35 @@
 
 /* ---------- Slim closing ---------- */
 
+/* Solid colored bookend — the "pop" block from the inspiration. */
 .closing {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 28px;
+  padding: clamp(32px, 5vw, 48px) 24px;
+  background: var(--band-bg);
+  color: var(--band-fg);
+  border-radius: var(--radius-card);
 }
 
-.closingDivider {
-  display: block;
-  width: min(240px, 60%);
-  height: auto;
-  margin: 0 auto 10px;
+.closingEyebrow {
+  font-family: var(--font-script);
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--band-accent);
+  margin-bottom: 6px;
 }
 
 .closingNames {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 24px;
+  font-size: clamp(30px, 3.4vw, 40px);
   font-weight: 500;
-  color: var(--color-olive-dark);
+  color: var(--band-fg);
 }
 
 .closingNames span {
-  color: var(--color-terracotta);
-  margin: 0 4px;
+  color: var(--band-accent);
+  margin: 0 6px;
 }
 
 .closingMeta {
@@ -354,8 +399,9 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-muted-ink);
-  margin-top: 8px;
+  color: var(--band-fg);
+  opacity: 0.75;
+  margin-top: 10px;
 }
 
 /* ---------- Responsive ---------- */
