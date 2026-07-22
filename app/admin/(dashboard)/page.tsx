@@ -16,6 +16,9 @@ import {
   IconAlert,
   IconPlus,
   IconChevronRight,
+  IconArrowRight,
+  IconCalendar,
+  IconBed,
 } from "@/components/admin/icons";
 
 /* ---- Types (shape returned by admin_list_guests) ---- */
@@ -241,6 +244,22 @@ async function getDashboard() {
   const unnamedGuests = allGuests.filter((g) => !g.first_name.trim()).length;
   const missingMeal = attending.filter((g) => !g.meal_choice).length;
 
+  /*
+   * A guest shows up in several buckets at once (no contact AND awaiting), so
+   * summing the bucket counts overstates the problem — it read 92 against 51
+   * guests. Count each affected guest once.
+   */
+  const attentionGuestIds = new Set<string>();
+  for (const p of attendingParties.filter((x) => !partyHasTravel(x))) {
+    p.guests.forEach((g) => attentionGuestIds.add(g.id));
+  }
+  for (const p of partyList.filter((x) => x.guests.length > 0 && !x.email && !x.phone)) {
+    p.guests.forEach((g) => attentionGuestIds.add(g.id));
+  }
+  allGuests.filter(isAwaiting).forEach((g) => attentionGuestIds.add(g.id));
+  attending.filter((g) => !g.meal_choice).forEach((g) => attentionGuestIds.add(g.id));
+  allGuests.filter((g) => !g.first_name.trim()).forEach((g) => attentionGuestIds.add(g.id));
+
   const guestIssues = [
     {
       key: "travel",
@@ -297,6 +316,14 @@ async function getDashboard() {
     else if (entry.names.length < 2) entry.names.push(p.name);
     arrivalMap.set(d.key, entry);
   }
+  /* The mockup's footer counts GUESTS with travel in, not parties. */
+  const arrivalGuests = attendingParties
+    .filter(partyHasTravel)
+    .reduce((n, p) => n + p.guests.length, 0);
+  const arrivalGuestsNeeded = attendingParties
+    .filter((p) => !partyHasTravel(p))
+    .reduce((n, p) => n + p.guests.length, 0);
+
   const arrivals = [...arrivalMap.entries()]
     .sort((a, b) => a[0].localeCompare(b[0]))
     .slice(0, 4)
@@ -320,12 +347,23 @@ async function getDashboard() {
     .filter((p) => p.created_at)
     .sort((a, b) => (b.created_at! > a.created_at! ? 1 : -1))
     .slice(0, 5)
-    .map((p) => ({
-      id: p.id,
-      name: p.name,
-      detail: `${p.guests.length} ${p.guests.length === 1 ? "guest" : "guests"} · added`,
-      when: relTime(p.created_at),
-    }));
+    .map((p) => {
+      /* The stored party name can be blank — the guest list derives its label
+         from the guests, so do the same here rather than showing nothing. */
+      const named = p.guests.map((g) => g.first_name?.trim()).filter(Boolean);
+      const label =
+        p.name?.trim() ||
+        (named.length > 1
+          ? `${named[0]} & ${named[1]}`
+          : named[0]) ||
+        "Unnamed party";
+      return {
+        id: p.id,
+        name: label,
+        detail: `${p.guests.length} ${p.guests.length === 1 ? "guest" : "guests"} · added`,
+        when: relTime(p.created_at),
+      };
+    });
 
   // ---- Planning reminders (real — preserved from the prior dashboard) ----
   const budgetItems = (budget?.items ?? []) as BudgetItem[];
@@ -394,14 +432,14 @@ async function getDashboard() {
       awaitingPct: pct(awaiting + pendingPlusOnes),
       travelSubmitted,
       travelNeeded,
-      attentionCount: guestIssues.reduce((s, i) => s + i.count, 0),
+      attentionCount: attentionGuestIds.size,
       activityBooked,
       activityFillPct,
     },
     guestIssues,
     arrivals,
-    arrivalsTotal: travelSubmitted,
-    arrivalsNeeded: travelNeeded,
+    arrivalGuests,
+    arrivalGuestsNeeded,
     child: {
       total: childGuests.length,
       rows: [
@@ -471,6 +509,29 @@ function Donut({ pct, center, caption }: { pct: number; center: string; caption:
   );
 }
 
+/*
+ * Card chrome, per the mockup: a line icon beside the title, and the action as
+ * an uppercase footer link with an arrow rather than a quiet "View all" tucked
+ * into the header.
+ */
+function CardHead({ icon, title }: { icon: React.ReactNode; title: string }) {
+  return (
+    <div className={styles.cardHead}>
+      <span className={styles.cardIcon}>{icon}</span>
+      <h2 className={styles.cardTitle}>{title}</h2>
+    </div>
+  );
+}
+
+function CardAction({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href} className={styles.cardAction}>
+      {children}
+      <IconArrowRight size={13} />
+    </Link>
+  );
+}
+
 const TONE_DOT: Record<string, string> = {
   bad: styles.dotBad,
   warn: styles.dotWarn,
@@ -529,7 +590,7 @@ export default async function AdminDashboardPage() {
       disabled: data.activities.total === 0,
     },
     { key: "travel", icon: <IconPlane size={18} />, value: String(m.travelSubmitted), label: "Travel Submitted", sub: `${m.travelNeeded} still needed`, tone: "info" },
-    { key: "attention", icon: <IconAlert size={18} />, value: String(m.attentionCount), label: "Needs Attention", sub: "Across guests", tone: m.attentionCount > 0 ? "bad" : "good" },
+    { key: "attention", icon: <IconAlert size={18} />, value: String(m.attentionCount), label: "Needs Attention", sub: `${m.attentionCount === 1 ? "guest needs" : "guests need"} a follow-up`, tone: m.attentionCount > 0 ? "bad" : "good" },
   ];
 
   return (
@@ -554,266 +615,9 @@ export default async function AdminDashboardPage() {
       <MetricStrip metrics={metricCards} />
 
       <div className={styles.cardGrid}>
-        {/* Needs Attention */}
+{/* RSVP Progress by Event (mockup §11A) */}
         <section className={styles.card}>
-          <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>Needs Attention</h2>
-            <Link href="/admin/guests?tab=attention" className={styles.cardLink}>
-              View all
-            </Link>
-          </div>
-          {data.guestIssues.length === 0 ? (
-            <p className={styles.cardEmpty}>Nothing needs attention right now.</p>
-          ) : (
-            <ul className={styles.issueList}>
-              {data.guestIssues.map((it) => (
-                <li key={it.key}>
-                  <Link href={it.href} className={styles.issueRow}>
-                    <span className={`${styles.dot} ${TONE_DOT[it.tone]}`} />
-                    <span className={styles.issueLabel}>{it.label}</span>
-                    <span className={styles.issueCount}>{it.count}</span>
-                    <IconChevronRight size={13} className={styles.issueChevron} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        {/* Upcoming Arrivals */}
-        <section className={styles.card}>
-          <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>Upcoming Arrivals</h2>
-            <Link href="/admin/guests?tab=attending" className={styles.cardLink}>
-              View all
-            </Link>
-          </div>
-          {data.arrivals.length === 0 ? (
-            <p className={styles.cardEmpty}>No arrivals submitted yet.</p>
-          ) : (
-            <ul className={styles.arrivalList}>
-              {data.arrivals.map((a, i) => (
-                <li key={i} className={styles.arrivalRow}>
-                  <span className={styles.arrivalDate}>
-                    <span className={styles.arrivalMonth}>{a.month.toUpperCase()}</span>
-                    <span className={styles.arrivalDay}>{a.day}</span>
-                  </span>
-                  <span className={styles.arrivalBody}>
-                    <span className={styles.arrivalCount}>
-                      {a.guests} {a.guests === 1 ? "guest" : "guests"}
-                    </span>
-                    <span className={styles.arrivalMeta}>
-                      Arriving {a.weekday}, {a.month} {a.day}
-                    </span>
-                    {a.names.length > 0 && (
-                      <span className={styles.arrivalNames}>
-                        Includes {a.names.filter(Boolean).join(", ")}
-                      </span>
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className={styles.cardFoot}>
-            <span>
-              <strong>{data.arrivalsTotal}</strong> parties submitted
-            </span>
-            <span>
-              <strong>{data.arrivalsNeeded}</strong> still needed
-            </span>
-          </div>
-        </section>
-
-        {/* Recently Added */}
-        <section className={styles.card}>
-          <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>Recently Added</h2>
-            <Link href="/admin/guests" className={styles.cardLink}>
-              View all
-            </Link>
-          </div>
-          {data.recent.length === 0 ? (
-            <p className={styles.cardEmpty}>No parties added yet.</p>
-          ) : (
-            <ul className={styles.recentList}>
-              {data.recent.map((r) => (
-                <li key={r.id} className={styles.recentRow}>
-                  <span className={styles.avatar}>
-                    {r.name.trim().charAt(0).toUpperCase() || "?"}
-                  </span>
-                  <span className={styles.recentBody}>
-                    <span className={styles.recentName}>{r.name}</span>
-                    <span className={styles.recentDetail}>{r.detail}</span>
-                  </span>
-                  <span className={styles.recentWhen}>{r.when}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        {/* Child Guest Overview (mockup §11) */}
-        <section className={styles.card}>
-          <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>Child Guest Overview</h2>
-            <Link href="/admin/guests?view=individual" className={styles.cardLink}>
-              View all
-            </Link>
-          </div>
-          {data.child.total === 0 ? (
-            <p className={styles.cardEmpty}>
-              No child guests yet. Mark guests as children on the Guest List to track meals,
-              travel, and activity eligibility here.
-            </p>
-          ) : (
-            <>
-              <div className={styles.bigStat}>
-                <span className={styles.bigStatValue}>{data.child.total}</span>
-                <span className={styles.bigStatLabel}>under 18</span>
-              </div>
-              <ul className={styles.miniStats}>
-                {data.child.rows.map((r) => (
-                  <li key={r.label}>
-                    <span>{r.label}</span>
-                    <span className={styles.miniValue}>
-                      <strong>{r.value}</strong>
-                      <span className={styles.miniPct}>{r.pct}%</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </section>
-
-        {/* Planning Reminders (preserved budget/vendor/venue attention) */}
-        <section className={styles.card}>
-          <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>Planning Reminders</h2>
-          </div>
-          {data.planning.length === 0 ? (
-            <p className={styles.cardEmpty}>
-              No pressing deadlines. Add due dates and next actions in Budget, Venues, and Vendors.
-            </p>
-          ) : (
-            <ul className={styles.issueList}>
-              {data.planning.map((p, i) => (
-                <li key={i}>
-                  <Link href={p.href} className={styles.issueRow}>
-                    <span className={`${styles.dot} ${TONE_DOT[p.tone]}`} />
-                    <span className={styles.issueLabel}>{p.label}</span>
-                    <span className={styles.issueDetail}>{p.detail}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        {/* Activity Booking Status (mockup §11E) */}
-        <section className={styles.card}>
-          <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>Activity Booking Status</h2>
-            <Link href="/admin/activities" className={styles.cardLink}>
-              Manage
-            </Link>
-          </div>
-          {data.activities.total === 0 ? (
-            <p className={styles.cardEmpty}>
-              No activities yet. Add the wine tasting or cooking class to track sign-ups here.
-            </p>
-          ) : (
-            <>
-              <div className={styles.donutRow}>
-                <Donut
-                  pct={data.activities.fillPct}
-                  center={String(data.activities.booked)}
-                  caption="Booked"
-                />
-                <ul className={styles.legend}>
-                  <li>
-                    <span className={`${styles.swatch} ${styles.swatchBooked}`} />
-                    <span>Booked</span>
-                    <strong>{data.activities.booked}</strong>
-                  </li>
-                  <li>
-                    <span className={`${styles.swatch} ${styles.swatchOpen}`} />
-                    <span>Spaces left</span>
-                    <strong>{data.activities.spaces}</strong>
-                  </li>
-                  <li>
-                    <span className={`${styles.swatch} ${styles.swatchWait}`} />
-                    <span>Waitlisted</span>
-                    <strong>{data.activities.waitlist}</strong>
-                  </li>
-                </ul>
-              </div>
-              <div className={styles.cardFoot}>
-                <span>
-                  {data.activities.published} of {data.activities.total} published
-                </span>
-                <span>
-                  <strong>{data.activities.capacity}</strong> total spaces
-                </span>
-              </div>
-            </>
-          )}
-        </section>
-
-        {/* Lodging Snapshot (mockup §11F) */}
-        <section className={styles.card}>
-          <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>Lodging Snapshot</h2>
-            <Link href="/admin/lodging" className={styles.cardLink}>
-              Manage
-            </Link>
-          </div>
-          {data.lodging.roomsHeld === 0 ? (
-            <p className={styles.cardEmpty}>
-              No rooms yet. Add a property and its rooms to see occupancy here.
-            </p>
-          ) : (
-            <>
-              <div className={styles.donutRow}>
-                <Donut
-                  pct={data.lodging.occupancyPct}
-                  center={`${data.lodging.occupancyPct}%`}
-                  caption="Occupancy"
-                />
-                <ul className={styles.legend}>
-                  <li>
-                    <span>Rooms held</span>
-                    <strong>{data.lodging.roomsHeld}</strong>
-                  </li>
-                  <li>
-                    <span>Reserved</span>
-                    <strong>{data.lodging.roomsReserved}</strong>
-                  </li>
-                  <li>
-                    <span>Available</span>
-                    <strong>{data.lodging.roomsAvailable}</strong>
-                  </li>
-                </ul>
-              </div>
-              <div className={styles.cardFoot}>
-                <span>{data.lodging.propertyLabel}</span>
-                <span>
-                  <strong>{data.lodging.guestsLodging}</strong> of {data.lodging.invited} lodging
-                </span>
-              </div>
-            </>
-          )}
-        </section>
-
-        {/* RSVP Progress by Event (mockup §11A) */}
-        <section className={`${styles.card} ${styles.wideCard}`}>
-          <div className={styles.cardHead}>
-            <h2 className={styles.cardTitle}>RSVP Progress by Event</h2>
-            <Link href="/admin/itinerary" className={styles.cardLink}>
-              View all
-            </Link>
-          </div>
+          <CardHead icon={<IconCalendar size={15} />} title="RSVP Progress by Event" />
           {data.eventProgress.length === 0 ? (
             <p className={styles.cardEmpty}>
               No events yet. Add the Welcome Dinner, Ceremony, and Farewell Brunch in Itinerary to
@@ -856,6 +660,233 @@ export default async function AdminDashboardPage() {
               </tbody>
             </table>
           )}
+          <CardAction href="/admin/itinerary">View full RSVP report</CardAction>
+        </section>
+
+{/* Needs Attention */}
+        <section className={styles.card}>
+          <CardHead icon={<IconAlert size={15} />} title="Needs Attention" />
+          {data.guestIssues.length === 0 ? (
+            <p className={styles.cardEmpty}>Nothing needs attention right now.</p>
+          ) : (
+            <ul className={styles.issueList}>
+              {data.guestIssues.map((it) => (
+                <li key={it.key}>
+                  <Link href={it.href} className={styles.issueRow}>
+                    <span className={`${styles.dot} ${TONE_DOT[it.tone]}`} />
+                    <span className={styles.issueLabel}>{it.label}</span>
+                    <span className={styles.issueCount}>{it.count}</span>
+                    <IconChevronRight size={13} className={styles.issueChevron} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+          <CardAction href="/admin/guests?tab=attention">View all</CardAction>
+        </section>
+
+{/* Recently Added */}
+        <section className={styles.card}>
+          <CardHead icon={<IconUsers size={15} />} title="Recently Added" />
+          {data.recent.length === 0 ? (
+            <p className={styles.cardEmpty}>No parties added yet.</p>
+          ) : (
+            <ul className={styles.recentList}>
+              {data.recent.map((r) => (
+                <li key={r.id} className={styles.recentRow}>
+                  <span className={styles.avatar}>
+                    {r.name.trim().charAt(0).toUpperCase() || "?"}
+                  </span>
+                  <span className={styles.recentBody}>
+                    <span className={styles.recentName}>{r.name}</span>
+                    <span className={styles.recentDetail}>{r.detail}</span>
+                  </span>
+                  <span className={styles.recentWhen}>{r.when}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <CardAction href="/admin/guests">View all</CardAction>
+        </section>
+
+{/* Upcoming Arrivals */}
+        <section className={styles.card}>
+          <CardHead icon={<IconPlane size={15} />} title="Arrivals Overview" />
+          {data.arrivals.length === 0 ? (
+            <p className={styles.cardEmpty}>No arrivals submitted yet.</p>
+          ) : (
+            <ul className={styles.arrivalList}>
+              {data.arrivals.map((a, i) => (
+                <li key={i} className={styles.arrivalRow}>
+                  <span className={styles.arrivalDate}>
+                    <span className={styles.arrivalMonth}>{a.month.toUpperCase()}</span>
+                    <span className={styles.arrivalDay}>{a.day}</span>
+                  </span>
+                  <span className={styles.arrivalBody}>
+                    <span className={styles.arrivalCount}>
+                      {a.guests} {a.guests === 1 ? "guest" : "guests"}
+                    </span>
+                    <span className={styles.arrivalMeta}>
+                      Arriving {a.weekday}, {a.month} {a.day}
+                    </span>
+                    {a.names.length > 0 && (
+                      <span className={styles.arrivalNames}>
+                        Includes {a.names.filter(Boolean).join(", ")}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className={styles.cardFoot}>
+            <span>
+              <strong>{data.arrivalGuests}</strong> guests submitted
+            </span>
+            <span>
+              <strong>{data.arrivalGuestsNeeded}</strong> still needed
+            </span>
+          </div>
+          <CardAction href="/admin/travel">View all travel</CardAction>
+        </section>
+
+{/* Activity Booking Status (mockup §11E) */}
+        <section className={styles.card}>
+          <CardHead icon={<IconLeaf size={15} />} title="Activity Booking Status" />
+          {data.activities.total === 0 ? (
+            <p className={styles.cardEmpty}>
+              No activities yet. Add the wine tasting or cooking class to track sign-ups here.
+            </p>
+          ) : (
+            <>
+              <div className={styles.donutRow}>
+                <Donut
+                  pct={data.activities.fillPct}
+                  center={String(data.activities.booked)}
+                  caption="Booked"
+                />
+                <ul className={styles.legend}>
+                  <li>
+                    <span className={`${styles.swatch} ${styles.swatchBooked}`} />
+                    <span>Booked</span>
+                    <strong>{data.activities.booked}</strong>
+                  </li>
+                  <li>
+                    <span className={`${styles.swatch} ${styles.swatchOpen}`} />
+                    <span>Spaces left</span>
+                    <strong>{data.activities.spaces}</strong>
+                  </li>
+                  <li>
+                    <span className={`${styles.swatch} ${styles.swatchWait}`} />
+                    <span>Waitlisted</span>
+                    <strong>{data.activities.waitlist}</strong>
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.cardFoot}>
+                <span>
+                  {data.activities.published} of {data.activities.total} published
+                </span>
+                <span>
+                  <strong>{data.activities.capacity}</strong> total spaces
+                </span>
+              </div>
+            </>
+          )}
+          <CardAction href="/admin/activities">Manage activities</CardAction>
+        </section>
+
+{/* Child Guest Overview (mockup §11) */}
+        <section className={styles.card}>
+          <CardHead icon={<IconUsers size={15} />} title="Child Guest Overview" />
+          {data.child.total === 0 ? (
+            <p className={styles.cardEmpty}>
+              No child guests yet. Mark guests as children on the Guest List to track meals,
+              travel, and activity eligibility here.
+            </p>
+          ) : (
+            <>
+              <div className={styles.bigStat}>
+                <span className={styles.bigStatValue}>{data.child.total}</span>
+                <span className={styles.bigStatLabel}>under 18</span>
+              </div>
+              <ul className={styles.miniStats}>
+                {data.child.rows.map((r) => (
+                  <li key={r.label}>
+                    <span>{r.label}</span>
+                    <span className={styles.miniValue}>
+                      <strong>{r.value}</strong>
+                      <span className={styles.miniPct}>{r.pct}%</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <CardAction href="/admin/guests?view=individual">View child guest details</CardAction>
+        </section>
+
+{/* Planning Reminders (preserved budget/vendor/venue attention) */}
+        <section className={styles.card}>
+          <CardHead icon={<IconClock size={15} />} title="Planning Reminders" />
+          {data.planning.length === 0 ? (
+            <p className={styles.cardEmpty}>
+              No pressing deadlines. Add due dates and next actions in Budget, Venues, and Vendors.
+            </p>
+          ) : (
+            <ul className={styles.issueList}>
+              {data.planning.map((p, i) => (
+                <li key={i}>
+                  <Link href={p.href} className={styles.issueRow}>
+                    <span className={`${styles.dot} ${TONE_DOT[p.tone]}`} />
+                    <span className={styles.issueLabel}>{p.label}</span>
+                    <span className={styles.issueDetail}>{p.detail}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+{/* Lodging Snapshot (mockup §11F) */}
+        <section className={`${styles.card} ${styles.wideCard}`}>
+          <CardHead icon={<IconBed size={15} />} title="Lodging Snapshot" />
+          {data.lodging.roomsHeld === 0 ? (
+            <p className={styles.cardEmpty}>
+              No rooms yet. Add a property and its rooms to see occupancy here.
+            </p>
+          ) : (
+            <>
+              <div className={styles.donutRow}>
+                <Donut
+                  pct={data.lodging.occupancyPct}
+                  center={`${data.lodging.occupancyPct}%`}
+                  caption="Occupancy"
+                />
+                <ul className={styles.legend}>
+                  <li>
+                    <span>Rooms held</span>
+                    <strong>{data.lodging.roomsHeld}</strong>
+                  </li>
+                  <li>
+                    <span>Reserved</span>
+                    <strong>{data.lodging.roomsReserved}</strong>
+                  </li>
+                  <li>
+                    <span>Available</span>
+                    <strong>{data.lodging.roomsAvailable}</strong>
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.cardFoot}>
+                <span>{data.lodging.propertyLabel}</span>
+                <span>
+                  <strong>{data.lodging.guestsLodging}</strong> of {data.lodging.invited} lodging
+                </span>
+              </div>
+            </>
+          )}
+          <CardAction href="/admin/lodging">Manage lodging</CardAction>
         </section>
       </div>
     </div>

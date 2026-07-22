@@ -60,6 +60,8 @@
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border-soft);
   box-shadow: var(--shadow);
@@ -78,9 +80,44 @@
 .cardHead {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 14px;
+}
+
+/* Line icon beside the card title, as in the mockup. */
+.cardIcon {
+  display: inline-flex;
+  color: var(--olive);
+  flex-shrink: 0;
+}
+
+/* The card's action, as an uppercase footer link with an arrow. Pinned to the
+   bottom so cards of different heights still line their actions up. */
+.cardAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-soft);
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--olive-dark);
+  transition: var(--transition);
+}
+
+.cardAction:hover {
+  color: var(--terracotta-dark);
+  gap: 9px;
+}
+
+/* Push the action to the bottom so cards of different heights align theirs. */
+.card > .cardAction {
+  margin-top: auto;
 }
 
 .cardTitle {

@@ -193,6 +193,15 @@ export function IconGrip({ size, className }: IconProps) {
   );
 }
 
+export function IconArrowRight({ size, className }: IconProps) {
+  return (
+    <svg {...base(size, className)}>
+      <path d="M4 12h15" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
+  );
+}
+
 export function IconChevronUp({ size, className }: IconProps) {
   return (
     <svg {...base(size, className)}>

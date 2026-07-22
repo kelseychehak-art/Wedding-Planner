@@ -96,15 +96,15 @@ with the selected background and olive underline forever, reading as a filter th
 
 | Mockup | Built |
 |---|---|
-| Row 1: **RSVP Progress by Event** (wide, top-left), Needs Attention, Recent Submissions | RSVP Progress is the **last** card on the page |
+| Row 1: **RSVP Progress by Event** (wide, top-left), Needs Attention, Recent Submissions | ✅ reordered to match |
 | Row 2: Arrivals Overview · Activity Booking Status · Child Guest Overview | order differs; an extra **Planning Reminders** card (not in mockup) sits mid-grid |
-| Every card title has a **line icon** to its left | no icons |
-| Card actions are uppercase footer links with `→` (`VIEW FULL RSVP REPORT →`, `MANAGE ACTIVITIES →`) | small "View all" in the card header |
+| Every card title has a **line icon** to its left | ✅ added |
+| Card actions are uppercase footer links with `→` (`VIEW FULL RSVP REPORT →`, `MANAGE ACTIVITIES →`) | ✅ added, pinned to the card foot |
 | **Recent Submissions** — an activity feed: *"Karen Chehak · Travel submitted · Today, 9:41 AM"* | **Recently Added** — party rows by `created_at`. No audit/event log exists, so this can't be built without one |
 | Needs Attention rows: icon + label + count on its own line + red sub-note (*"Due 4+ days ago"*) | coloured dot + label + count, one line |
 | Activity Booking Status: 4-segment donut, per-guest booking status, each with **%** (`Booked 31 (60%)`, `Partially Booked 12 (23%)`, `No Response 9 (17%)`) | single-arc donut measuring **capacity fill**; legend has no percentages. Different question being answered |
 | Lodging Snapshot: 4 stat columns across + donut on the right | donut left + legend list (same layout as Activities card) |
-| Arrivals footer: *"24 **guests** total travel submitted"* | counts **parties**, not guests (`page.tsx:545`) |
+| Arrivals footer: *"24 **guests** total travel submitted"* | ✅ now counts guests |
 | Wedding-dates control: calendar icon, label, value, chevron — a picker | static chip, no icon, no chevron |
 | Metric cards clickable ("Click to view") | `MetricStrip` gets no `onSelect` on this page |
 
