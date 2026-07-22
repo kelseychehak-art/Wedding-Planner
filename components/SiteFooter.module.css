@@ -30,7 +30,7 @@
 
 .names {
   font-family: var(--font-script);
-  font-size: 30px;
+  font-size: 25px;
   color: #fdf9f0;
 }
 
@@ -41,6 +41,6 @@
   }
 
   .names {
-    font-size: 26px;
+    font-size: 22px;
   }
 }

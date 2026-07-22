@@ -31,6 +31,7 @@
 
 .topic {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: 10px;
   padding: 13px 4px;
@@ -167,7 +168,19 @@
 
   .topics {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* min-width:0 lets the flex row inside each topic wrap instead of pushing
+       the second column off-screen — the labels grew from 13px to 16px but the
+       grid was still sized for the smaller text. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 0 20px;
+  }
+}
+
+/* Phones: one column. Two columns of 16px labels put "Stay & Accommodations"
+   hard against the next column's chevron — readable beats compact when guests
+   are scanning this one-handed. 767px is the site's dominant mobile step. */
+@media (max-width: 767px) {
+  .topics {
+    grid-template-columns: 1fr;
   }
 }

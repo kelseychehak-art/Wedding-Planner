@@ -27,7 +27,7 @@
 
 .monogram {
   font-family: var(--font-serif);
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--terracotta);
@@ -42,7 +42,7 @@
   background: transparent;
   border: none;
   font-family: var(--font-sans);
-  font-size: 24px;
+  font-size: 21px;
   font-weight: 400;
   color: var(--olive-dark);
 }
@@ -58,7 +58,7 @@
 
 .navLink {
   font-family: var(--font-sans);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--ink);
 }
