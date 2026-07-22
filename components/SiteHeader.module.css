@@ -6,7 +6,10 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  min-height: 94px;
+  /* 78px is also what the hero's min-height calc subtracts for this bar. The
+     two numbers used to disagree (94 vs 78), so the homepage always ran one
+     header taller than the screen it was sized against. */
+  min-height: 78px;
   /* Full width so the monogram sits in the far-left corner; the nav + RSVP
      group stays centered via the flexible spacers on each side. */
   width: 100%;
@@ -31,7 +34,7 @@
   gap: 9px;
   flex: 1;
   font-family: var(--font-serif);
-  font-size: 34px;
+  font-size: 28px;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--terracotta);
@@ -52,7 +55,7 @@
 
 .navLink {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;

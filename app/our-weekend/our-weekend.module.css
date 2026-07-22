@@ -192,14 +192,14 @@
 
 .dayTitle {
   font-family: var(--font-serif);
-  font-size: 25px;
+  font-size: 23px;
   font-weight: 600;
   color: var(--color-olive-dark);
 }
 
 .dayDesc {
   font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.6;
   color: var(--color-ink);
   margin: 8px 0 12px;
