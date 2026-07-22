@@ -252,3 +252,29 @@ So a rule matches households and the UI always states both numbers — "12 house
 **Rules stay dynamic.** A saved group stores the rule, never a list of ids, and re-resolves every
 time it is read. Only when a message is marked sent is the count frozen onto the row, so history
 stops moving. See `app/admin/(dashboard)/communications/recipients.ts`.
+
+### D18 — One money model: paid is derived, and the Budget owns it (resolved 2026-07-21)
+**Decision:** money lives in **`budget_items` + `budget_payments`** and nowhere else.
+- `budget_items.estimated_amount` = **Budgeted** (what you planned), `actual_amount` = **Spent**
+  (what it really costs), `committed_amount` = promised but not yet invoiced.
+- **Paid is not a column.** It is `sum(budget_payments.amount) where paid_on is not null`, computed
+  in `admin_get_budget`. **Status** (Planned · Committed · Partial · Paid · Over Budget) is computed
+  there too, in one place.
+- A budget line can carry a `vendor_id`. `admin_list_vendors` rolls those up into
+  `contracted_amount` / `paid_amount` / `next_payment_due`, so **the Vendors page reports spend
+  without storing any**.
+**Why:** `amount_paid` and `status` used to be stored columns you could type a number into while the
+payments underneath said something different — and nothing would ever tell you. The same argument
+applies across pages: two places holding a vendor's cost is two places to disagree, usually
+discovered at the worst moment. The Budget owns money; everything else reads it.
+**Over budget wins.** A line can be both over budget and part-paid; the status shows *Over Budget*,
+because that is the fact that needs acting on.
+**Payments, not a single number.** Wedding vendors are a deposit now and a balance later. The
+schedule lives in a drawer on each line, which is also what makes "what's due in the next 30 days"
+answerable at all.
+**Categories became rows.** `budget_categories` replaces the old `budget_category_targets` JSON blob
+in `settings`; deleting one leaves its lines uncategorised (`on delete set null`) rather than
+deleting real spend.
+**Also fixed here:** `admin_upsert_vendor`'s UPDATE assigned every column unconditionally, so a form
+that omitted a field wrote NULL over it — the same defect as D14. Every column now guards on
+`p_vendor ? 'key'`.

@@ -1,442 +1,533 @@
-.header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-}
+/* Budget — docs/admin/budget.md, adapted to CSS Modules. */
 
-.heading {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  font-weight: 500;
-  color: var(--ink);
-  margin: 0;
-}
-
-.subheading {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--olive-muted);
-  margin: 6px 0 0;
-  max-width: 520px;
-}
-
-/* ---- Summary cards ---- */
-
-.summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 14px;
-  margin-bottom: 24px;
-}
-
-.summaryCard {
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow);
-  border-radius: var(--radius-card);
-  padding: 18px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.overCard {
-  border-color: var(--terracotta);
-  background: #fbf1ec;
-}
-
-.summaryLabel {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--olive-muted);
-}
-
-.summaryValue {
-  font-family: var(--font-serif);
-  font-size: 26px;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.overCard .summaryValue {
-  color: var(--terracotta-dark);
-}
-
-.summaryMeta {
-  font-family: var(--font-sans);
-  font-size: 12px;
-  color: var(--olive-muted);
-}
-
-.budgetValueRow,
-.budgetEdit {
+.headerActions {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.budgetInput {
-  width: 110px;
-}
-
-.currencyInput {
-  width: 56px;
-  text-transform: uppercase;
-}
-
-.budgetInput,
-.currencyInput {
-  min-height: 34px;
-  padding: 0 8px;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--ink);
-}
-
-.linkBtn {
-  background: transparent;
-  border: none;
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--olive-muted);
-  padding: 4px 2px;
-}
-
-/* ---- Actions ---- */
-
-.actions {
-  margin-bottom: 18px;
-}
-
-/* ---- Category blocks ---- */
-
-.categoryBlock {
-  margin-bottom: 18px;
-}
-
-.categoryHeader {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 4px 8px;
-  border-bottom: 1px solid var(--border-soft);
-  margin-bottom: 8px;
-}
-
-.categoryName {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--olive-dark);
-}
-
-.categoryTotal {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--olive-muted);
-}
-
-.categoryRight {
-  display: flex;
-  align-items: baseline;
   gap: 10px;
+}
+
+.btnIcon {
+  margin-right: 8px;
+  vertical-align: -2px;
+}
+
+.totalEditor {
+  display: flex;
+  align-items: flex-end;
   flex-wrap: wrap;
-}
-
-.targetChip {
-  background: transparent;
-  border: none;
-  font-family: var(--font-sans);
-  font-size: 12px;
-  color: var(--olive-muted);
-  cursor: pointer;
-  padding: 0;
-}
-
-.targetChip:hover {
-  color: var(--olive-dark);
-  text-decoration: underline;
-}
-
-.targetOver {
-  color: var(--terracotta-dark);
-  font-weight: 600;
-}
-
-.targetEdit {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.targetOf {
-  font-family: var(--font-sans);
-  font-size: 12px;
-  color: var(--olive-muted);
-}
-
-.targetInput {
-  width: 90px;
-  min-height: 30px;
-  padding: 0 8px;
-  background: var(--surface-soft);
+  gap: 14px;
+  margin: 4px 0 18px;
+  padding: 16px 18px;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 2px;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--ink);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
 }
 
-.targetTrack {
-  position: relative;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--border-soft);
-  overflow: hidden;
-  margin: 0 4px 10px;
+.totalEditor .field {
+  margin-bottom: 0;
+  max-width: 200px;
 }
 
-.targetFill {
-  display: block;
-  height: 100%;
-  background: var(--olive);
-  border-radius: 999px;
+/* ---- Two-column layout: categories left, items right (mockup) ---- */
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 18px;
 }
 
-.targetFillOver {
-  background: var(--terracotta);
+@media (max-width: 1199px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* ---- Upcoming payments ---- */
+/* ---- Category panel ---- */
 
-.upcoming {
+.catPanel {
   background: var(--surface);
   border: 1px solid var(--border-soft);
   box-shadow: var(--shadow);
   border-radius: var(--radius-card);
-  padding: 18px 20px;
-  margin-bottom: 22px;
+  padding: 18px 18px 14px;
 }
 
-.upcomingTitle {
+.panelTitle {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--olive-muted);
   margin: 0 0 12px;
 }
 
-.upcomingList {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.catList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.upcomingRow {
+.catList > li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.catList > li:last-child {
+  border-bottom: none;
+}
+
+.catRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+/* The whole name/figures block filters the table, so it is one button. */
+.catMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.catRowActive .catName {
+  color: var(--olive-dark);
+  text-decoration: underline;
+}
+
+.catName {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.catFigures {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--olive-muted);
+}
+
+.catSpent {
+  color: var(--ink);
+}
+
+.catPct {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--olive-dark);
+  white-space: nowrap;
+}
+
+.catPctOver {
+  color: var(--terracotta-dark);
+}
+
+.catTrack {
+  height: 5px;
+  margin-top: 7px;
+  border-radius: 999px;
+  background: var(--border-soft);
+  overflow: hidden;
+}
+
+.catFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--olive);
+}
+
+.catFillOver {
+  background: var(--terracotta);
+}
+
+.catEdit,
+.catActions,
+.catAdd {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 8px;
+  margin-top: 7px;
+}
+
+.catAdd {
+  margin-top: 12px;
+  padding-top: 12px;
   border-top: 1px solid var(--border-soft);
 }
 
-.upcomingRow:first-child {
-  border-top: none;
+.catInput {
+  flex: 1;
+  min-width: 0;
+  min-height: 30px;
+  padding: 0 9px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--ink);
 }
 
-.upcomingName {
+/*
+ * Delete stays out of the way until you're actually on the row. `visibility`
+ * rather than `opacity` so it leaves the tab order while hidden — and because
+ * the category name beside it is a button, tabbing to that row reveals it,
+ * which keeps it reachable without a mouse.
+ */
+.catDelete {
+  visibility: hidden;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink);
-  flex: 1;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--terracotta-dark);
+  padding: 0;
+}
+
+.catList > li:hover .catDelete,
+.catList > li:focus-within .catDelete {
+  visibility: visible;
+}
+
+/* ---- Table panel ---- */
+
+.tablePanel {
   min-width: 0;
 }
 
-.upcomingCat {
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.tab {
+  padding: 9px 15px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
   font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--olive-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tab:hover {
+  color: var(--olive-dark);
+}
+
+.tabActive {
+  color: var(--olive-dark);
+  border-bottom-color: var(--olive);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.table th {
+  text-align: left;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+  padding: 10px 12px;
+  background: var(--surface-soft);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--ink);
+  vertical-align: top;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: var(--surface-soft);
+}
+
+.itemName {
+  font-weight: 600;
+}
+
+.itemLink {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.itemLink:hover {
+  color: var(--olive-dark);
+  text-decoration: underline;
+}
+
+.sub {
   font-size: 11px;
   color: var(--olive-muted);
-  white-space: nowrap;
+  margin-top: 2px;
+  white-space: normal;
 }
 
-.upcomingWhen {
-  font-family: var(--font-sans);
-  font-size: 12px;
-  color: var(--olive-muted);
-  white-space: nowrap;
-  min-width: 92px;
-  text-align: right;
+.catTag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
+  font-size: 11px;
+  color: var(--olive-dark);
 }
 
-.dueSoon {
-  color: #7a5a08;
+.overText {
+  color: var(--terracotta-dark);
   font-weight: 600;
 }
 
 .dueOverdue {
   color: var(--terracotta-dark);
-  font-weight: 700;
-}
-
-.upcomingAmount {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink);
-  white-space: nowrap;
-  min-width: 84px;
-  text-align: right;
-}
-
-/* ---- Item rows ---- */
-
-.itemRow {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow);
-  border-radius: var(--radius-card);
-  padding: 14px 18px;
-  margin-bottom: 8px;
-}
-
-.itemMain {
-  flex: 1;
-  min-width: 0;
-}
-
-.itemName {
-  font-family: var(--font-sans);
-  font-size: 15px;
   font-weight: 600;
-  color: var(--ink);
 }
 
-.itemMeta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  margin-top: 3px;
-  font-family: var(--font-sans);
-  font-size: 12px;
-  color: var(--olive-muted);
+.dueSoon {
+  color: #7a5a08;
 }
 
-.statusPill {
-  font-weight: 700;
+/* ---- Status pills ---- */
+
+.pill {
+  display: inline-block;
   font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 2px 8px;
-  border-radius: 2px;
-  background: var(--surface-soft);
-  color: var(--olive-dark);
-}
-
-.itemNotes {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 260px;
-}
-
-.itemAmounts {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  flex-shrink: 0;
-}
-
-.itemEstimated {
-  font-family: var(--font-sans);
-  font-size: 15px;
   font-weight: 700;
-  color: var(--ink);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  white-space: nowrap;
 }
 
-.itemPaid {
-  font-family: var(--font-sans);
-  font-size: 11px;
+.pillPlanned {
+  background: var(--surface-soft);
   color: var(--olive-muted);
-  margin-top: 1px;
+  border-color: var(--border);
 }
 
-.itemActions {
+.pillCommitted {
+  background: color-mix(in srgb, var(--blue) 14%, transparent);
+  color: var(--blue);
+  border-color: color-mix(in srgb, var(--blue) 30%, transparent);
+}
+
+.pillPartial {
+  background: color-mix(in srgb, var(--citrus) 20%, transparent);
+  color: #7a5a08;
+  border-color: color-mix(in srgb, var(--citrus) 40%, transparent);
+}
+
+.pillPaid {
+  background: color-mix(in srgb, var(--olive) 16%, transparent);
+  color: var(--olive-dark);
+  border-color: color-mix(in srgb, var(--olive) 32%, transparent);
+}
+
+.pillOver {
+  background: color-mix(in srgb, var(--terracotta) 14%, transparent);
+  color: var(--terracotta-dark);
+  border-color: color-mix(in srgb, var(--terracotta) 32%, transparent);
+}
+
+.rowActions {
   display: flex;
-  gap: 8px;
-  flex-shrink: 0;
+  gap: 6px;
 }
 
-.itemActions button {
+.rowActions button {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 3px;
+  padding: 5px 9px;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 6px 12px;
   color: var(--ink);
+  cursor: pointer;
 }
 
 .deleteBtn {
   color: var(--terracotta-dark);
 }
 
-/* ---- Edit / add form ---- */
+.empty {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--olive-muted);
+  text-align: center;
+  padding: 46px 20px;
+  max-width: 58ch;
+  margin: 0 auto;
+  line-height: 1.6;
+}
 
-.editCard {
+/* ---- Drawer ---- */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(31, 33, 27, 0.32);
+}
+
+.drawer {
+  position: fixed;
+  z-index: 71;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(560px, 100vw);
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  border-radius: var(--radius-card);
-  padding: 20px 22px;
-  margin-bottom: 12px;
+  border-left: 1px solid var(--border);
+  box-shadow: -18px 0 48px rgba(31, 33, 27, 0.16);
 }
 
-.draftGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 14px;
+.drawerHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border-soft);
 }
+
+.drawerTitle {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--olive-muted);
+  padding: 4px;
+  line-height: 0;
+}
+
+.closeBtn:hover {
+  color: var(--ink);
+}
+
+/* min-height:0 so this scrolls instead of pushing the drawer past 100vh. */
+.drawerBody {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 22px 18px;
+}
+
+.drawerFoot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--surface-soft);
+}
+
+.section {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+  margin: 0 0 12px;
+}
+
+/* ---- Fields ---- */
 
 .field {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  margin-bottom: 12px;
 }
 
-.fieldWide {
-  grid-column: 1 / -1;
+.fieldRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
 }
 
-.label {
+.fieldLabel {
   font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--olive-muted);
   margin-bottom: 6px;
@@ -444,27 +535,158 @@
 
 .input {
   width: 100%;
-  min-height: 40px;
-  padding: 0 12px;
+  min-height: 38px;
+  padding: 0 11px;
   background: var(--surface-soft);
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 4px;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--ink);
 }
 
-.draftActions {
-  grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.hint {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--olive-muted);
+  margin: 5px 0 0;
 }
 
-.empty {
+.linkBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--olive-muted);
-  padding: 40px 0;
-  text-align: center;
+  padding: 0;
+}
+
+.linkBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.error {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--terracotta-dark);
+  margin-right: auto;
+}
+
+/* ---- Payment schedule ---- */
+
+.payList {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+}
+
+.payRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.payRow:last-child {
+  border-bottom: none;
+}
+
+.payCheck {
+  display: inline-flex;
+  align-items: center;
+}
+
+.payMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.payLabel {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Paid rows read as done, not as another thing to act on. */
+.payLabelPaid {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--olive-muted);
+}
+
+.payDelete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--terracotta-dark);
+  padding: 0;
+}
+
+.paySummary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+}
+
+.paySummary dt {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+}
+
+.paySummary dd {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 3px 0 0;
+}
+
+.payForm {
+  margin-top: 12px;
+  padding: 14px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+}
+
+.payFormActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+@media (max-width: 767px) {
+  .drawer {
+    width: 100vw;
+  }
+
+  .paySummary {
+    grid-template-columns: 1fr;
+  }
 }

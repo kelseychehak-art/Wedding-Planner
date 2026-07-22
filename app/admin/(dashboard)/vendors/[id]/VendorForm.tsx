@@ -69,7 +69,30 @@ export type VendorRecord = {
   why_we_hesitate: string;
   questions_remaining: string;
   decision: string;
+  /* Where the paperwork has got to. Drives the Status column on the list. */
+  proposal_status: string;
+  proposal_amount: string;
+  proposal_received_on: string;
+  contract_status: string;
+  contract_sent_on: string;
+  contract_signed_on: string;
 };
+
+const PROPOSAL_STATUSES = [
+  { value: "none", label: "Not requested" },
+  { value: "requested", label: "Requested" },
+  { value: "received", label: "Received" },
+  { value: "under_review", label: "Under review" },
+  { value: "accepted", label: "Accepted" },
+  { value: "declined", label: "Declined" },
+];
+
+const CONTRACT_STATUSES = [
+  { value: "none", label: "None yet" },
+  { value: "drafted", label: "Drafted" },
+  { value: "sent", label: "Sent" },
+  { value: "signed", label: "Signed" },
+];
 
 export type CommunicationEntry = {
   id: string;
@@ -101,6 +124,12 @@ function emptyVendor(): VendorRecord {
     why_we_hesitate: "",
     questions_remaining: "",
     decision: "",
+    proposal_status: "none",
+    proposal_amount: "",
+    proposal_received_on: "",
+    contract_status: "none",
+    contract_sent_on: "",
+    contract_signed_on: "",
   };
 }
 
@@ -352,6 +381,76 @@ export default function VendorForm({
               className={styles.textarea}
               value={vendor.cancellation_terms}
               onChange={(e) => update("cancellation_terms", e.target.value)}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <p className={styles.sectionTitle}>Proposal &amp; Contract</p>
+        <div className={styles.fieldGrid}>
+          <div className={styles.field}>
+            <label className={styles.label}>Proposal</label>
+            <select
+              className={styles.input}
+              value={vendor.proposal_status}
+              onChange={(e) => update("proposal_status", e.target.value)}
+            >
+              {PROPOSAL_STATUSES.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Quoted Amount</label>
+            <input
+              className={styles.input}
+              type="number"
+              value={vendor.proposal_amount}
+              onChange={(e) => update("proposal_amount", e.target.value)}
+            />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Proposal Received</label>
+            <input
+              className={styles.input}
+              type="date"
+              value={vendor.proposal_received_on}
+              onChange={(e) => update("proposal_received_on", e.target.value)}
+            />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Contract</label>
+            <select
+              className={styles.input}
+              value={vendor.contract_status}
+              onChange={(e) => update("contract_status", e.target.value)}
+            >
+              {CONTRACT_STATUSES.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Contract Sent</label>
+            <input
+              className={styles.input}
+              type="date"
+              value={vendor.contract_sent_on}
+              onChange={(e) => update("contract_sent_on", e.target.value)}
+            />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Contract Signed</label>
+            <input
+              className={styles.input}
+              type="date"
+              value={vendor.contract_signed_on}
+              onChange={(e) => update("contract_signed_on", e.target.value)}
             />
           </div>
         </div>

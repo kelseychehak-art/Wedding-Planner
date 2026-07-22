@@ -1,112 +1,276 @@
-.headerRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 28px;
+/* Vendors — docs/admin/vendors.md, adapted to CSS Modules. */
+
+.btnIcon {
+  margin-right: 8px;
+  vertical-align: -2px;
 }
 
-.heading {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  font-weight: 500;
-  color: var(--ink);
-  margin: 0;
-}
+/* ---- Tabs ---- */
 
-.subheading {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--olive-muted);
-  margin: 6px 0 0;
-}
-
-.stageFilters {
+.tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 20px;
+  gap: 4px;
+  margin: 22px 0 16px;
+  border-bottom: 1px solid var(--border-soft);
 }
 
-.stageFilter {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 7px 12px;
-  border-radius: 2px;
-  color: var(--olive-muted);
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-}
-
-.stageFilterActive {
-  background: var(--olive);
-  color: #fffaf0;
-  border-color: var(--olive);
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.row {
-  display: flex;
+.tab {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow);
-  border-radius: var(--radius-card);
-  padding: 16px 20px;
+  gap: 7px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--olive-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
 }
 
-.rowName {
+.tab:hover {
+  color: var(--olive-dark);
+}
+
+.tabActive {
+  color: var(--olive-dark);
+  border-bottom-color: var(--olive);
+}
+
+.tabCount {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--citrus) 26%, transparent);
+  color: #7a5a08;
+}
+
+/* ---- Table ---- */
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.table th {
+  text-align: left;
+  font-size: 9.5px;
   font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+  padding: 10px 12px;
+  background: var(--surface-soft);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--ink);
+  vertical-align: top;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: var(--surface-soft);
+}
+
+.vendorName {
+  font-size: 13.5px;
+  font-weight: 600;
   color: var(--ink);
 }
 
-.rowCategory {
-  font-family: var(--font-sans);
-  font-size: 12px;
+.vendorName:hover {
+  color: var(--olive-dark);
+  text-decoration: underline;
+}
+
+.sub {
+  display: block;
+  font-size: 11px;
   color: var(--olive-muted);
   margin-top: 2px;
+  white-space: normal;
 }
 
-.rowMeta {
-  flex: 1;
-  min-width: 0;
+.sub a {
+  color: var(--olive-dark);
 }
 
-.rowStage {
+.sub a:hover {
+  text-decoration: underline;
+}
+
+.stagePill {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--olive-dark);
+}
+
+/* Status tones — how far along, at a glance. */
+.toneGood {
+  color: var(--olive-dark);
+  font-weight: 600;
+}
+.toneWarn {
+  color: #7a5a08;
+  font-weight: 600;
+}
+.toneInfo {
+  color: var(--blue);
+  font-weight: 600;
+}
+.toneBad {
+  color: var(--terracotta-dark);
+  font-weight: 600;
+}
+
+.rowActions {
+  display: flex;
+  gap: 6px;
+}
+
+.rowActions a,
+.rowActions button {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 5px 9px;
   font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 5px 10px;
-  border-radius: 2px;
-  background: var(--surface-soft);
-  color: var(--olive-dark);
-  white-space: nowrap;
+  color: var(--ink);
+  cursor: pointer;
 }
 
-.rowPrice {
+.deleteBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
   font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--ink);
-  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--terracotta-dark);
+  padding: 0;
 }
 
 .empty {
   font-family: var(--font-sans);
   font-size: 14px;
   color: var(--olive-muted);
-  padding: 40px 0;
   text-align: center;
+  padding: 46px 20px;
+  max-width: 58ch;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.footNote {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--olive-muted);
+  margin: 16px 0 0;
+  max-width: 72ch;
+}
+
+/* ---- Tasks ---- */
+
+.taskAdd {
+  display: grid;
+  grid-template-columns: 200px 1fr 160px auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 899px) {
+  .taskAdd {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.taskList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.taskRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.taskRow:last-child {
+  border-bottom: none;
+}
+
+.taskMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskTitle {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Done tasks stay visible but stop competing for attention. */
+.taskTitleDone {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--olive-muted);
+  text-decoration: line-through;
 }

@@ -1,8 +1,8 @@
 # Admin back-office specs — index
 
-**Status: seven of nine built** (all 2026-07-21). The shared foundation + Dashboard + Guest List
-came first, then Settings, Travel, Itinerary, Activities, Lodging and Communications. **Budget and
-Vendors exist as earlier, simpler pages** — their specs describe expansions not yet applied.
+**Status: all nine built** (2026-07-21). The shared foundation + Dashboard + Guest List came
+first, then Settings, Travel, Itinerary, Activities, Lodging, Communications, and finally the
+Budget and Vendors expansions.
 This folder holds design/implementation briefs for the private wedding-planning **admin**
 back-office (`/admin/*`). Each is adapted rather than followed literally: the briefs assume Tailwind
 + TanStack + direct Supabase reads, this repo uses **CSS Modules + `admin_*` RPCs**. Where a brief
@@ -19,14 +19,14 @@ mockup PNGs live in [`docs/admin/mockups/`](./mockups) and are embedded in each 
 | Spec | Mockup(s) | Maps to admin surface | Build state today |
 |---|---|---|---|
 | [`guest-list.md`](./guest-list.md) — **foundation + Dashboard + Guest List** | [party view](./mockups/guest-list-party-view.png), [individual view](./mockups/guest-list-individual-view.png), [dashboard](./mockups/dashboard.png) | `app/admin/(dashboard)/` (Dashboard) + `guests/` | **Foundation + Guest List + Dashboard (§11) built 2026-07-21** (adapted; see the spec's Implementation notes). §1–10 define the shared shell every other spec reuses. |
-| [`travel.md`](./travel.md) | [travel](./mockups/travel.png) | `/admin/travel` | **Net-new page.** Only `POST /api/admin/travel` exists — no UI, not in nav. |
-| [`itinerary.md`](./itinerary.md) | [itinerary](./mockups/itinerary.png) | `/admin/itinerary` | Related to existing **Timeline** (milestones) but distinct — the weekend **event schedule**. |
-| [`budget.md`](./budget.md) | [budget](./mockups/budget.png) | `app/admin/(dashboard)/budget/` | Exists (`BudgetManager`, budget RPCs); richer redesign. |
-| [`settings.md`](./settings.md) | [settings](./mockups/settings.png) | `/admin/settings` | **Net-new page.** Only `POST /api/admin/budget/settings` exists today. |
-| [`activities.md`](./activities.md) | [activities](./mockups/activities.png) | `/admin/activities` | **Net-new page.** Public `/activities` route exists on the guest site; this is the admin counterpart. |
-| [`lodging.md`](./lodging.md) | [lodging](./mockups/lodging.png) | `/admin/lodging` | **Net-new page.** Admin **Venues** exists (venue selection) — distinct from guest room-assignment. |
+| [`travel.md`](./travel.md) | [travel](./mockups/travel.png) | `/admin/travel` | **Built 2026-07-21** — itineraries, segments, arrival/departure views. |
+| [`itinerary.md`](./itinerary.md) | [itinerary](./mockups/itinerary.png) | `/admin/itinerary` | **Built 2026-07-21** — `wedding_events` + locations + per-event RSVPs. Distinct from **Timeline**, which stays the planning-milestone log. |
+| [`budget.md`](./budget.md) | [budget](./mockups/budget.png) | `app/admin/(dashboard)/budget/` | **Expanded 2026-07-21** — category panel, four money columns, payment schedules. Paid and status are **derived, not stored** (D18). |
+| [`settings.md`](./settings.md) | [settings](./mockups/settings.png) | `/admin/settings` | **Built 2026-07-21** — wedding details, guests & RSVP, travel, currency. Feeds every other page's config. |
+| [`activities.md`](./activities.md) | [activities](./mockups/activities.png) | `/admin/activities` | **Built 2026-07-21** — capacity, age rules, sign-up window. Guest-facing sign-up flow still to build, so counts read zero. |
+| [`lodging.md`](./lodging.md) | [lodging](./mockups/lodging.png) | `/admin/lodging` | **Built 2026-07-21** — properties, rooms, assignments. Distinct from **Venues**, which stays venue selection. |
 | [`communications.md`](./communications.md) | [communications](./mockups/communications.png) | `/admin/communications` | **Built 2026-07-21** — messages, templates, saved recipient groups, live recipient resolution. **No messaging provider wired, so nothing sends**: draft / schedule / mark-as-sent only, and no delivery or open-rate figures. See D17. |
-| [`vendors.md`](./vendors.md) | [vendors](./mockups/vendors.png) | `app/admin/(dashboard)/vendors/` | Exists (`VendorForm`, vendor RPCs); **large expansion** (proposals, contracts, payments, tasks, Gmail). |
+| [`vendors.md`](./vendors.md) | [vendors](./mockups/vendors.png) | `app/admin/(dashboard)/vendors/` | **Expanded 2026-07-21** — five tabs, proposal/contract state, follow-up tasks, spend rolled up from the Budget. Gmail ingest still unbuilt. |
 
 Notes: the **Guest Dashboard** mockup has no standalone brief — it's specced inside `guest-list.md`
 **§11**. The four newest specs (activities, lodging, communications, vendors) came bundled in one

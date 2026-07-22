@@ -10,11 +10,12 @@ with **Next.js 16 (App Router) + React 19 + TypeScript**. It has two surfaces:
 
 - **Public guest site** — `/` (home) plus `/our-weekend`, `/travel`, `/stay`, `/things-to-do`,
   `/faq`, `/rsvp`. This is the design-mockup work.
-- **Admin back-office** — `/admin` (auth + dashboard for vendors, venues, guests, budget, timeline,
-  decisions, exports), backed by `app/api/admin/*` route handlers. Not part of the current mockup
-  rebuild — but admin **design briefs** (Guest List + Dashboard, Travel, Itinerary, Budget,
-  Settings, Activities, Lodging, Communications, Vendors) are now captured in
-  [`docs/admin/`](./docs/admin) for a future build.
+- **Admin back-office** — `/admin`, backed by `app/api/admin/*` route handlers and `admin_*` RPCs.
+  All nine briefs in [`docs/admin/`](./docs/admin) are **built** (2026-07-21): Dashboard, Guest List,
+  Travel, Lodging, Communications, Itinerary, Activities, Venues, Vendors, Budget, Timeline,
+  Decisions, Exports, Settings. Two integrations are deliberately absent and must not be implied to
+  work: **no email/SMS provider** (Communications drafts and schedules only — D17) and **no Gmail
+  ingest**. Money has one home: `budget_items` + `budget_payments`, read by everything else (D18).
 
 **Supabase** (`@supabase/supabase-js`) powers the RSVP flow and admin. RSVP works by **name + email
 lookup** (RPCs `get_party_for_rsvp` / `submit_rsvp` in `lib/supabase.ts`). There is **no guest login
@@ -95,7 +96,7 @@ photograph are still pending. Until they land:
   [`travel.md`](./docs/pages/travel.md), [`stay.md`](./docs/pages/stay.md),
   [`activities.md`](./docs/pages/activities.md), [`faq.md`](./docs/pages/faq.md).
   (Things to Do + RSVP specs pending their mockups.)
-- **Admin back-office specs (seven of nine built 2026-07-21; Budget + Vendors expansions pending)** —
+- **Admin back-office specs (all nine built 2026-07-21)** —
   [`docs/admin/README.md`](./docs/admin/README.md) (index), plus nine specs:
   [`guest-list.md`](./docs/admin/guest-list.md) (foundation + Dashboard + Guest List),
   [`travel.md`](./docs/admin/travel.md), [`itinerary.md`](./docs/admin/itinerary.md),

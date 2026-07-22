@@ -1,117 +1,40 @@
-import Link from "next/link";
 import { getAdminToken } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
 import { getEurUsdRate, DEFAULT_EUR_USD_RATE } from "@/lib/admin-rate";
-import Money from "@/components/admin/Money";
-import styles from "./vendors.module.css";
+import VendorsManager, { type Vendor, type VendorTask } from "./VendorsManager";
 
-const STAGES = [
-  "Researching",
-  "Contacted",
-  "Waiting",
-  "In conversation",
-  "Proposal received",
-  "Top contender",
-  "Booked",
-  "Declined",
-];
-
-type Vendor = {
-  id: string;
-  name: string;
-  category: string;
-  location: string | null;
-  stage: string;
-  estimated_cost: number | null;
-  currency: string | null;
-};
-
-async function getVendors(): Promise<{ vendors: Vendor[]; eurUsdRate: number }> {
+async function getData() {
   const token = await getAdminToken();
-  if (!token) return { vendors: [], eurUsdRate: DEFAULT_EUR_USD_RATE };
-  const [{ data }, eurUsdRate] = await Promise.all([
+  if (!token) {
+    return { vendors: [] as Vendor[], tasks: [] as VendorTask[], eurUsdRate: DEFAULT_EUR_USD_RATE };
+  }
+
+  const [{ data: vendors }, { data: tasks }, eurUsdRate] = await Promise.all([
     supabase.rpc("admin_list_vendors", { p_token: token }),
+    supabase.rpc("admin_list_vendor_tasks", { p_token: token }),
     getEurUsdRate(token),
   ]);
-  return { vendors: (data ?? []) as Vendor[], eurUsdRate };
+
+  return {
+    vendors: (vendors ?? []) as Vendor[],
+    tasks: (tasks ?? []) as VendorTask[],
+    eurUsdRate,
+  };
 }
 
 export default async function AdminVendorsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ stage?: string }>;
+  searchParams: Promise<{ tab?: string; stage?: string }>;
 }) {
-  const { stage: activeStage } = await searchParams;
-  const { vendors, eurUsdRate } = await getVendors();
-  const filtered = activeStage ? vendors.filter((v) => v.stage === activeStage) : vendors;
-
+  const [data, params] = await Promise.all([getData(), searchParams]);
   return (
-    <div>
-      <div className={styles.headerRow}>
-        <div>
-          <h1 className={styles.heading}>Vendors</h1>
-          <p className={styles.subheading}>{vendors.length} in the pipeline</p>
-        </div>
-        <Link href="/admin/vendors/new" className="btn-primary">
-          Add Vendor
-        </Link>
-      </div>
-
-      <div className={styles.stageFilters}>
-        <Link
-          href="/admin/vendors"
-          className={`${styles.stageFilter} ${!activeStage ? styles.stageFilterActive : ""}`}
-        >
-          All ({vendors.length})
-        </Link>
-        {STAGES.map((stage) => {
-          const count = vendors.filter((v) => v.stage === stage).length;
-          return (
-            <Link
-              key={stage}
-              href={`/admin/vendors?stage=${encodeURIComponent(stage)}`}
-              className={`${styles.stageFilter} ${
-                activeStage === stage ? styles.stageFilterActive : ""
-              }`}
-            >
-              {stage} ({count})
-            </Link>
-          );
-        })}
-      </div>
-
-      {filtered.length === 0 ? (
-        <p className={styles.empty}>
-          {vendors.length === 0
-            ? "No vendors yet. Add the first one to start tracking."
-            : "No vendors at this stage."}
-        </p>
-      ) : (
-        <div className={styles.list}>
-          {filtered.map((vendor) => (
-            <Link href={`/admin/vendors/${vendor.id}`} className={styles.row} key={vendor.id}>
-              <div className={styles.rowMeta}>
-                <div className={styles.rowName}>{vendor.name}</div>
-                <div className={styles.rowCategory}>
-                  {vendor.category}
-                  {vendor.location ? ` · ${vendor.location}` : ""}
-                </div>
-              </div>
-              {vendor.estimated_cost != null && (
-                <span className={styles.rowPrice}>
-                  <Money
-                    amount={vendor.estimated_cost}
-                    currency={vendor.currency ?? "EUR"}
-                    eurUsdRate={eurUsdRate}
-                    size="sm"
-                  />
-                </span>
-              )}
-              <span className={styles.rowStage}>{vendor.stage}</span>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
+    <VendorsManager
+      vendors={data.vendors}
+      tasks={data.tasks}
+      eurUsdRate={data.eurUsdRate}
+      initialTab={params.tab}
+      initialStage={params.stage}
+    />
   );
 }

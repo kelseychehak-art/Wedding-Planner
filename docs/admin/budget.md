@@ -1,7 +1,21 @@
 # Admin Spec — Budget
 
-> **Status:** Captured 2026-07-20 — **not yet built.** Source: "Claude Code Implementation
-> Brief — Admin Budget Page" + approved mockup (transcribed below; PNG not committed).
+> **Status:** Captured 2026-07-20; **built 2026-07-21** (`app/admin/(dashboard)/budget/`).
+> Source: "Claude Code Implementation Brief — Admin Budget Page" + approved mockup.
+>
+> **What was built:** the mockup's two-column layout (category panel left, item table right), a
+> six-metric strip, tabs All Items · Over Budget · Unpaid · Upcoming Payments, the four money
+> columns (Budgeted · Spent · Committed · Paid), `budget_categories` with per-category budgets and
+> over-budget bars, and a **payment schedule** per line in a drawer — deposit, balance, mark paid.
+>
+> **The money model (D18):** `paid` and `status` are **derived**, never stored. Paid is the sum of
+> `budget_payments` actually paid; status is computed in `admin_get_budget`. They used to be columns
+> you could type a number into while the payments underneath said something else. A budget line can
+> also be attached to a vendor, which is how the Vendors page reports spend without a second copy.
+>
+> **Not built:** document storage against a budget line, and **Gmail ingest** (its own unbuilt
+> spec). The mockup's four footer cards were dropped: each one just switches to a tab that is
+> already one click away in the tab row.
 > **Maps to:** existing **Budget** page `app/admin/(dashboard)/budget/` (`BudgetManager.tsx`,
 > `POST /api/admin/budget/items`, `budget/settings`, RPCs `admin_get_budget`,
 > `admin_upsert_budget_item`, `admin_delete_budget_item`, `admin_set_budget_settings`). This brief

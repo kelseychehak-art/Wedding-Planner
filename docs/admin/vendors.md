@@ -1,7 +1,19 @@
 # Admin Spec — Vendors
 
-> **Status:** Captured 2026-07-20 — **not yet built.** Source: bundled "Claude Code Implementation
-> Brief — Admin Vendors Page" (brief 4 of 4) + approved mockup.
+> **Status:** Captured 2026-07-20; **built 2026-07-21** (`app/admin/(dashboard)/vendors/`).
+> Source: bundled "Claude Code Implementation Brief — Admin Vendors Page" (brief 4 of 4) + mockup.
+>
+> **What was built:** the list page rebuilt onto the shared admin shell (PageHeader, metric strip,
+> toolbar, table, pagination) with five tabs — All Vendors · Proposals · Contracts · Payments ·
+> Tasks; proposal + contract state on the vendor with a derived single-line **Status**; a
+> `vendor_tasks` follow-up list with overdue highlighting; and **contracted/paid figures rolled up
+> from the Budget** (see D18) rather than stored again here.
+>
+> **Deliberate deviations:** proposals and contracts are **columns on `vendors`, not tables** — one
+> vendor has one proposal and one contract, which is exactly what the mockup's single Status column
+> shows; two extra tables would buy versioning nobody asked for. **Not built:** proposal comparison,
+> document storage against a vendor (Venues has it; Vendors doesn't yet), and **Gmail ingest** —
+> that is its own unbuilt spec, and nothing here should imply mail is being read.
 > **Maps to:** existing **Vendors** page `app/admin/(dashboard)/vendors/` (`VendorForm.tsx`,
 > `vendors/[id]/`, RPCs `admin_list_vendors`, `admin_upsert_vendor`, `admin_delete_vendor`,
 > `admin_add_vendor_communication`). This brief is a **large expansion** — vendor lifecycle stages,

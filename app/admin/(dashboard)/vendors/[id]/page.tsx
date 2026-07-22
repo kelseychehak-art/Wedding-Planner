@@ -28,6 +28,12 @@ function toFormVendor(row: Record<string, unknown>): VendorRecord {
     why_we_hesitate: str("why_we_hesitate"),
     questions_remaining: str("questions_remaining"),
     decision: str("decision"),
+    proposal_status: str("proposal_status") || "none",
+    proposal_amount: str("proposal_amount"),
+    proposal_received_on: str("proposal_received_on"),
+    contract_status: str("contract_status") || "none",
+    contract_sent_on: str("contract_sent_on"),
+    contract_signed_on: str("contract_signed_on"),
   };
 }
 

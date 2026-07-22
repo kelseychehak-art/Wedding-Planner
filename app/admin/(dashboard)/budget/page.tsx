@@ -1,40 +1,63 @@
 import { getAdminToken } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
-import BudgetManager, { type BudgetItem } from "./BudgetManager";
+import { DEFAULT_EUR_USD_RATE } from "@/lib/admin-rate";
+import BudgetManager, {
+  type BudgetItem,
+  type BudgetCategory,
+  type BudgetPayment,
+  type VendorOption,
+} from "./BudgetManager";
 
-async function getBudget(): Promise<{
-  total: number;
-  currency: string;
-  items: BudgetItem[];
-  targets: Record<string, number>;
-  eurUsdRate: number;
-}> {
+async function getBudget() {
   const token = await getAdminToken();
-  if (!token) return { total: 0, currency: "USD", items: [], targets: {}, eurUsdRate: 1.08 };
+  if (!token) {
+    return {
+      total: 0,
+      currency: "USD",
+      items: [] as BudgetItem[],
+      categories: [] as BudgetCategory[],
+      payments: [] as BudgetPayment[],
+      vendors: [] as VendorOption[],
+      eurUsdRate: DEFAULT_EUR_USD_RATE,
+    };
+  }
 
-  const [{ data }, { data: settings }] = await Promise.all([
+  /* Vendors come along so a budget line can be attached to one — that link is
+     what lets the Vendors page report spend without keeping its own figures. */
+  const [{ data }, { data: settings }, { data: vendors }] = await Promise.all([
     supabase.rpc("admin_get_budget", { p_token: token }),
     supabase.rpc("admin_get_settings", { p_token: token }),
+    supabase.rpc("admin_list_vendors", { p_token: token }),
   ]);
 
   return {
     total: Number(data?.total ?? 0),
-    currency: data?.currency ?? "USD",
+    currency: (data?.currency ?? "USD") as string,
     items: (data?.items ?? []) as BudgetItem[],
-    targets: (data?.targets ?? {}) as Record<string, number>,
-    eurUsdRate: Number(settings?.eur_usd_rate ?? 1.08) || 1.08,
+    categories: (data?.categories ?? []) as BudgetCategory[],
+    payments: (data?.payments ?? []) as BudgetPayment[],
+    vendors: (vendors ?? []) as VendorOption[],
+    eurUsdRate: Number(settings?.eur_usd_rate ?? DEFAULT_EUR_USD_RATE) || DEFAULT_EUR_USD_RATE,
   };
 }
 
-export default async function BudgetPage() {
-  const { total, currency, items, targets, eurUsdRate } = await getBudget();
+export default async function BudgetPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string; category?: string }>;
+}) {
+  const [data, params] = await Promise.all([getBudget(), searchParams]);
   return (
     <BudgetManager
-      initialTotal={total}
-      initialCurrency={currency}
-      initialItems={items}
-      initialTargets={targets}
-      eurUsdRate={eurUsdRate}
+      initialTotal={data.total}
+      initialCurrency={data.currency}
+      initialItems={data.items}
+      initialCategories={data.categories}
+      initialPayments={data.payments}
+      vendors={data.vendors}
+      eurUsdRate={data.eurUsdRate}
+      initialTab={params.tab}
+      initialCategoryId={params.category}
     />
   );
 }

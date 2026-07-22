@@ -1,4 +1,4 @@
-import type { Guest, Party } from "./GuestsManager";
+import type { Party } from "./GuestsManager";
 
 /*
  * Household grouping + name derivation (docs/decisions.md D13).
