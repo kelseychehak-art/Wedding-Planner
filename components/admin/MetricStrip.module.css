@@ -94,6 +94,16 @@
   margin-top: 2px;
 }
 
+/* Secondary context (share of invited, party count) — present but quieter, so
+   the adults/children split stays the line the eye lands on. */
+.sub2 {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  color: var(--olive-muted);
+  opacity: 0.75;
+  margin-top: 1px;
+}
+
 /* Tones color the value + icon (labels stay ink for readability). */
 
 .toneGood {

@@ -17,6 +17,8 @@ export type Metric = {
   value: string;
   label: string;
   sub?: string;
+  /** Optional second line, rendered dimmer — e.g. a share or a party count. */
+  sub2?: string;
   tone?: MetricTone;
   disabled?: boolean;
 };
@@ -49,6 +51,7 @@ export default function MetricStrip({
               <span className={`${styles.value} ${tone}`}>{m.value}</span>
               <span className={styles.label}>{m.label}</span>
               {m.sub ? <span className={styles.sub}>{m.sub}</span> : null}
+              {m.sub2 ? <span className={styles.sub2}>{m.sub2}</span> : null}
             </span>
           </>
         );

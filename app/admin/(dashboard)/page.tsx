@@ -152,11 +152,18 @@ async function getDashboard() {
   // ---- Metrics (real, from guest data) ----
   const invited = allGuests.length;
   const attending = allGuests.filter(isAttending);
-  const adults = attending.filter((g) => !g.is_child).length;
-  const children = attending.filter((g) => g.is_child).length;
-  const declined = allGuests.filter((g) => g.rsvp_status === "Declined").length;
-  const awaiting = allGuests.filter(isAwaiting).length;
+  const declinedGuests = allGuests.filter((g) => g.rsvp_status === "Declined");
+  const awaitingGuests = allGuests.filter(isAwaiting);
+  const declined = declinedGuests.length;
+  const awaiting = awaitingGuests.length;
   const pct = (n: number) => (invited ? Math.round((n / invited) * 100) : 0);
+
+  /* Same adult/child split as the Guest List, so the two pages agree. */
+  const split = (list: Guest[]) => {
+    const c = list.filter((g) => g.is_child).length;
+    const a = list.length - c;
+    return `${a} ${a === 1 ? "adult" : "adults"} · ${c} ${c === 1 ? "child" : "children"}`;
+  };
   const attendingParties = partyList.filter((p) => p.guests.some(isAttending));
   const travelSubmitted = attendingParties.filter(partyHasTravel).length;
   const travelNeeded = attendingParties.length - travelSubmitted;
@@ -363,13 +370,16 @@ async function getDashboard() {
   return {
     metrics: {
       invited,
-      partyCount: partyList.length,
+      invitedSplit: split(allGuests),
+      partyCount: partyList.filter((p) => p.guests.length > 0).length,
       attending: attending.length,
-      adults,
-      children,
+      attendingSplit: split(attending),
+      attendingPct: pct(attending.length),
       declined,
+      declinedSplit: split(declinedGuests),
       declinedPct: pct(declined),
       awaiting,
+      awaitingSplit: split(awaitingGuests),
       awaitingPct: pct(awaiting),
       travelSubmitted,
       travelNeeded,
@@ -462,10 +472,41 @@ export default async function AdminDashboardPage() {
   const m = data.metrics;
 
   const metricCards: Metric[] = [
-    { key: "invited", icon: <IconUsers size={18} />, value: String(m.invited), label: "Invited", sub: `Across ${m.partyCount} ${m.partyCount === 1 ? "party" : "parties"}` },
-    { key: "attending", icon: <IconLeaf size={18} />, value: String(m.attending), label: "Attending", sub: `${m.adults} adults · ${m.children} children`, tone: "good" },
-    { key: "declined", icon: <IconHeart size={18} />, value: String(m.declined), label: "Declined", sub: `${m.declinedPct}% of invited`, tone: "bad" },
-    { key: "awaiting", icon: <IconClock size={18} />, value: String(m.awaiting), label: "Awaiting RSVP", sub: `${m.awaitingPct}% of invited`, tone: "warn" },
+    {
+      key: "invited",
+      icon: <IconUsers size={18} />,
+      value: String(m.invited),
+      label: "Invited",
+      sub: m.invitedSplit,
+      sub2: `Across ${m.partyCount} ${m.partyCount === 1 ? "party" : "parties"}`,
+    },
+    {
+      key: "attending",
+      icon: <IconLeaf size={18} />,
+      value: String(m.attending),
+      label: "Attending",
+      sub: m.attendingSplit,
+      sub2: `${m.attendingPct}% of invited`,
+      tone: "good",
+    },
+    {
+      key: "declined",
+      icon: <IconHeart size={18} />,
+      value: String(m.declined),
+      label: "Declined",
+      sub: m.declinedSplit,
+      sub2: `${m.declinedPct}% of invited`,
+      tone: "bad",
+    },
+    {
+      key: "awaiting",
+      icon: <IconClock size={18} />,
+      value: String(m.awaiting),
+      label: "Awaiting RSVP",
+      sub: m.awaitingSplit,
+      sub2: `${m.awaitingPct}% of invited`,
+      tone: "warn",
+    },
     {
       key: "activities",
       icon: <IconBasket size={18} />,

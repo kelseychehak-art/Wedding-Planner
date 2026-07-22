@@ -393,33 +393,47 @@ export default function GuestsManager({
   const metrics = useMemo(() => {
     const allGuests = parties.flatMap((p) => p.guests);
     const invited = allGuests.length;
-    const attending = allGuests.filter(isAttending);
-    const adults = attending.filter((g) => !g.is_child).length;
-    const children = attending.filter((g) => g.is_child).length;
-    const declined = allGuests.filter((g) => g.rsvp_status === "Declined").length;
-    const awaiting = allGuests.filter(isAwaiting).length;
+    const attendingGuests = allGuests.filter(isAttending);
+    const declinedGuests = allGuests.filter((g) => g.rsvp_status === "Declined");
+    const awaitingGuests = allGuests.filter(isAwaiting);
     const pct = (n: number) => (invited ? Math.round((n / invited) * 100) : 0);
+
+    /* Every headline number carries its adult/child split — catering, seating
+       and pricing all turn on it, so it shouldn't need a second click. */
+    const split = (list: Guest[]) => {
+      const children = list.filter((g) => g.is_child).length;
+      const adults = list.length - children;
+      return `${adults} ${adults === 1 ? "adult" : "adults"} · ${children} ${
+        children === 1 ? "child" : "children"
+      }`;
+    };
     const attendingParties = parties.filter((p) => p.guests.some(isAttending));
     const travelSubmitted = attendingParties.filter(partyHasTravel).length;
     const travelNeeded = attendingParties.length - travelSubmitted;
     const attentionCount = parties.filter((p) => partyAttention(p).length > 0).length;
+    /* Invitations are counted per household that actually has guests — an
+       empty party shell isn't an invitation you'd order stationery for. */
+    const invitedParties = parties.filter((p) => p.guests.length > 0).length;
 
     /* Activity sign-ups: count guests who have booked at least one, and how
        many attending guests still have none — the mockup's "8 need to select". */
     const activityBooked = allGuests.filter((g) => (g.activities?.length ?? 0) > 0).length;
-    const activityNeeded = attending.filter((g) => (g.activities?.length ?? 0) === 0).length;
+    const activityNeeded = attendingGuests.filter((g) => (g.activities?.length ?? 0) === 0).length;
     const anyActivities = allGuests.some((g) => (g.activities?.length ?? 0) > 0);
 
     return {
       invited,
-      partyCount: parties.length,
-      attending: attending.length,
-      adults,
-      children,
-      declined,
-      declinedPct: pct(declined),
-      awaiting,
-      awaitingPct: pct(awaiting),
+      invitedSplit: split(allGuests),
+      partyCount: invitedParties,
+      attending: attendingGuests.length,
+      attendingSplit: split(attendingGuests),
+      attendingPct: pct(attendingGuests.length),
+      declined: declinedGuests.length,
+      declinedSplit: split(declinedGuests),
+      declinedPct: pct(declinedGuests.length),
+      awaiting: awaitingGuests.length,
+      awaitingSplit: split(awaitingGuests),
+      awaitingPct: pct(awaitingGuests.length),
       travelSubmitted,
       travelNeeded,
       attentionCount,
@@ -435,14 +449,16 @@ export default function GuestsManager({
       icon: <IconUsers size={18} />,
       value: String(metrics.invited),
       label: "Invited",
-      sub: `Across ${metrics.partyCount} ${metrics.partyCount === 1 ? "party" : "parties"}`,
+      sub: metrics.invitedSplit,
+      sub2: `Across ${metrics.partyCount} ${metrics.partyCount === 1 ? "party" : "parties"}`,
     },
     {
       key: "attending",
       icon: <IconLeaf size={18} />,
       value: String(metrics.attending),
       label: "Attending",
-      sub: `${metrics.adults} adults · ${metrics.children} children`,
+      sub: metrics.attendingSplit,
+      sub2: `${metrics.attendingPct}% of invited`,
       tone: "good",
     },
     {
@@ -450,7 +466,8 @@ export default function GuestsManager({
       icon: <IconHeart size={18} />,
       value: String(metrics.declined),
       label: "Declined",
-      sub: `${metrics.declinedPct}% of invited`,
+      sub: metrics.declinedSplit,
+      sub2: `${metrics.declinedPct}% of invited`,
       tone: "bad",
     },
     {
@@ -458,7 +475,8 @@ export default function GuestsManager({
       icon: <IconClock size={18} />,
       value: String(metrics.awaiting),
       label: "Awaiting RSVP",
-      sub: `${metrics.awaitingPct}% of invited`,
+      sub: metrics.awaitingSplit,
+      sub2: `${metrics.awaitingPct}% of invited`,
       tone: "warn",
     },
     {
