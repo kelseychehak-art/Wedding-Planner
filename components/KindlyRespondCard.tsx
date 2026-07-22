@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./KindlyRespondCard.module.css";
 import Illustration from "./Illustration";
+import { siteContent } from "@/data/siteContent";
 import { findPartyForRsvp, submitRsvp, type RsvpGuest, type RsvpParty } from "@/lib/supabase";
 
 type Phase = "search" | "found" | "notFound" | "error" | "submitted";
@@ -33,6 +34,33 @@ export default function KindlyRespondCard() {
   const [dietary, setDietary] = useState("");
   const [searching, setSearching] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  /*
+   * Every step swaps the card's contents, and the page doesn't move on its own.
+   * Submitting used to leave you scrolled past a card that had just shrunk to a
+   * short thank-you — on a phone the screen barely changes, which reads as
+   * "nothing happened" and invites a second submission. So each step brings its
+   * own card into view. Skipped on first paint, and instant rather than smooth
+   * for anyone who asked for less motion.
+   */
+  const cardRef = useRef<HTMLElement | null>(null);
+  /* Callback ref so the same handle works for the <form> and the <div>. */
+  const setCard = (el: HTMLElement | null) => {
+    cardRef.current = el;
+  };
+  const firstPaint = useRef(true);
+
+  useEffect(() => {
+    if (firstPaint.current) {
+      firstPaint.current = false;
+      return;
+    }
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    cardRef.current?.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "center",
+    });
+  }, [phase]);
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -113,7 +141,7 @@ export default function KindlyRespondCard() {
   // ---- Confirmation ----
   if (phase === "submitted") {
     return (
-      <div className={styles.thanks}>
+      <div className={styles.thanks} ref={setCard}>
         <Illustration name="heart" tone="terracotta" size={34} />
         <h2 className={styles.thanksTitle}>Thank You!</h2>
         <p className={styles.thanksBody}>
@@ -128,7 +156,7 @@ export default function KindlyRespondCard() {
   // ---- Step 1: find invitation ----
   if (phase === "search" || phase === "notFound" || phase === "error") {
     return (
-      <form className={styles.form} onSubmit={handleSearch}>
+      <form className={styles.form} onSubmit={handleSearch} ref={setCard}>
         <section className={styles.section}>
           <p className={styles.stepLabel}>1. Find Your Invitation</p>
           <p className={styles.stepHelp}>
@@ -161,8 +189,18 @@ export default function KindlyRespondCard() {
 
           {phase === "notFound" && (
             <p className={styles.error}>
-              We couldn&rsquo;t find an invitation matching that name and email. Please check your
-              invitation or reach out to us directly.
+              We couldn&rsquo;t find an invitation matching that name and email. Try the name of
+              anyone in your party, and the email we sent your invitation to.
+              {siteContent.contact.email ? (
+                <>
+                  {" "}
+                  Still stuck?{" "}
+                  <a href={`mailto:${siteContent.contact.email}`}>
+                    {siteContent.contact.label || siteContent.contact.email}
+                  </a>
+                  .
+                </>
+              ) : null}
             </p>
           )}
           {phase === "error" && (
@@ -181,7 +219,7 @@ export default function KindlyRespondCard() {
 
   // ---- Step 2: respond ----
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit} ref={setCard}>
       <section className={styles.section}>
         <p className={styles.stepLabel}>1. Your Party</p>
         <p className={styles.stepHelp}>

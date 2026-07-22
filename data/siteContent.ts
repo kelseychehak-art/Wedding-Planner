@@ -17,6 +17,17 @@ export const siteContent = {
     locationLabel: "Tuscany, Italy",
     rsvpDeadlineLabel: "By April 1, 2027",
   },
+  /*
+   * The one place a guest can reach you. Deliberately EMPTY until Kelsey picks
+   * an address — nothing invents a contact route that doesn't work.
+   *
+   * While it's empty, the site says "check your invitation" and stops. Fill it
+   * in and a mailto link appears on the RSVP page and in the FAQ at once.
+   */
+  contact: {
+    email: "",
+    label: "",
+  },
   navigation: [
     { label: "Our Weekend", href: "/our-weekend" },
     { label: "Travel", href: "/travel" },

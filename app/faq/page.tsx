@@ -1,3 +1,4 @@
+import { siteContent } from "@/data/siteContent";
 import type { Metadata } from "next";
 import ContentPageFrame from "@/components/ContentPageFrame";
 import FaqGroups, { type FaqGroup } from "@/components/FaqGroups";
@@ -267,8 +268,19 @@ const GROUPS: FaqGroup[] = [
         q: "I have another question — who do I ask?",
         a: (
           <p>
-            Please reach out to either of us directly &mdash; we&rsquo;re happy to help with anything
-            at all. We&rsquo;ll also keep this page updated as more details come together.
+            {siteContent.contact.email ? (
+              <>
+                Email us at{" "}
+                <a href={`mailto:${siteContent.contact.email}`}>{siteContent.contact.email}</a>{" "}
+                &mdash; we&rsquo;re happy to help with anything at all.
+              </>
+            ) : (
+              <>
+                Please reach out to either of us directly &mdash; we&rsquo;re happy to help with
+                anything at all.
+              </>
+            )}{" "}
+            We&rsquo;ll also keep this page updated as more details come together.
           </p>
         ),
       },
@@ -312,7 +324,10 @@ export default function FaqPage() {
             <p className={styles.contactBody}>
               We&rsquo;re here to help! Reach out if you need anything.
             </p>
-            <a href="#other" className="btn-outline">
+            <a
+              href={siteContent.contact.email ? `mailto:${siteContent.contact.email}` : "#other"}
+              className="btn-outline"
+            >
               Contact Us →
             </a>
           </div>
