@@ -72,14 +72,17 @@ const THEMES = new Set(["sunlit", "amalfi"]);
 export default async function OurWeekendPreviewPage({
   searchParams,
 }: {
-  searchParams: Promise<{ bg?: string; theme?: string }>;
+  searchParams: Promise<{ bg?: string; theme?: string; style?: string }>;
 }) {
   const { couple, wedding } = siteContent;
-  const { bg, theme } = await searchParams;
-  /* Default to the homepage photo so the site coheres; ?bg=none for plain. */
-  const bgImage = bg && bg in BACKGROUNDS ? BACKGROUNDS[bg] : BACKGROUNDS.rafael;
+  const { bg, theme, style } = await searchParams;
   /* Colour direction: ?theme=sunlit (warm terracotta+gold) or amalfi (blue). */
   const activeTheme = theme && THEMES.has(theme) ? theme : "sunlit";
+  /* ?style=suite is the clean-paper direction: NO faded wash, the photo lives
+     as a crisp arch-framed element, bigger bolder type. Closer to the paper
+     goods on the board. Default (no style) keeps the faded-photo look. */
+  const suite = style === "suite";
+  const bgImage = suite ? null : bg && bg in BACKGROUNDS ? BACKGROUNDS[bg] : BACKGROUNDS.rafael;
 
   return (
     <div className={styles.page}>
@@ -95,21 +98,49 @@ export default async function OurWeekendPreviewPage({
         />
       )}
 
-      <main className={styles.container} data-theme={activeTheme}>
+      <main
+        className={styles.container}
+        data-theme={activeTheme}
+        data-style={suite ? "suite" : undefined}
+      >
         <a href="/" className={styles.back}>
           <span aria-hidden="true">←</span> Back to Home
         </a>
 
         {/* ---------- Hero ---------- */}
         <header className={styles.hero}>
-          <p className={styles.eyebrow}>
-            {wedding.dateLabel} &middot; {wedding.locationLabel}
-          </p>
-          <Art name="lemon-branch" className={styles.sprig} />
-          <h1 className={styles.title}>Weekend Schedule</h1>
-          <p className={styles.subtitle}>
-            A week of celebration, connection, and unforgettable moments in Italy.
-          </p>
+          {suite ? (
+            <>
+              {/* Crisp arch-framed photo — the image as a designed element,
+                  not a wash. Mirrors the arch cards on the board. */}
+              <div className={styles.archFrame}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/assets/hero/split-rafael-peier.jpg"
+                  alt="A Tuscan farmhouse above olive groves and vineyard rows"
+                  className={styles.archImg}
+                />
+              </div>
+              <p className={styles.eyebrow}>
+                {wedding.dateLabel} &middot; {wedding.locationLabel}
+              </p>
+              <h1 className={styles.title}>Weekend Schedule</h1>
+              <p className={styles.subtitle}>
+                A week of celebration, connection, and unforgettable moments in Italy.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className={styles.eyebrow}>
+                {wedding.dateLabel} &middot; {wedding.locationLabel}
+              </p>
+              <Art name="lemon-branch" className={styles.sprig} />
+              <h1 className={styles.title}>Weekend Schedule</h1>
+              <p className={styles.subtitle}>
+                A week of celebration, connection, and unforgettable moments in Italy.
+              </p>
+            </>
+          )}
         </header>
 
         {/* ---------- Body ---------- */}

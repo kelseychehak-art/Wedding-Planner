@@ -93,6 +93,30 @@
   padding: clamp(24px, 4vh, 44px) 0 clamp(28px, 4vh, 40px);
 }
 
+/* Clean-paper "suite" direction: crisp arch photo + bigger, bolder type. */
+.archFrame {
+  width: min(460px, 100%);
+  margin: 4px auto 22px;
+}
+
+.archImg {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  /* Arch top, squared bottom — the invitation-card shape from the board. */
+  border-radius: 230px 230px 14px 14px;
+  border: 1px solid var(--color-border-soft);
+}
+
+.container[data-style="suite"] .title {
+  font-size: clamp(40px, 5vw, 60px);
+}
+
+.container[data-style="suite"] .subtitle {
+  font-size: 17px;
+}
+
 .eyebrow {
   display: inline-block;
   font-family: var(--font-sans);
