@@ -30,6 +30,7 @@ export type PartyDraft = {
   display_name_override: string;
   formal_name_override: string;
   plus_one_allowance: number;
+  is_host: boolean;
   email: string;
   phone: string;
   mailing_address: string;
@@ -77,6 +78,7 @@ export function emptyPartyDraft(): PartyDraft {
     display_name_override: "",
     formal_name_override: "",
     plus_one_allowance: 0,
+    is_host: false,
     email: "",
     phone: "",
     mailing_address: "",
@@ -261,6 +263,22 @@ export default function PartyForm({
         <div className={`${styles.field} ${styles.fieldWide}`}>
           <label className={styles.label}>Notes</label>
           <input className={styles.input} value={draft.notes} onChange={(e) => set("notes", e.target.value)} />
+        </div>
+        <div className={`${styles.field} ${styles.fieldWide}`}>
+          <label className={styles.checkboxRow} style={{ alignItems: "flex-start" }}>
+            <input
+              type="checkbox"
+              checked={draft.is_host}
+              onChange={(e) => set("is_host", e.target.checked)}
+            />
+            <span>
+              This is the couple&rsquo;s own party
+              <span className={styles.checkboxHint}>
+                Pins to the top of the list and counts toward the head count. Only one party can be
+                the couple.
+              </span>
+            </span>
+          </label>
         </div>
       </div>
 

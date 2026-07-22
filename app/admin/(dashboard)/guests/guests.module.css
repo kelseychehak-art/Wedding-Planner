@@ -981,6 +981,32 @@
   color: var(--olive-dark);
 }
 
+/* "The Couple" badge on the pinned host party — filled, so it reads as a
+   status rather than another quiet metadata tag. */
+.hostBadge {
+  display: inline-block;
+  margin-left: 8px;
+  vertical-align: middle;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: var(--olive-dark);
+  color: var(--paper, #fff);
+}
+
+/* The host toggle carries a hint under its label, so the row aligns to the
+   top rather than centering the checkbox against a two-line block. */
+.checkboxHint {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted-ink);
+}
+
 .fieldHint {
   display: block;
   font-family: var(--font-sans);

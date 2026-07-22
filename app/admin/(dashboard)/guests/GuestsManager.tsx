@@ -122,6 +122,8 @@ export type Party = {
   formal_name_override: string | null;
   /** Plus-one seats granted to this household (see unfilledPlusOnes). */
   plus_one_allowance: number;
+  /** The couple's own household — pinned to the top and badged. At most one. */
+  is_host: boolean;
   guests: Guest[];
   travel: Travel;
   lodging: Lodging[];
@@ -274,6 +276,7 @@ function partyToDraft(p: Party): PartyDraft {
     display_name_override: p.display_name_override ?? "",
     formal_name_override: p.formal_name_override ?? "",
     plus_one_allowance: p.plus_one_allowance ?? 0,
+    is_host: p.is_host ?? false,
     email: p.email ?? "",
     phone: p.phone ?? "",
     mailing_address: p.mailing_address ?? "",
@@ -575,22 +578,30 @@ export default function GuestsManager({
   const filteredParties = useMemo(() => {
     const rows = parties.filter((p) => partyMatchesFilters(p) && partyMatchesTab(p, tab));
     const byName = (a: Party, c: Party) => displayName(a).localeCompare(displayName(c));
+    /* The host couple pins to the top under every sort — otherwise "us" would
+       scatter into the alphabet or the head-count ranking like any other row. */
+    const hostFirst =
+      (cmp: (a: Party, c: Party) => number) => (a: Party, c: Party) =>
+        Number(c.is_host) - Number(a.is_host) || cmp(a, c);
     switch (sort) {
       case "name-desc":
-        return rows.sort((a, c) => byName(c, a));
+        return rows.sort(hostFirst((a, c) => byName(c, a)));
       case "guests":
-        return rows.sort((a, c) => c.guests.length - a.guests.length || byName(a, c));
+        return rows.sort(hostFirst((a, c) => c.guests.length - a.guests.length || byName(a, c)));
       case "rsvp":
         return rows.sort(
-          (a, c) =>
-            c.guests.filter(isAwaiting).length - a.guests.filter(isAwaiting).length || byName(a, c)
+          hostFirst(
+            (a, c) =>
+              c.guests.filter(isAwaiting).length - a.guests.filter(isAwaiting).length ||
+              byName(a, c)
+          )
         );
       case "attention":
         return rows.sort(
-          (a, c) => partyAttention(c).length - partyAttention(a).length || byName(a, c)
+          hostFirst((a, c) => partyAttention(c).length - partyAttention(a).length || byName(a, c))
         );
       default:
-        return rows.sort(byName);
+        return rows.sort(hostFirst(byName));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parties, tab, search, rsvpFilter, travelFilter, sideFilter, activityFilter, lodgingFilter, sort]);
@@ -683,6 +694,7 @@ export default function GuestsManager({
           display_name_override: draft.display_name_override,
           formal_name_override: draft.formal_name_override,
           plus_one_allowance: draft.plus_one_allowance,
+          is_host: draft.is_host,
         }),
       });
       if (!partyRes.ok) {
@@ -765,6 +777,7 @@ export default function GuestsManager({
         display_name_override: party.display_name_override ?? null,
         formal_name_override: party.formal_name_override ?? null,
         plus_one_allowance: party.plus_one_allowance ?? 0,
+        is_host: party.is_host ?? false,
         guests: savedGuests,
         travel,
         /* Room assignments are managed under Lodging, not this form — keep
@@ -1354,6 +1367,7 @@ function PartyTable({
                     }}
                   >
                     {displayName(p)}
+                    {p.is_host && <span className={styles.hostBadge}>The Couple</span>}
                   </button>
                   <span className={styles.partyMeta}>
                     <span className={styles.householdTag}>
