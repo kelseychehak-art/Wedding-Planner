@@ -96,21 +96,56 @@
 /* ---- Nav ---- */
 
 .nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Quiet section heading — a divider you can read. */
+.navGroupLabel {
+  margin: 0 0 2px 12px;
+  font-family: var(--font-sans);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+  opacity: 0.7;
+}
+
+.navList {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: 1;
 }
 
+/* On mobile the sidebar becomes a horizontal strip; the group labels would
+   cost more room than they earn, so they're dropped and the lists run on. */
 @media (max-width: 767px) {
   .nav {
     flex-direction: row;
     overflow-x: auto;
     gap: 4px;
     padding-bottom: 2px;
+  }
+
+  .navGroupLabel {
+    display: none;
+  }
+
+  .navList {
+    flex-direction: row;
+    gap: 4px;
   }
 }
 

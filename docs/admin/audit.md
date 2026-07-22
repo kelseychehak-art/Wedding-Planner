@@ -194,21 +194,24 @@ Payments), **FILTERS** + **EXPORT** buttons, a 9-column item table with category
 
 ## 🟡 P2 — Consistency and professional polish
 
-1. **Two button idioms.** Dashboard and Guest List use `<IconPlus />`; Itinerary and Travel use a
-   literal `"+ "` string. Pick one.
-2. **Two row-action idioms.** `…` menu (Guest List) vs inline `Edit`/`Delete` text (Itinerary,
-   Lodging, Travel).
-3. **Label drift.** "Needs Attention" (Dashboard) vs "Need Attention" (Guest List).
-4. **Nav has grown to 13 flat items** vs the mockup's 10, in a different order, with Communications
-   missing and Venues/Timeline/Decisions/Exports added. It needs grouping (e.g. *Guests · Planning ·
-   Money · Admin*) before it grows further.
+1. ✅ **Two button idioms** — all "add" buttons now use `<IconPlus />`.
+2. ⏳ **Two row-action idioms — still open.** `…` menu (Guest List) vs inline `Edit`/`Delete` text
+   (Itinerary, Lodging, Travel, Activities, Budget, Decisions, Timeline). The mockups show `…`
+   throughout, but for a two-action row the inline buttons are one click instead of two. Worth a
+   deliberate decision before converting seven managers.
+3. ✅ **Label drift** — "Needs Attention" everywhere.
+4. ✅ **Nav grouped** — Dashboard / Guests / The weekend / Planning / Exports + Settings. Group
+   labels are hidden on mobile, where the sidebar becomes a horizontal strip. Communications still
+   missing (unbuilt).
 5. **No global top bar.** The Activities and Settings mockups both show one (⌘K search, notification
    bell, `KA ⌄` account menu, `VIEW SITE ↗`). Nothing like it exists. Worth deciding for or against
    deliberately — right now it's absent by omission, and the two mockups that show it disagree with
    the nine that don't.
-6. **`window.confirm()` for deletes** (`GuestsManager.tsx:511`) — a browser-chrome alert in an
-   otherwise carefully styled product.
-7. **`/admin` is indexable.** No `robots.ts`, no `noindex` on admin routes, no distinct `<title>`.
+6. ✅ **`window.confirm()` replaced** — all 11 call sites across 10 files now use a shared
+   `useConfirm()` alertdialog: on-brand, names the record, says what is lost, red confirm for
+   destructive actions, focus-trapped, Escape cancels.
+7. ✅ **`/admin` is no longer indexable** — `robots.ts` disallows `/admin` and `/api`, and
+   `app/admin/layout.tsx` sets `robots: { index: false, follow: false }` plus its own title.
 8. **Login has no rate limiting or lockout** — a single shared password with unlimited attempts. Fine
    for one couple; not fine if this is ever handed to other people.
 9. **`tsc --noEmit` reports 2 errors** from stray `.next/types/*  2.ts` files (a filesystem-sync

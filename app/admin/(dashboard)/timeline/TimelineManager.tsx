@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./timeline.module.css";
 
 export type Milestone = {
@@ -45,6 +46,7 @@ function fmtDate(d: string) {
 }
 
 export default function TimelineManager({ initialItems }: { initialItems: Milestone[] }) {
+  const { confirm, dialog } = useConfirm();
   const [items, setItems] = useState(initialItems);
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft());
@@ -114,7 +116,7 @@ export default function TimelineManager({ initialItems }: { initialItems: Milest
   }
 
   async function remove(m: Milestone) {
-    if (!confirm(`Delete "${m.title}"?`)) return;
+    if (!(await confirm({ title: `Delete “${m.title}”?` }))) return;
     const res = await fetch(`/api/admin/milestones/${m.id}`, { method: "DELETE" });
     if (res.ok) setItems((prev) => prev.filter((i) => i.id !== m.id));
   }
@@ -192,6 +194,7 @@ export default function TimelineManager({ initialItems }: { initialItems: Milest
           )
         )}
       </div>
+      {dialog}
     </div>
   );
 }

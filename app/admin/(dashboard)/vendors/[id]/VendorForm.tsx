@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./vendor-detail.module.css";
 
 const CATEGORIES = [
@@ -110,6 +111,7 @@ export default function VendorForm({
   initialVendor: VendorRecord | null;
   initialCommunications: CommunicationEntry[];
 }) {
+  const { confirm, dialog } = useConfirm();
   const router = useRouter();
   const isNew = !initialVendor;
   const [vendor, setVendor] = useState<VendorRecord>(initialVendor ?? emptyVendor());
@@ -154,7 +156,7 @@ export default function VendorForm({
 
   async function handleDelete() {
     if (!vendor.id) return;
-    if (!confirm(`Delete ${vendor.name || "this vendor"}? This can't be undone.`)) return;
+    if (!(await confirm({ title: `Delete ${vendor.name || "this vendor"}?`, body: "Quotes, contacts and communication history will be removed. This can't be undone." }))) return;
     await fetch(`/api/admin/vendors/${vendor.id}`, { method: "DELETE" });
     router.push("/admin/vendors");
   }
@@ -444,6 +446,7 @@ export default function VendorForm({
           </div>
         </section>
       )}
+      {dialog}
     </div>
   );
 }

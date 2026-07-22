@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./decisions.module.css";
 
 export type Decision = {
@@ -42,6 +43,7 @@ function fmtDate(d: string) {
 }
 
 export default function DecisionsManager({ initialItems }: { initialItems: Decision[] }) {
+  const { confirm, dialog } = useConfirm();
   const [items, setItems] = useState(initialItems);
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft());
@@ -90,7 +92,7 @@ export default function DecisionsManager({ initialItems }: { initialItems: Decis
   }
 
   async function remove(d: Decision) {
-    if (!confirm(`Delete "${d.title}"?`)) return;
+    if (!(await confirm({ title: `Delete “${d.title}”?`, body: "This decision and its rationale will be removed." }))) return;
     const res = await fetch(`/api/admin/decisions/${d.id}`, { method: "DELETE" });
     if (res.ok) setItems((prev) => prev.filter((i) => i.id !== d.id));
   }
@@ -155,6 +157,7 @@ export default function DecisionsManager({ initialItems }: { initialItems: Decis
           )}
         </div>
       )}
+      {dialog}
     </div>
   );
 }

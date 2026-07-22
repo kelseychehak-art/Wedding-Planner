@@ -12,7 +12,9 @@ import {
   IconAlert,
   IconCalendar,
   IconSearch,
+  IconPlus,
 } from "@/components/admin/icons";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./lodging.module.css";
 
 /*
@@ -112,6 +114,7 @@ export default function LodgingManager({
   data: LodgingData;
   parties: PartyOption[];
 }) {
+  const { confirm, dialog } = useConfirm();
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("assignments");
   const [page, setPage] = useState(1);
@@ -198,7 +201,7 @@ export default function LodgingManager({
   );
 
   async function removeRecord(kind: string, id: string, label: string) {
-    if (!confirm(`Delete ${label}?`)) return;
+    if (!(await confirm({ title: `Delete ${label}?` }))) return;
     const res = await fetch(`/api/admin/lodging?kind=${kind}&id=${id}`, { method: "DELETE" });
     if (res.ok) router.refresh();
   }
@@ -227,7 +230,8 @@ export default function LodgingManager({
               Assign Room
             </button>
             <button type="button" className="btn-primary" onClick={() => setEditing("property")}>
-              + Add Property
+              <IconPlus size={15} className={styles.btnIcon} />
+            Add Property
             </button>
           </div>
         }
@@ -513,6 +517,7 @@ export default function LodgingManager({
           </div>
         </div>
       )}
+      {dialog}
     </div>
   );
 }

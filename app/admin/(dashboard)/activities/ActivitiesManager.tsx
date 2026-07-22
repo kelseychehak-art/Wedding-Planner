@@ -12,7 +12,9 @@ import {
   IconClock,
   IconAlert,
   IconSearch,
+  IconPlus,
 } from "@/components/admin/icons";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./activities.module.css";
 
 /*
@@ -119,6 +121,7 @@ export default function ActivitiesManager({
   signupOpens: string;
   signupCloses: string;
 }) {
+  const { confirm, dialog } = useConfirm();
   const router = useRouter();
   const [activities, setActivities] = useState(initialActivities);
   const [search, setSearch] = useState("");
@@ -197,7 +200,7 @@ export default function ActivitiesManager({
   const visible = filtered.slice((clampedPage - 1) * pageSize, clampedPage * pageSize);
 
   async function remove(a: Activity) {
-    if (!confirm(`Delete "${a.title}"?`)) return;
+    if (!(await confirm({ title: `Delete “${a.title}”?`, body: "Any sign-ups and waitlist places for this activity go with it." }))) return;
     const res = await fetch(`/api/admin/activities?id=${a.id}`, { method: "DELETE" });
     if (res.ok) {
       setActivities((prev) => prev.filter((x) => x.id !== a.id));
@@ -212,7 +215,8 @@ export default function ActivitiesManager({
         subtitle="Manage optional experiences, sign-ups, capacity, and logistics."
         action={
           <button type="button" className="btn-primary" onClick={() => setEditing("new")}>
-            + Add Activity
+            <IconPlus size={15} className={styles.btnIcon} />
+            Add Activity
           </button>
         }
       />
@@ -352,6 +356,7 @@ export default function ActivitiesManager({
         Sign-up counts come from real bookings. Guests can&rsquo;t book yet — the guest-facing
         activity sign-up flow is still to build, so these will read zero until then.
       </p>
+      {dialog}
     </div>
   );
 }

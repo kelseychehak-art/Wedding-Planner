@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Money from "@/components/admin/Money";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./budget.module.css";
 
 export type BudgetItem = {
@@ -83,6 +84,7 @@ export default function BudgetManager({
   initialTargets: Record<string, number>;
   eurUsdRate: number;
 }) {
+  const { confirm, dialog } = useConfirm();
   const router = useRouter();
   const [items, setItems] = useState(initialItems);
   const [total, setTotal] = useState(initialTotal);
@@ -200,7 +202,7 @@ export default function BudgetManager({
   }
 
   async function deleteItem(item: BudgetItem) {
-    if (!confirm(`Delete "${item.name}"?`)) return;
+    if (!(await confirm({ title: `Delete “${item.name}”?`, body: "The amount and payment history for this line go with it." }))) return;
     const res = await fetch(`/api/admin/budget/items/${item.id}`, { method: "DELETE" });
     if (res.ok) setItems((prev) => prev.filter((i) => i.id !== item.id));
   }
@@ -476,6 +478,7 @@ export default function BudgetManager({
           );
         })
       )}
+      {dialog}
     </div>
   );
 }

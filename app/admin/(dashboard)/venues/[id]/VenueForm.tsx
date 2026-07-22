@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./venue-detail.module.css";
 
 const STAGES = [
@@ -158,6 +159,7 @@ export default function VenueForm({
   initialCommunications: CommunicationEntry[];
   initialDocuments: DocumentEntry[];
 }) {
+  const { confirm, dialog } = useConfirm();
   const router = useRouter();
   const isNew = !initialVenue;
   const [venue, setVenue] = useState<VenueRecord>(initialVenue ?? emptyVenue());
@@ -208,7 +210,7 @@ export default function VenueForm({
 
   async function handleDelete() {
     if (!venue.id) return;
-    if (!confirm(`Delete ${venue.name || "this venue"}? This can't be undone.`)) return;
+    if (!(await confirm({ title: `Delete ${venue.name || "this venue"}?`, body: "Research notes, costs and uploaded documents will be removed. This can't be undone." }))) return;
     await fetch(`/api/admin/venues/${venue.id}`, { method: "DELETE" });
     router.push("/admin/venues");
   }
@@ -270,7 +272,7 @@ export default function VenueForm({
 
   async function handleDeleteDocument(doc: DocumentEntry) {
     if (!venue.id) return;
-    if (!confirm(`Delete "${doc.display_name}"? This can't be undone.`)) return;
+    if (!(await confirm({ title: `Delete “${doc.display_name}”?`, body: "The file will be removed from storage. This can't be undone." }))) return;
     const res = await fetch(`/api/admin/venues/${venue.id}/documents/${doc.id}`, {
       method: "DELETE",
     });
@@ -765,6 +767,7 @@ export default function VenueForm({
           </div>
         </section>
       )}
+      {dialog}
     </div>
   );
 }

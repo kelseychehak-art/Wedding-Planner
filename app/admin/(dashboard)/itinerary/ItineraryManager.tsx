@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
 import {
+  IconPlus,
   IconCalendar,
   IconUsers,
   IconCheckCircle,
@@ -12,6 +13,7 @@ import {
   IconBuilding,
   IconAlert,
 } from "@/components/admin/icons";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./itinerary.module.css";
 
 /*
@@ -122,6 +124,7 @@ export default function ItineraryManager({
   /* Settings → Events & Activities; applies to newly added events only. */
   defaultVisibility: string;
 }) {
+  const { confirm, dialog } = useConfirm();
   const router = useRouter();
   const { events, locations, tasks } = data;
   const [tab, setTab] = useState<TabKey>("all");
@@ -204,7 +207,7 @@ export default function ItineraryManager({
   }, [events, tab]);
 
   async function remove(e: WeddingEvent) {
-    if (!confirm(`Delete "${e.title}"?`)) return;
+    if (!(await confirm({ title: `Delete “${e.title}”?`, body: "Per-guest RSVPs for this event will be removed too." }))) return;
     const res = await fetch(`/api/admin/itinerary?id=${e.id}`, { method: "DELETE" });
     if (res.ok) router.refresh();
   }
@@ -224,7 +227,8 @@ export default function ItineraryManager({
               Add Location
             </button>
             <button type="button" className="btn-primary" onClick={() => setEditing("new")}>
-              + Add Event
+              <IconPlus size={15} className={styles.btnIcon} />
+            Add Event
             </button>
           </div>
         }
@@ -382,6 +386,7 @@ export default function ItineraryManager({
         </ul>
         <p className={styles.legendNote}>Times and details are subject to change.</p>
       </div>
+      {dialog}
     </div>
   );
 }

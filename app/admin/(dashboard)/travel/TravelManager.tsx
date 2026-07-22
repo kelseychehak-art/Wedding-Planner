@@ -12,8 +12,10 @@ import {
   IconCalendar,
   IconCheckCircle,
   IconSearch,
+  IconPlus,
   IconDots,
 } from "@/components/admin/icons";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./travel.module.css";
 
 /*
@@ -143,6 +145,7 @@ export default function TravelManager({
   travelDeadline: string;
   timezone: string;
 }) {
+  const { confirm, dialog } = useConfirm();
   const router = useRouter();
   const [itineraries, setItineraries] = useState(initialItineraries);
   const [view, setView] = useState<ViewKey>("all");
@@ -289,7 +292,7 @@ export default function TravelManager({
   ];
 
   async function remove(it: Itinerary) {
-    if (!confirm(`Delete the travel record for ${it.party_name ?? "this party"}?`)) return;
+    if (!(await confirm({ title: `Delete travel for ${it.party_name ?? "this party"}?`, body: "Flights, times and transport notes for this party will be removed." }))) return;
     const res = await fetch(`/api/admin/travel/itineraries/${it.id}`, { method: "DELETE" });
     if (res.ok) {
       setItineraries((prev) => prev.filter((x) => x.id !== it.id));
@@ -304,7 +307,8 @@ export default function TravelManager({
         subtitle="Manage guest travel details, arrivals, departures, and transportation needs."
         action={
           <button type="button" className="btn-primary" onClick={() => setEditing("new")}>
-            + Add Travel Info
+            <IconPlus size={15} className={styles.btnIcon} />
+            Add Travel Info
           </button>
         }
       />
@@ -540,6 +544,7 @@ export default function TravelManager({
           </p>
         </div>
       </div>
+      {dialog}
     </div>
   );
 }

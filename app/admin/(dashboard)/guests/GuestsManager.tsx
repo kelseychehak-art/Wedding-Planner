@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import DetailDrawer from "./DetailDrawer";
 import { displayName, HOUSEHOLD_LABEL, householdNudges } from "./household";
+import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./guests.module.css";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
@@ -349,6 +350,7 @@ export default function GuestsManager({
   initialView?: string;
   initialTab?: string;
 }) {
+  const { confirm, dialog } = useConfirm();
   const router = useRouter();
   const [parties, setParties] = useState(initialParties);
   const [view, setView] = useState<ViewMode>(
@@ -529,7 +531,7 @@ export default function GuestsManager({
       key: "attention",
       icon: <IconAlert size={18} />,
       value: String(metrics.attentionCount),
-      label: "Need Attention",
+      label: "Needs Attention",
       sub: "Click to view",
       tone: metrics.attentionCount > 0 ? "bad" : "good",
     },
@@ -787,8 +789,11 @@ export default function GuestsManager({
 
   async function deleteParty(p: Party) {
     setMenuId(null);
-    if (!confirm(`Delete ${p.name} and all their guests? This can't be undone.`))
-      return;
+    const ok = await confirm({
+      title: `Delete ${displayName(p)}?`,
+      body: `All ${p.guests.length} ${p.guests.length === 1 ? "guest" : "guests"} in this household, plus their RSVPs, activity sign-ups and room assignment, will be removed. This can't be undone.`,
+    });
+    if (!ok) return;
     const res = await fetch(`/api/admin/parties/${p.id}`, { method: "DELETE" });
     if (res.ok) setParties((prev) => prev.filter((x) => x.id !== p.id));
   }
@@ -1000,6 +1005,7 @@ export default function GuestsManager({
         onPageSize={setPageSize}
         noun={view === "party" ? "parties" : "guests"}
       />
+      {dialog}
     </div>
   );
 }

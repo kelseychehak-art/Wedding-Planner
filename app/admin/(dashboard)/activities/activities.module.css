@@ -480,3 +480,9 @@
   margin: 16px 0 0;
   max-width: 72ch;
 }
+
+/* Matches the Dashboard/Guest List add buttons. */
+.btnIcon {
+  margin-right: 8px;
+  vertical-align: -2px;
+}
