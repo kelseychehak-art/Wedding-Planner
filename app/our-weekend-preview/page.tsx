@@ -78,11 +78,35 @@ export default async function OurWeekendPreviewPage({
   const { bg, theme, style } = await searchParams;
   /* Colour direction: ?theme=sunlit (warm terracotta+gold) or amalfi (blue). */
   const activeTheme = theme && THEMES.has(theme) ? theme : "sunlit";
-  /* ?style=suite is the clean-paper direction: NO faded wash, the photo lives
-     as a crisp arch-framed element, bigger bolder type. Closer to the paper
-     goods on the board. Default (no style) keeps the faded-photo look. */
-  const suite = style === "suite";
-  const bgImage = suite ? null : bg && bg in BACKGROUNDS ? BACKGROUNDS[bg] : BACKGROUNDS.rafael;
+  /* Clean-paper directions (no faded wash). The arch photo fills the space
+     differently in each so it never floats in empty cream:
+       suite — arch centered (too airy; kept for reference)
+       split — arch beside the type, two-column editorial
+       band  — arch + type on a solid colour block
+     Default (no style) keeps the faded-photo look. */
+  const CLEAN = new Set(["suite", "split", "band"]);
+  const clean = style ? CLEAN.has(style) : false;
+  const bgImage = clean ? null : bg && bg in BACKGROUNDS ? BACKGROUNDS[bg] : BACKGROUNDS.rafael;
+
+  const archImg = (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
+      src="/assets/hero/split-rafael-peier.jpg"
+      alt="A Tuscan farmhouse above olive groves and vineyard rows"
+      className={styles.archImg}
+    />
+  );
+  const heroText = (
+    <div className={styles.heroText}>
+      <p className={styles.eyebrow}>
+        {wedding.dateLabel} &middot; {wedding.locationLabel}
+      </p>
+      <h1 className={styles.title}>Weekend Schedule</h1>
+      <p className={styles.subtitle}>
+        A week of celebration, connection, and unforgettable moments in Italy.
+      </p>
+    </div>
+  );
 
   return (
     <div className={styles.page}>
@@ -101,7 +125,7 @@ export default async function OurWeekendPreviewPage({
       <main
         className={styles.container}
         data-theme={activeTheme}
-        data-style={suite ? "suite" : undefined}
+        data-style={clean ? "clean" : undefined}
       >
         <a href="/" className={styles.back}>
           <span aria-hidden="true">←</span> Back to Home
@@ -109,27 +133,26 @@ export default async function OurWeekendPreviewPage({
 
         {/* ---------- Hero ---------- */}
         <header className={styles.hero}>
-          {suite ? (
+          {style === "split" ? (
+            /* Two-column editorial: type beside the arch, filling the row. */
+            <div className={styles.heroSplit}>
+              {heroText}
+              <div className={styles.archFrame}>{archImg}</div>
+            </div>
+          ) : style === "band" ? (
+            /* Arch + type on a solid colour block — no empty cream. */
+            <div className={styles.heroBand}>
+              <div className={styles.archFrame}>{archImg}</div>
+              {heroText}
+            </div>
+          ) : style === "suite" ? (
+            /* Centered arch (kept for reference — reads too airy). */
             <>
-              {/* Crisp arch-framed photo — the image as a designed element,
-                  not a wash. Mirrors the arch cards on the board. */}
-              <div className={styles.archFrame}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/assets/hero/split-rafael-peier.jpg"
-                  alt="A Tuscan farmhouse above olive groves and vineyard rows"
-                  className={styles.archImg}
-                />
-              </div>
-              <p className={styles.eyebrow}>
-                {wedding.dateLabel} &middot; {wedding.locationLabel}
-              </p>
-              <h1 className={styles.title}>Weekend Schedule</h1>
-              <p className={styles.subtitle}>
-                A week of celebration, connection, and unforgettable moments in Italy.
-              </p>
+              <div className={styles.archFrame}>{archImg}</div>
+              {heroText}
             </>
           ) : (
+            /* Faded-photo default. */
             <>
               <p className={styles.eyebrow}>
                 {wedding.dateLabel} &middot; {wedding.locationLabel}
