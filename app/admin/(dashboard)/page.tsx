@@ -242,7 +242,6 @@ async function getDashboard() {
     .filter((p) => p.guests.length > 0 && !p.email && !p.phone)
     .reduce((s, p) => s + p.guests.length, 0);
   const unnamedGuests = allGuests.filter((g) => !g.first_name.trim()).length;
-  const missingMeal = attending.filter((g) => !g.meal_choice).length;
 
   /*
    * A guest shows up in several buckets at once (no contact AND awaiting), so
@@ -257,7 +256,6 @@ async function getDashboard() {
     p.guests.forEach((g) => attentionGuestIds.add(g.id));
   }
   allGuests.filter(isAwaiting).forEach((g) => attentionGuestIds.add(g.id));
-  attending.filter((g) => !g.meal_choice).forEach((g) => attentionGuestIds.add(g.id));
   allGuests.filter((g) => !g.first_name.trim()).forEach((g) => attentionGuestIds.add(g.id));
 
   const guestIssues = [
@@ -282,13 +280,8 @@ async function getDashboard() {
       tone: "warn" as const,
       href: "/admin/guests?tab=awaiting",
     },
-    {
-      key: "meal",
-      label: "Missing meal choice",
-      count: missingMeal,
-      tone: "info" as const,
-      href: "/admin/guests?tab=attending",
-    },
+    /* "Missing meal choice" removed — no menu exists to choose from, so it
+       flagged every accepting guest for something nobody could act on. */
     {
       key: "unnamed",
       label: "Unnamed guests",

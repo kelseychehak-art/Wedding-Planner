@@ -51,14 +51,13 @@ export function partyAttention(p: Party): AttentionItem[] {
     items.push({ key: "travel", label: "Travel info missing", tone: "warn" });
   }
 
-  const missingMeal = attending.filter((g) => !g.meal_choice).length;
-  if (missingMeal > 0) {
-    items.push({
-      key: "meal",
-      label: `${missingMeal} meal choice${missingMeal === 1 ? "" : "s"} missing`,
-      tone: "warn",
-    });
-  }
+  /*
+   * No meal-choice flag. meal_choice is free text with no menu behind it —
+   * there is no caterer and no venue contract yet — and the RSVP form has
+   * never collected it. Flagging it marked every accepting guest as needing
+   * attention for something nobody could act on, which buried the warnings
+   * that were real. Bring this back when there is a menu to choose from.
+   */
 
   const unnamed = p.guests.filter((g) => !g.first_name.trim()).length;
   if (unnamed > 0) {
@@ -74,9 +73,7 @@ export function guestAttention(g: Guest, party: Party): AttentionItem[] {
   if (isAwaiting(g)) {
     items.push({ key: "awaiting", label: "Awaiting RSVP", tone: "warn" });
   }
-  if (isAttending(g) && !g.meal_choice) {
-    items.push({ key: "meal", label: "Meal choice missing", tone: "warn" });
-  }
+  /* See partyAttention: no menu exists yet, so this is not actionable. */
   if (isAttending(g) && !partyHasTravel(party)) {
     items.push({ key: "travel", label: "Travel info missing", tone: "warn" });
   }

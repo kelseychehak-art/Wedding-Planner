@@ -25,8 +25,8 @@ export const siteContent = {
    * in and a mailto link appears on the RSVP page and in the FAQ at once.
    */
   contact: {
-    email: "",
-    label: "",
+    email: "chehakshultswedding@gmail.com",
+    label: "email us",
   },
   navigation: [
     { label: "Our Weekend", href: "/our-weekend" },

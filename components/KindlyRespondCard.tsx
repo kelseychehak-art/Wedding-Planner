@@ -29,11 +29,10 @@ export default function KindlyRespondCard() {
   const [partyName, setPartyName] = useState("");
   const [email, setEmail] = useState("");
   const [party, setParty] = useState<RsvpParty | null>(null);
-  const [response, setResponse] = useState<"accept" | "decline">("accept");
   const [guests, setGuests] = useState<RsvpGuest[]>([emptyGuest()]);
-  const [dietary, setDietary] = useState("");
   const [searching, setSearching] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [nudge, setNudge] = useState(false);
 
   /*
    * Every step swaps the card's contents, and the page doesn't move on its own.
@@ -80,18 +79,13 @@ export default function KindlyRespondCard() {
               id: g.id,
               first_name: g.first_name,
               is_child: g.is_child,
-              rsvp_status: g.rsvp_status === "Declined" ? "Declined" : "Confirmed",
+              /* Keep "Invited" as-is so an unanswered guest reads as
+                 unanswered, rather than being pre-accepted on their behalf. */
+              rsvp_status: g.rsvp_status ?? "Invited",
               meal_choice: g.meal_choice,
               dietary_restrictions: g.dietary_restrictions,
             })),
           );
-          setResponse(
-            result.guests.some((g) => g.rsvp_status !== "Declined") ? "accept" : "decline",
-          );
-          const existingDietary = result.guests
-            .map((g) => g.dietary_restrictions)
-            .find((d) => d && d.trim());
-          if (existingDietary) setDietary(existingDietary);
         }
         setPhase("found");
       }
@@ -102,16 +96,27 @@ export default function KindlyRespondCard() {
     }
   }
 
+  /* Everyone named has to have an answer — otherwise a household submits and
+     one person is silently left as "Invited", which reads as "never replied". */
+  const named = guests.filter((g) => g.first_name.trim());
+  const unanswered = named.filter((g) => g.rsvp_status !== "Confirmed" && g.rsvp_status !== "Declined");
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!party) return;
+    if (unanswered.length > 0) {
+      setNudge(true);
+      return;
+    }
     setSubmitting(true);
     try {
-      const dietaryNote = dietary.trim() || null;
-      const status = response === "decline" ? ("Declined" as const) : ("Confirmed" as const);
-      const finalGuests: RsvpGuest[] = guests
-        .filter((g) => g.first_name.trim())
-        .map((g) => ({ ...g, rsvp_status: status, dietary_restrictions: dietaryNote }));
+      /* Each guest carries their own answer and their own notes. Dietary is
+         sent for everyone (empty included) so clearing a note actually clears
+         it — submit_rsvp treats a present key as the answer. */
+      const finalGuests: RsvpGuest[] = named.map((g) => ({
+        ...g,
+        dietary_restrictions: g.rsvp_status === "Confirmed" ? g.dietary_restrictions?.trim() || null : null,
+      }));
 
       await submitRsvp(party.id, finalGuests);
       setPhase("submitted");
@@ -122,12 +127,8 @@ export default function KindlyRespondCard() {
     }
   }
 
-  function updateGuestName(index: number, value: string) {
-    setGuests((prev) => prev.map((g, i) => (i === index ? { ...g, first_name: value } : g)));
-  }
-
-  function toggleGuestChild(index: number) {
-    setGuests((prev) => prev.map((g, i) => (i === index ? { ...g, is_child: !g.is_child } : g)));
+  function setGuestField(index: number, patch: Partial<RsvpGuest>) {
+    setGuests((prev) => prev.map((g, i) => (i === index ? { ...g, ...patch } : g)));
   }
 
   function addGuestRow() {
@@ -145,9 +146,9 @@ export default function KindlyRespondCard() {
         <Illustration name="heart" tone="terracotta" size={34} />
         <h2 className={styles.thanksTitle}>Thank You!</h2>
         <p className={styles.thanksBody}>
-          {response === "decline"
-            ? "We're sorry you can't make it — you'll be missed. Thank you for letting us know."
-            : "Your response has been recorded. We can't wait to celebrate with you in Italy!"}
+          {guests.some((g) => g.rsvp_status === "Confirmed")
+            ? "Your response has been recorded. We can't wait to celebrate with you in Italy!"
+            : "We're sorry you can't make it — you'll be missed. Thank you for letting us know."}
         </p>
       </div>
     );
@@ -221,82 +222,115 @@ export default function KindlyRespondCard() {
   return (
     <form className={styles.form} onSubmit={handleSubmit} ref={setCard}>
       <section className={styles.section}>
-        <p className={styles.stepLabel}>1. Your Party</p>
+        <p className={styles.stepLabel}>1. Who&rsquo;s Coming?</p>
         <p className={styles.stepHelp}>
-          Found you{party?.name ? `, ${party.name}` : ""}! Confirm who we should plan for.
+          Found you{party?.name ? `, ${party.name}` : ""}! Please answer for each person &mdash;
+          everyone can reply differently.
         </p>
+
         <div className={styles.guestList}>
-          {guests.map((guest, index) => (
-            <div className={styles.guestRow} key={index}>
-              <input
-                type="text"
-                placeholder="Guest name"
-                className={styles.input}
-                value={guest.first_name}
-                onChange={(e) => updateGuestName(index, e.target.value)}
-              />
-              <label className={styles.childToggle}>
-                <input
-                  type="checkbox"
-                  checked={guest.is_child}
-                  onChange={() => toggleGuestChild(index)}
-                />
-                Child
-              </label>
-              {guests.length > 1 && (
-                <button
-                  type="button"
-                  className={styles.removeGuest}
-                  onClick={() => removeGuestRow(index)}
-                  aria-label="Remove guest"
+          {guests.map((guest, index) => {
+            const attending = guest.rsvp_status === "Confirmed";
+            const declined = guest.rsvp_status === "Declined";
+            /* Only rows added in this session can be removed. Removing an
+               invited guest here never deleted them — submit only updates and
+               inserts — so the row vanished and they stayed "Invited" forever.
+               For a real invitee the honest answer is Can't make it. */
+            const isNewRow = !guest.id;
+
+            return (
+              <div className={styles.guestCard} key={guest.id ?? `new-${index}`}>
+                <div className={styles.guestRow}>
+                  <input
+                    type="text"
+                    placeholder="Guest name"
+                    className={styles.input}
+                    value={guest.first_name}
+                    onChange={(e) => setGuestField(index, { first_name: e.target.value })}
+                  />
+                  <label className={styles.childToggle}>
+                    <input
+                      type="checkbox"
+                      checked={guest.is_child}
+                      onChange={() => setGuestField(index, { is_child: !guest.is_child })}
+                    />
+                    Child
+                  </label>
+                  {isNewRow && guests.length > 1 && (
+                    <button
+                      type="button"
+                      className={styles.removeGuest}
+                      onClick={() => removeGuestRow(index)}
+                      aria-label={`Remove ${guest.first_name || "guest"}`}
+                    >
+                      &times;
+                    </button>
+                  )}
+                </div>
+
+                <div
+                  className={styles.choices}
+                  role="radiogroup"
+                  aria-label={`Will ${guest.first_name || "this guest"} attend?`}
                 >
-                  &times;
-                </button>
-              )}
-            </div>
-          ))}
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={attending}
+                    className={`${styles.choice} ${attending ? styles.choiceAccept : ""}`}
+                    onClick={() => setGuestField(index, { rsvp_status: "Confirmed" })}
+                  >
+                    Joyfully accepts
+                  </button>
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={declined}
+                    className={`${styles.choice} ${declined ? styles.choiceDecline : ""}`}
+                    onClick={() =>
+                      setGuestField(index, { rsvp_status: "Declined", dietary_restrictions: null })
+                    }
+                  >
+                    Regretfully declines
+                  </button>
+                </div>
+
+                {/* Dietary notes belong to the person eating, so they only
+                    appear once that person is actually coming. */}
+                {attending && (
+                  <label className={styles.dietaryField}>
+                    <span className={styles.fieldLabel}>
+                      Dietary restrictions or allergies (optional)
+                    </span>
+                    <input
+                      type="text"
+                      className={styles.input}
+                      placeholder="e.g. vegetarian, gluten-free, nut allergy"
+                      maxLength={250}
+                      value={guest.dietary_restrictions ?? ""}
+                      onChange={(e) =>
+                        setGuestField(index, { dietary_restrictions: e.target.value })
+                      }
+                    />
+                  </label>
+                )}
+              </div>
+            );
+          })}
+
           <button type="button" className={styles.addGuest} onClick={addGuestRow}>
             + Add Guest
           </button>
         </div>
-      </section>
 
-      <section className={styles.section}>
-        <p className={styles.stepLabel}>2. Will You Be Joining Us?</p>
-        <div className={styles.choices} role="radiogroup" aria-label="RSVP response">
-          <button
-            type="button"
-            role="radio"
-            aria-checked={response === "accept"}
-            className={`${styles.choice} ${response === "accept" ? styles.choiceAccept : ""}`}
-            onClick={() => setResponse("accept")}
-          >
-            Joyfully Accepts
-          </button>
-          <button
-            type="button"
-            role="radio"
-            aria-checked={response === "decline"}
-            className={`${styles.choice} ${response === "decline" ? styles.choiceDecline : ""}`}
-            onClick={() => setResponse("decline")}
-          >
-            Regretfully Declines
-          </button>
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <p className={styles.stepLabel}>3. Any Dietary Restrictions or Allergies?</p>
-        <p className={styles.stepHelp}>Let us know so we can plan accordingly.</p>
-        <textarea
-          className={styles.textarea}
-          placeholder="e.g. Vegetarian, gluten-free, nut allergy, etc."
-          maxLength={250}
-          rows={3}
-          value={dietary}
-          onChange={(e) => setDietary(e.target.value)}
-        />
-        <span className={styles.counter}>{dietary.length} / 250</span>
+        {nudge && unanswered.length > 0 && (
+          <p className={styles.error}>
+            Please choose an answer for{" "}
+            {unanswered.map((g) => g.first_name.trim()).filter(Boolean).join(", ") ||
+              "each guest"}
+            .
+          </p>
+        )}
       </section>
 
       <button type="submit" className={`btn-primary ${styles.submit}`} disabled={submitting}>

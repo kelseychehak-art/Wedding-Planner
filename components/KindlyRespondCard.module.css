@@ -166,6 +166,24 @@
   color: var(--color-terracotta);
 }
 
+/* One card per person — each carries that person's own answer and notes. */
+.guestCard {
+  padding: 16px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-card);
+  background: var(--color-paper);
+}
+
+.dietaryField {
+  display: block;
+  margin-top: 14px;
+}
+
+.dietaryField .fieldLabel {
+  display: block;
+  margin-bottom: 6px;
+}
+
 /* Accept / decline choices */
 .choices {
   display: flex;
