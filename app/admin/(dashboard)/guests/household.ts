@@ -132,7 +132,23 @@ export function householdNudges(p: Party): HouseholdNudge[] {
     out.push({ partyId: p.id, message: "Plus-one still needs a name before invitations go out." });
   }
 
-  if (p.household_type !== "single" && p.guests.length === 1) {
+  /* An allowance is a seat that's counted but not yet attached to a person —
+     fine for now, but it needs a name before stationery. */
+  const pending = Math.max(
+    0,
+    (p.plus_one_allowance ?? 0) - p.guests.filter((g) => g.is_plus_one).length
+  );
+  if (pending > 0) {
+    out.push({
+      partyId: p.id,
+      message: `${pending} plus-${pending === 1 ? "one" : "ones"} counted but not named yet.`,
+    });
+  }
+
+  /* Head count, not row count — a single + guest with one named guest and a
+     granted seat is correctly filled, and shouldn't be flagged. */
+  const headCount = p.guests.length + pending;
+  if (p.household_type !== "single" && headCount === 1) {
     out.push({
       partyId: p.id,
       message: `Only one guest, but grouped as "${HOUSEHOLD_LABEL[p.household_type] ?? p.household_type}".`,

@@ -29,6 +29,7 @@ export type PartyDraft = {
   household_surname: string;
   display_name_override: string;
   formal_name_override: string;
+  plus_one_allowance: number;
   email: string;
   phone: string;
   mailing_address: string;
@@ -75,6 +76,7 @@ export function emptyPartyDraft(): PartyDraft {
     household_surname: "",
     display_name_override: "",
     formal_name_override: "",
+    plus_one_allowance: 0,
     email: "",
     phone: "",
     mailing_address: "",
@@ -210,6 +212,23 @@ export default function PartyForm({
           />
           <span className={styles.fieldHint}>
             Kept as a fallback for parties with no guests entered yet.
+          </span>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Plus-ones allowed</label>
+          <input
+            className={styles.input}
+            type="number"
+            min={0}
+            max={10}
+            value={draft.plus_one_allowance}
+            onChange={(e) =>
+              set("plus_one_allowance", Math.max(0, Number(e.target.value) || 0))
+            }
+          />
+          <span className={styles.fieldHint}>
+            Counted in the totals straight away. Add the guest below once you know the name — the
+            total won&rsquo;t change.
           </span>
         </div>
         <div className={styles.field}>

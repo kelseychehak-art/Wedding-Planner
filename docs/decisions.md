@@ -207,3 +207,24 @@ content. `tabular-nums` additionally keeps digits a fixed width so columns of fi
 it should be a deliberate design call, not a side effect of this fix.
 **Note:** `MetricStrip` previously carried a local `lining-nums` rule; that patched one component
 while every other number in the admin stayed ambiguous. The rule now lives once on the shell.
+
+### D16 — Plus-ones are an allowance on the household, not a placeholder person (resolved 2026-07-21)
+**Decision:** `parties.plus_one_allowance` (integer) records how many plus-one **seats** a household
+is granted. A plus-one whose name is known is an ordinary `guests` row with `is_plus_one = true`.
+
+    unfilled seats = max(0, plus_one_allowance − named plus-ones)
+    head count     = guests + unfilled seats
+
+**Why:** the head count is right the moment you grant the seat, and **does not change** when you
+later fill in the name — the named row replaces the unfilled seat rather than adding to it. No
+double counting, nothing to decrement by hand.
+**Rejected:** creating a nameless `guests` row as a placeholder. It trips the "unnamed guest"
+warning, exports blank, and can't be distinguished from a real guest you forgot to finish.
+**Counting:** unfilled seats count toward **Invited** and **Awaiting RSVP**, and are assumed
+**adults**. They are not counted as attending or declined — nobody has answered for them.
+**Seeded:** every household already typed `single_plus_guest` with no named plus-one was granted 1,
+since that type means precisely "one person plus a guest". Everything else starts at 0 — granting a
+plus-one stays a deliberate act.
+**Nudges:** an unfilled seat raises "counted but not named yet" (it needs a name before stationery).
+The "only one guest but grouped as X" nudge now compares against the **head count**, so a single +
+guest with one named guest and one granted seat is correctly considered complete.

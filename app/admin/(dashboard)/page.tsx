@@ -23,6 +23,7 @@ type Guest = {
   id: string;
   first_name: string;
   is_child: boolean;
+  is_plus_one?: boolean;
   rsvp_status: string;
   meal_choice: string | null;
   created_at?: string | null;
@@ -42,6 +43,8 @@ type Party = {
   email: string | null;
   phone: string | null;
   side: string | null;
+  /** Plus-one seats granted but possibly not yet named. */
+  plus_one_allowance?: number | null;
   guests: Guest[];
   travel: Travel;
   created_at?: string | null;
@@ -150,7 +153,15 @@ async function getDashboard() {
   const allGuests = partyList.flatMap((p) => p.guests ?? []);
 
   // ---- Metrics (real, from guest data) ----
-  const invited = allGuests.length;
+  /* Plus-one seats granted but not yet named — real people, so they count.
+     Mirrors unfilledPlusOnes() on the Guest List. */
+  const pendingPlusOnes = partyList.reduce(
+    (n, p) =>
+      n +
+      Math.max(0, (p.plus_one_allowance ?? 0) - p.guests.filter((g) => g.is_plus_one).length),
+    0
+  );
+  const invited = allGuests.length + pendingPlusOnes;
   const attending = allGuests.filter(isAttending);
   const declinedGuests = allGuests.filter((g) => g.rsvp_status === "Declined");
   const awaitingGuests = allGuests.filter(isAwaiting);
@@ -159,9 +170,9 @@ async function getDashboard() {
   const pct = (n: number) => (invited ? Math.round((n / invited) * 100) : 0);
 
   /* Same adult/child split as the Guest List, so the two pages agree. */
-  const split = (list: Guest[]) => {
+  const split = (list: Guest[], extraAdults = 0) => {
     const c = list.filter((g) => g.is_child).length;
-    const a = list.length - c;
+    const a = list.length - c + extraAdults;
     return `${a} ${a === 1 ? "adult" : "adults"} · ${c} ${c === 1 ? "child" : "children"}`;
   };
   const attendingParties = partyList.filter((p) => p.guests.some(isAttending));
@@ -370,7 +381,7 @@ async function getDashboard() {
   return {
     metrics: {
       invited,
-      invitedSplit: split(allGuests),
+      invitedSplit: split(allGuests, pendingPlusOnes),
       partyCount: partyList.filter((p) => p.guests.length > 0).length,
       attending: attending.length,
       attendingSplit: split(attending),
@@ -378,9 +389,9 @@ async function getDashboard() {
       declined,
       declinedSplit: split(declinedGuests),
       declinedPct: pct(declined),
-      awaiting,
-      awaitingSplit: split(awaitingGuests),
-      awaitingPct: pct(awaiting),
+      awaiting: awaiting + pendingPlusOnes,
+      awaitingSplit: split(awaitingGuests, pendingPlusOnes),
+      awaitingPct: pct(awaiting + pendingPlusOnes),
       travelSubmitted,
       travelNeeded,
       attentionCount: guestIssues.reduce((s, i) => s + i.count, 0),

@@ -119,6 +119,8 @@ export type Party = {
   household_surname: string | null;
   display_name_override: string | null;
   formal_name_override: string | null;
+  /** Plus-one seats granted to this household (see unfilledPlusOnes). */
+  plus_one_allowance: number;
   guests: Guest[];
   travel: Travel;
   lodging: Lodging[];
@@ -222,6 +224,22 @@ async function errorText(res: Response, fallback: string): Promise<string> {
   }
 }
 
+/*
+ * Plus-one seats granted but not yet attached to a name. Named plus-ones are
+ * ordinary guest rows flagged is_plus_one, so the head count is
+ * `guests.length + unfilledPlusOnes(party)` — correct the moment a seat is
+ * granted, and unchanged when the name is later filled in.
+ */
+export function unfilledPlusOnes(p: Party): number {
+  const named = p.guests.filter((g) => g.is_plus_one).length;
+  return Math.max(0, (p.plus_one_allowance ?? 0) - named);
+}
+
+/** Everyone this household covers, named or not. */
+export function partyHeadCount(p: Party): number {
+  return p.guests.length + unfilledPlusOnes(p);
+}
+
 /** Attending, but hasn't signed up for anything yet. */
 function needsActivityFollowUp(g: Guest) {
   return isAttending(g) && (g.activities?.length ?? 0) === 0;
@@ -254,6 +272,7 @@ function partyToDraft(p: Party): PartyDraft {
     household_surname: p.household_surname ?? "",
     display_name_override: p.display_name_override ?? "",
     formal_name_override: p.formal_name_override ?? "",
+    plus_one_allowance: p.plus_one_allowance ?? 0,
     email: p.email ?? "",
     phone: p.phone ?? "",
     mailing_address: p.mailing_address ?? "",
@@ -392,7 +411,10 @@ export default function GuestsManager({
   /* ---- Metrics (from real data; activities has no backend yet) ---- */
   const metrics = useMemo(() => {
     const allGuests = parties.flatMap((p) => p.guests);
-    const invited = allGuests.length;
+    /* Plus-one seats granted but not yet named. They're people who are coming,
+       so they belong in the head count — assumed adults until told otherwise. */
+    const pendingPlusOnes = parties.reduce((n, p) => n + unfilledPlusOnes(p), 0);
+    const invited = allGuests.length + pendingPlusOnes;
     const attendingGuests = allGuests.filter(isAttending);
     const declinedGuests = allGuests.filter((g) => g.rsvp_status === "Declined");
     const awaitingGuests = allGuests.filter(isAwaiting);
@@ -400,9 +422,9 @@ export default function GuestsManager({
 
     /* Every headline number carries its adult/child split — catering, seating
        and pricing all turn on it, so it shouldn't need a second click. */
-    const split = (list: Guest[]) => {
+    const split = (list: Guest[], extraAdults = 0) => {
       const children = list.filter((g) => g.is_child).length;
-      const adults = list.length - children;
+      const adults = list.length - children + extraAdults;
       return `${adults} ${adults === 1 ? "adult" : "adults"} · ${children} ${
         children === 1 ? "child" : "children"
       }`;
@@ -423,7 +445,8 @@ export default function GuestsManager({
 
     return {
       invited,
-      invitedSplit: split(allGuests),
+      invitedSplit: split(allGuests, pendingPlusOnes),
+      pendingPlusOnes,
       partyCount: invitedParties,
       attending: attendingGuests.length,
       attendingSplit: split(attendingGuests),
@@ -431,9 +454,10 @@ export default function GuestsManager({
       declined: declinedGuests.length,
       declinedSplit: split(declinedGuests),
       declinedPct: pct(declinedGuests.length),
-      awaiting: awaitingGuests.length,
-      awaitingSplit: split(awaitingGuests),
-      awaitingPct: pct(awaitingGuests.length),
+      /* An unnamed plus-one hasn't responded, so they're awaiting too. */
+      awaiting: awaitingGuests.length + pendingPlusOnes,
+      awaitingSplit: split(awaitingGuests, pendingPlusOnes),
+      awaitingPct: pct(awaitingGuests.length + pendingPlusOnes),
       travelSubmitted,
       travelNeeded,
       attentionCount,
@@ -450,7 +474,12 @@ export default function GuestsManager({
       value: String(metrics.invited),
       label: "Invited",
       sub: metrics.invitedSplit,
-      sub2: `Across ${metrics.partyCount} ${metrics.partyCount === 1 ? "party" : "parties"}`,
+      sub2:
+        metrics.pendingPlusOnes > 0
+          ? `${metrics.partyCount} parties · incl. ${metrics.pendingPlusOnes} plus-${
+              metrics.pendingPlusOnes === 1 ? "one" : "ones"
+            } to name`
+          : `Across ${metrics.partyCount} ${metrics.partyCount === 1 ? "party" : "parties"}`,
     },
     {
       key: "attending",
@@ -651,6 +680,7 @@ export default function GuestsManager({
           household_surname: draft.household_surname,
           display_name_override: draft.display_name_override,
           formal_name_override: draft.formal_name_override,
+          plus_one_allowance: draft.plus_one_allowance,
         }),
       });
       if (!partyRes.ok) {
@@ -732,6 +762,7 @@ export default function GuestsManager({
         household_surname: party.household_surname ?? null,
         display_name_override: party.display_name_override ?? null,
         formal_name_override: party.formal_name_override ?? null,
+        plus_one_allowance: party.plus_one_allowance ?? 0,
         guests: savedGuests,
         travel,
         /* Room assignments are managed under Lodging, not this form — keep
@@ -1322,8 +1353,8 @@ function PartyTable({
                     <span className={styles.householdTag}>
                       {HOUSEHOLD_LABEL[p.household_type] ?? p.household_type}
                     </span>
-                    {p.guests.length}{" "}
-                    {p.guests.length === 1 ? "guest" : "guests"}
+                    {partyHeadCount(p)}{" "}
+                    {partyHeadCount(p) === 1 ? "guest" : "guests"}
                     {p.side ? ` · ${p.side}` : ""}
                   </span>
                   <ul className={styles.memberList}>
@@ -1339,6 +1370,14 @@ function PartyTable({
                         </span>
                       </li>
                     ))}
+                    {unfilledPlusOnes(p) > 0 && (
+                      <li className={styles.memberLine}>
+                        <span className={`${styles.memberName} ${styles.dim}`}>
+                          <em>{`Plus-one${unfilledPlusOnes(p) > 1 ? ` ×${unfilledPlusOnes(p)}` : ""} — to be named`}</em>
+                        </span>
+                        <span className={styles.memberKind}>Plus-one</span>
+                      </li>
+                    )}
                   </ul>
                 </td>
                 {show("child") && (
