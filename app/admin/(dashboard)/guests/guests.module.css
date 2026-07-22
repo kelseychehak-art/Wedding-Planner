@@ -821,6 +821,19 @@
 
 /* ---- Reordering guests within a party ---- */
 
+.formHint {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--olive-muted);
+}
+
+.formError {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--terracotta-dark);
+}
+
 .reorderHint {
   font-family: var(--font-sans);
   font-size: 11.5px;

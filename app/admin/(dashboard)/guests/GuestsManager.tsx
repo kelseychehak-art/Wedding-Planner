@@ -212,6 +212,16 @@ const SORT_OPTIONS = [
   { value: "attention", label: "Most issues first" },
 ];
 
+/** Pull a useful message out of a failed response, falling back to `fallback`. */
+async function errorText(res: Response, fallback: string): Promise<string> {
+  try {
+    const body = await res.json();
+    return typeof body?.error === "string" ? body.error : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 /** Attending, but hasn't signed up for anything yet. */
 function needsActivityFollowUp(g: Guest) {
   return isAttending(g) && (g.activities?.length ?? 0) === 0;
@@ -349,6 +359,7 @@ export default function GuestsManager({
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<PartyDraft>(emptyPartyDraft());
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const editRef = useRef<HTMLDivElement>(null);
 
   /* Close row menus on any outside click. */
@@ -580,6 +591,7 @@ export default function GuestsManager({
   /* ---- Edit / save / delete (unchanged flow) ---- */
   function startAdd() {
     setDraft(emptyPartyDraft());
+    setSaveError(null);
     setEditingId("new");
     requestAnimationFrame(() =>
       editRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -587,6 +599,7 @@ export default function GuestsManager({
   }
   function startEdit(p: Party) {
     setDraft(partyToDraft(p));
+    setSaveError(null);
     setEditingId(p.id);
     setMenuId(null);
     requestAnimationFrame(() =>
@@ -596,11 +609,12 @@ export default function GuestsManager({
   function cancel() {
     setEditingId(null);
     setDraft(emptyPartyDraft());
+    setSaveError(null);
   }
 
   async function saveDraft() {
-    if (!draft.name.trim()) return;
     setSaving(true);
+    setSaveError(null);
     try {
       const partyRes = await fetch("/api/admin/parties", {
         method: "POST",
@@ -613,9 +627,18 @@ export default function GuestsManager({
           mailing_address: draft.mailing_address,
           side: draft.side,
           notes: draft.notes,
+          /* These four were missing, and because the RPC assigned every column
+             unconditionally, omitting them wiped the stored values on save. */
+          household_type: draft.household_type,
+          household_surname: draft.household_surname,
+          display_name_override: draft.display_name_override,
+          formal_name_override: draft.formal_name_override,
         }),
       });
-      if (!partyRes.ok) return;
+      if (!partyRes.ok) {
+        setSaveError(await errorText(partyRes, "Couldn't save the party."));
+        return;
+      }
       const { party } = await partyRes.json();
       const partyId = party.id as string;
 
@@ -624,6 +647,7 @@ export default function GuestsManager({
       }
 
       const savedGuests: Guest[] = [];
+      const failed: string[] = [];
       for (const [index, g] of draft.guests.entries()) {
         if (!g.first_name.trim()) continue;
         const gRes = await fetch("/api/admin/guests", {
@@ -632,19 +656,27 @@ export default function GuestsManager({
           /* Position in the form is the stored order. */
           body: JSON.stringify({ ...g, party_id: partyId, sort_order: index }),
         });
+        const prior = parties.flatMap((p) => p.guests).find((x) => x.id === g.id);
         if (gRes.ok) {
           const { guest } = await gRes.json();
           /* The upsert returns the guest row alone; activities and events come
              from admin_list_guests, so preserve what we already had for them. */
-          const prior = parties
-            .flatMap((p) => p.guests)
-            .find((x) => x.id === guest.id);
           savedGuests.push({
             ...guest,
             activities: prior?.activities ?? [],
             events: prior?.events ?? [],
           });
+        } else {
+          failed.push(g.first_name.trim());
+          /* Keep the guest in local state. Dropping them here would make a
+             failed save look like the person had been deleted. */
+          if (prior) savedGuests.push(prior);
         }
+      }
+      if (failed.length > 0) {
+        setSaveError(
+          `Saved the party, but couldn't save ${failed.join(", ")}. Try again — nothing was deleted.`
+        );
       }
 
       let travel: Travel = null;
@@ -695,7 +727,10 @@ export default function GuestsManager({
           ? prev.map((p) => (p.id === partyId ? updatedParty : p))
           : [...prev, updatedParty];
       });
-      cancel();
+      /* Leave the form open if anything failed, so the edits aren't lost. */
+      if (failed.length === 0) cancel();
+    } catch {
+      setSaveError("Couldn't reach the server. Your changes are still on screen — try again.");
     } finally {
       setSaving(false);
     }
@@ -845,6 +880,7 @@ export default function GuestsManager({
             onSave={saveDraft}
             onCancel={cancel}
             saving={saving}
+            error={saveError}
           />
         </div>
       )}

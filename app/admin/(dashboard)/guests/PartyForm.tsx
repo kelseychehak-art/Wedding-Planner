@@ -96,17 +96,28 @@ export default function PartyForm({
   onSave,
   onCancel,
   saving,
+  error,
 }: {
   draft: PartyDraft;
   setDraft: (d: PartyDraft) => void;
   onSave: () => void;
   onCancel: () => void;
   saving: boolean;
+  /** Set when the last save failed; shown beside the button. */
+  error?: string | null;
 }) {
   /* Native HTML5 drag for the mouse; the arrow buttons cover keyboard and
      touch, which drag-and-drop alone would shut out. */
   const [dragging, setDragging] = useState<number | null>(null);
   const [dragOver, setDragOver] = useState<number | null>(null);
+
+  /* The household name is derived, so any one of these is enough to identify
+     the party. Requiring the legacy field silently disabled Save. */
+  const hasName =
+    Boolean(draft.name.trim()) ||
+    Boolean(draft.display_name_override.trim()) ||
+    Boolean(draft.household_surname.trim()) ||
+    draft.guests.some((g) => g.first_name.trim());
 
   function set<K extends keyof PartyDraft>(key: K, value: PartyDraft[K]) {
     setDraft({ ...draft, [key]: value });
@@ -438,12 +449,24 @@ export default function PartyForm({
       </div>
 
       <div className={styles.formActions}>
-        <button type="button" className="btn-primary" onClick={onSave} disabled={saving || !draft.name.trim()}>
+        <button type="button" className="btn-primary" onClick={onSave} disabled={saving || !hasName}>
           {saving ? "Saving…" : "Save"}
         </button>
         <button type="button" className={styles.linkBtn} onClick={onCancel}>
           Cancel
         </button>
+        {/* Say why the button is dead, rather than leaving it mysteriously
+            greyed out — the household name can come from any of three places. */}
+        {!hasName && (
+          <span className={styles.formHint}>
+            Add a display name, a legacy party name, or at least one guest.
+          </span>
+        )}
+        {error && (
+          <span className={styles.formError} role="alert">
+            {error}
+          </span>
+        )}
       </div>
     </div>
   );
