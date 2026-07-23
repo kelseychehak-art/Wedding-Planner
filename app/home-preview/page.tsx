@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Illustration from "@/components/Illustration";
-import PostageStamp from "@/components/PostageStamp";
 import ScallopFrame from "@/components/ScallopFrame";
 import { siteContent } from "@/data/siteContent";
 import styles from "./home-preview.module.css";
@@ -129,8 +128,16 @@ export default function HomePreviewPage() {
 
           <p className={styles.inviteLine}>invite you to celebrate their wedding</p>
 
-          <span className={styles.rule} aria-hidden="true">
-            <i /> <Illustration name="heart" tone="terracotta" size={13} /> <i />
+          {/* Wavy tricolour line — the "brand element" from the board. */}
+          <span className={styles.wave} aria-hidden="true">
+            <svg viewBox="0 0 260 22" preserveAspectRatio="none" fill="none">
+              <path d="M2 6 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0"
+                stroke="var(--rust)" strokeWidth="2" strokeLinecap="round" />
+              <path d="M2 11 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0"
+                stroke="var(--sage)" strokeWidth="2" strokeLinecap="round" />
+              <path d="M2 16 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0"
+                stroke="var(--sky-deep)" strokeWidth="2" strokeLinecap="round" />
+            </svg>
           </span>
 
           <p className={styles.date}>{wedding.dateLabel}</p>
@@ -192,14 +199,29 @@ export default function HomePreviewPage() {
           />
           <span className={styles.scallopEdge} aria-hidden="true" />
 
+          {/* Clean round postmark, not the engraved stamp. */}
           <span className={styles.stamp} aria-hidden="true">
-            <PostageStamp rotate={6} />
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="1.4"
+                strokeDasharray="1 4.4" strokeLinecap="round" />
+              <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" strokeWidth="1" />
+              <path id="stampTop" d="M20 50a30 30 0 0 1 60 0" fill="none" />
+              <path id="stampBot" d="M20 50a30 30 0 0 0 60 0" fill="none" />
+              <text className={styles.stampText}>
+                <textPath href="#stampTop" startOffset="50%" textAnchor="middle">TUSCANY</textPath>
+              </text>
+              <text className={styles.stampText}>
+                <textPath href="#stampBot" startOffset="50%" textAnchor="middle">ITALIA</textPath>
+              </text>
+              <path d="M50 44c-3-4-9-1-9 3 0 3 5 6 9 9 4-3 9-6 9-9 0-4-6-7-9-3Z"
+                fill="currentColor" />
+            </svg>
           </span>
 
           <div className={styles.highlights}>
-            <ScallopFrame color="var(--color-olive)" target={26} inset={6} />
+            <ScallopFrame color="var(--color-citrus-gold)" target={26} inset={6} />
             <span className={styles.highlightsHead}>
-              <Illustration name="cypress" tone="olive" size={18} /> Weekend Highlights
+              <Illustration name="cypress" tone="gold" size={18} /> Weekend Highlights
             </span>
             <p className={styles.highlightsBody}>
               Explore the key events, experiences, and moments we can&rsquo;t wait to share with you.
