@@ -46,10 +46,14 @@
   text-align: center;
 }
 
+/* Height scales with width (aspect-ratio) and the polaroids use %-based
+   offsets, so the container always fully contains them — no overflow onto
+   the text below, at any screen width. */
 .photos {
   position: relative;
-  height: 296px;
-  margin: 4px 0 26px;
+  width: 100%;
+  aspect-ratio: 1 / 0.95;
+  margin: 4px 0 22px;
 }
 
 .snap {
@@ -68,16 +72,16 @@
 }
 
 .snapBack {
-  width: 52%;
-  top: 6px;
-  left: 10px;
+  width: 50%;
+  top: 2%;
+  left: 2%;
   transform: rotate(-5deg);
 }
 
 .snapFront {
-  width: 56%;
-  top: 44px;
-  right: 8px;
+  width: 55%;
+  top: 13%;
+  right: 2%;
   transform: rotate(3deg);
 }
 
