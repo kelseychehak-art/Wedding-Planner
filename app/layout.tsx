@@ -4,10 +4,13 @@ import {
   Caveat,
   Cormorant_Garamond,
   Fraunces,
+  Great_Vibes,
   Instrument_Sans,
+  Parisienne,
   Pinyon_Script,
   Playfair_Display,
   Sacramento,
+  Tangerine,
 } from "next/font/google";
 import "../styles/tokens.css";
 import "./globals.css";
@@ -76,6 +79,26 @@ const allura = Allura({
   display: "swap",
 });
 
+// Candidate accentuated scripts (for the name-script comparison).
+const greatVibes = Great_Vibes({
+  variable: "--font-greatvibes",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+const tangerine = Tangerine({
+  variable: "--font-tangerine",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+});
+const parisienne = Parisienne({
+  variable: "--font-parisienne",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Kelsey & Andrew's Wedding Week",
   description: "Join us for a week in Italy — Kelsey & Andrew's Wedding Week.",
@@ -89,7 +112,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable} ${allura.variable}`}
+      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable} ${allura.variable} ${greatVibes.variable} ${tangerine.variable} ${parisienne.variable}`}
     >
       <body>{children}</body>
     </html>
