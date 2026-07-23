@@ -307,3 +307,19 @@ print-resolution files in one email; scraped web images are 72dpi and unusable f
 **Not built:** a runtime "Extract with AI" button. That needs an Anthropic API key and the SDK,
 neither of which this repo has. Extraction is done by hand in-session for now, writing into the same
 schema — so wiring the button later changes nothing about the data.
+
+### D20 — Mobile is first-class, and "works at 375–390px" is an acceptance criterion (2026-07-22)
+**Decision:** A large share of guests reach the site on their phones — often the *only* way they'll
+see it (checking travel, schedule, and RSVP on the go). So the phone layout is the **primary
+target**, and desktop is the enhancement layered on top — not the other way around. `CLAUDE.md`
+already called `767px` the "dominant" breakpoint; this makes it a **hard rule** with teeth.
+
+**What changes:** a guest-facing page is **not done** until it is genuinely good at **375–390px** —
+no horizontal scroll, layouts that reflow (stack/wrap/collapse) rather than shrink, body type ≥16px,
+tap targets ≥44px, the hero legible in portrait, and the RSVP form full-width and reachable.
+"Verify at phone width" is now part of the definition of done, not a later polish pass. Full
+checklist lives in `docs/design-system.md` → "Mobile acceptance."
+
+**Why now:** the current live pages don't meet this bar on mobile. The redesign already in flight
+should treat mobile as the design's spine, and every new page (guest **and** admin) inherits this
+requirement going forward.

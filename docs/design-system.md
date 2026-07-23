@@ -205,3 +205,26 @@ RSVP is the exception (drops `KindlyRespondCard` instead of sections).
 | `max-width: 1099px` | page-shell gutter step |
 
 Reuse these; do not introduce new breakpoint values.
+
+### Mobile acceptance (first-class — a page is not done until it passes)
+
+A large share of guests reach the site on phones, so **mobile is the primary target, not a
+fallback** (see `CLAUDE.md` → "RULE — mobile-first, not mobile-tolerant"). Every guest-facing page
+must pass all of the following, verified at **375px and 390px** widths before it's called complete:
+
+- **No horizontal scroll / no overflow.** The page body never scrolls sideways; wide content
+  (tables, code, wide images, date rows) scrolls inside its own container, not the page.
+- **Reflow, don't shrink.** Multi-column layouts stack; nav collapses to the hamburger `MobileMenu`;
+  card rows wrap. Nothing should rely on the desktop grid just scaled down.
+- **Readable type.** Body copy ≥16px on mobile; headings use the clamp scale (no fixed desktop sizes
+  bleeding onto small screens). Line length stays comfortable.
+- **Tap targets ≥44px.** Links, buttons, form controls, and menu items are finger-sized with enough
+  spacing; no tiny tap zones.
+- **Hero & imagery.** The full-bleed hero holds its focal point and legible text at portrait phone
+  aspect ratios — not letterboxed, cropped awkwardly, or pushing the CTA below the fold.
+- **Forms (RSVP).** Inputs are full-width, labels visible, no zoom-on-focus surprises, and the
+  submit action is reachable without horizontal scrolling.
+- **Spacing.** Gutters and vertical rhythm tighten on mobile (don't carry desktop padding down).
+
+Verification: load each page at 375–390px (real device or emulated) and confirm the above. This is
+an **acceptance criterion**, not a polish pass — a page that only works on desktop is not done.
