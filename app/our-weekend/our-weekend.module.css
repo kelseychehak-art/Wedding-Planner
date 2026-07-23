@@ -158,6 +158,13 @@
   min-width: 0;
 }
 
+/* a day's events stacked under one day label (one, or several on the wedding day) */
+.dayEvents {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .dayLabel {
   font-family: var(--font-sans);
   font-size: 16px;
