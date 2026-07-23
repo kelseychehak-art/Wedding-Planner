@@ -1,230 +1,243 @@
-/* Mobile-native proof — centered phone-width column, safe on desktop too. */
+/* Mobile-native homepage in the "scrapbook" style (matches home-preview-3):
+   warm paper, charcoal, Allura script, taped polaroids, small-caps labels,
+   monochrome. Palette scoped locally (prototype — not yet global tokens). */
 
 .frame {
+  position: relative;
   min-height: 100dvh;
   max-width: 448px;
   margin: 0 auto;
-  background: var(--page-bg);
-  border-inline: 1px solid var(--border-soft);
-  position: relative;
+  background: #efe6d4; /* warm cream paper */
+  color: #2b2925; /* warm charcoal */
+  --ink: #2b2925;
+  --paper: #efe6d4;
+  --card: #fbf7ee;
+  --line: rgba(43, 41, 37, 0.18);
+  --muted: #6c675d;
+  --body: #4a463e;
+  /* theme the shared bottom nav to match */
+  --mnav-bg: color-mix(in srgb, #efe6d4 92%, transparent);
+  --mnav-border: rgba(43, 41, 37, 0.18);
+  --mnav-color: #6c675d;
+  --mnav-active: #2b2925;
+  border-inline: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
 .main {
-  padding: 20px 20px calc(84px + env(safe-area-inset-bottom, 0px));
+  position: relative;
+  z-index: 2;
+  padding: 24px 22px calc(84px + env(safe-area-inset-bottom, 0px));
 }
 
 /* ---- Hero ---- */
 
 .hero {
   text-align: center;
-  padding-top: 8px;
 }
 
-.polaroid {
-  display: inline-block;
+.photos {
   position: relative;
-  margin: 6px 0 20px;
-  padding: 10px 10px 34px;
-  background: var(--color-paper);
-  box-shadow: 0 6px 18px rgba(48, 52, 45, 0.14);
-  transform: rotate(-2deg);
+  height: 296px;
+  margin: 4px 0 26px;
+}
+
+.snap {
+  position: absolute;
+  margin: 0;
+  padding: 9px 9px 0;
+  background: var(--card);
+  box-shadow: 0 10px 26px rgba(43, 41, 37, 0.22);
+}
+
+.snapImg {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.snapBack {
+  width: 52%;
+  top: 6px;
+  left: 10px;
+  transform: rotate(-5deg);
+}
+
+.snapFront {
+  width: 56%;
+  top: 44px;
+  right: 8px;
+  transform: rotate(3deg);
 }
 
 .tape {
   position: absolute;
-  top: -10px;
+  top: -11px;
   left: 50%;
   transform: translateX(-50%) rotate(-3deg);
   width: 82px;
   height: 22px;
-  background: color-mix(in srgb, var(--blue-soft) 55%, transparent);
-  border: 1px solid color-mix(in srgb, var(--blue-soft) 70%, transparent);
+  background: rgba(43, 41, 37, 0.1);
+  border-left: 1px dashed rgba(43, 41, 37, 0.3);
+  border-right: 1px dashed rgba(43, 41, 37, 0.3);
 }
 
-.polaroidImg {
-  display: block;
-  width: 100%;
-  height: 210px;
-  object-fit: cover;
-}
-
-.polaroidCap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 8px;
-  font-family: var(--font-script);
-  font-size: 21px;
-  color: var(--olive-dark);
+.snapCap {
+  font-family: var(--font-allura);
+  font-size: 22px;
+  text-align: center;
+  color: var(--ink);
+  padding: 3px 0 11px;
 }
 
 .pre {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--olive-muted);
+  color: var(--muted);
   margin: 0;
 }
 
 .names {
-  font-family: var(--font-heading);
-  font-size: clamp(2.6rem, 13vw, 3.4rem);
-  font-weight: 500;
-  line-height: 1.02;
-  color: var(--olive-dark);
-  margin: 8px 0 6px;
+  font-family: var(--font-allura);
+  font-weight: 400;
+  font-size: clamp(58px, 20vw, 82px);
+  line-height: 1.0;
+  color: var(--ink);
+  margin: 4px 0 0;
 }
 
-.amp {
-  color: var(--terracotta);
-  font-style: italic;
+.and {
+  font-size: 0.62em;
 }
 
-.invite {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--olive-muted);
-  margin: 0 0 12px;
+.married {
+  font-family: var(--font-allura);
+  font-weight: 400;
+  font-size: clamp(30px, 9vw, 40px);
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 18px;
 }
 
-.date {
-  font-family: var(--font-serif);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--terracotta-dark);
-  margin: 0;
-}
-
-.loc {
+.meta {
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--ink);
-  margin: 3px 0 18px;
+  line-height: 1.9;
+  margin: 0;
 }
 
 .cta {
   display: block;
-  width: 100%;
+  margin: 22px 0 0;
   padding: 15px;
-  background: var(--olive-dark);
-  color: var(--color-paper);
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   text-align: center;
-  border-radius: var(--radius-button);
   text-decoration: none;
 }
 
 .cta:active {
-  background: var(--olive);
+  background: var(--ink);
+  color: var(--paper);
 }
 
-/* ---- Welcome postcard ---- */
+/* ---- Section launcher ---- */
 
-.postcard {
-  position: relative;
-  margin: 24px 0;
-  padding: 20px 22px;
-  text-align: center;
+.explore {
+  margin-top: 40px;
 }
 
-.dolce {
-  font-family: var(--font-script);
-  font-size: 26px;
-  color: var(--blue);
-  margin: 0 0 4px;
-}
-
-.postcardBody {
+.exploreLabel {
   font-family: var(--font-sans);
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  margin: 0 0 6px;
+}
+
+.links {
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
 
-/* ---- Section launcher grid ---- */
-
-.grid {
+.link {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-/* First card (Our Weekend) spans the full width as the headline entry. */
-.grid > .card:first-child {
-  grid-column: 1 / -1;
-  flex-direction: row;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 14px;
-  text-align: left;
+  gap: 16px;
+  padding: 18px 4px;
+  border-top: 1px solid var(--line);
+  text-decoration: none;
 }
 
-.card {
-  position: relative;
+.links li:last-child .link {
+  border-bottom: 1px solid var(--line);
+}
+
+.linkNum {
+  font-family: var(--font-allura);
+  font-size: 32px;
+  color: var(--muted);
+  line-height: 1;
+}
+
+.linkText {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  min-height: 108px;
-  padding: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow);
-  text-decoration: none;
-  color: var(--ink);
+  gap: 2px;
+  min-width: 0;
 }
 
-.card:active {
-  border-color: var(--olive-muted);
-}
-
-.cardIcon {
-  width: 26px;
-  height: 26px;
-  color: var(--olive);
-  flex-shrink: 0;
-}
-
-.cardLabel {
+.linkLabel {
   font-family: var(--font-serif);
-  font-size: 17px;
+  font-size: 21px;
   font-weight: 600;
-  color: var(--olive-dark);
-  line-height: 1.15;
+  color: var(--ink);
+  line-height: 1.1;
 }
 
-.cardNote {
+.linkNote {
   font-family: var(--font-sans);
-  font-size: 11.5px;
-  color: var(--olive-muted);
+  font-size: 12px;
+  color: var(--muted);
 }
 
-.grid > .card:first-child .cardArrow {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+.linkArrow {
   font-size: 18px;
-  color: var(--olive-muted);
+  color: var(--muted);
 }
 
-.card:not(:first-child) .cardArrow {
-  display: none;
-}
-
-.footNote {
-  margin: 24px 0 0;
+.sign {
+  margin: 30px 0 0;
   text-align: center;
-  font-family: var(--font-script);
-  font-size: 20px;
-  color: var(--olive);
+  font-family: var(--font-allura);
+  font-size: 30px;
+  color: var(--ink);
 }
