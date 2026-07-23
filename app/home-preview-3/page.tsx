@@ -96,12 +96,12 @@ export default function HomePreview3Page() {
           <div className={styles.photos}>
             <figure className={`${styles.snap} ${styles.snapBack}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/hero/split-nick-george.jpg" alt="A stone villa among cypresses" className={styles.snapImg} />
+              <img src="/assets/hero/giuseppe-mondi-fJWYwHWYQpY-unsplash.jpg" alt="Golden-hour light over the Tuscan hills" className={styles.snapImg} />
             </figure>
             <figure className={`${styles.snap} ${styles.snapFront}`}>
               <span className={styles.tape} aria-hidden="true" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/hero/split-rafael-peier.jpg" alt="A Tuscan farmhouse above olive groves" className={styles.snapImg} />
+              <img src="/assets/hero/couple-1.jpg" alt="Kelsey and Andrew in the mountains" className={styles.snapImg} />
               <figcaption className={styles.snapCap}>la dolce vita</figcaption>
             </figure>
           </div>
@@ -109,7 +109,15 @@ export default function HomePreview3Page() {
 
         {/* ---------- Details band ---------- */}
         <section className={styles.detailsBand}>
-          <h2 className={styles.bandTitle}>A week in Tuscany</h2>
+          <div className={styles.bandHead}>
+            <figure className={styles.bandPhoto}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/assets/hero/villa-estate.jpg" alt="A Tuscan villa among cypresses" />
+            </figure>
+            <h2 className={styles.bandTitle}>
+              A week in <span className={styles.bandTitleLine}>Tuscany</span>
+            </h2>
+          </div>
           <div className={styles.details}>
             <div className={styles.detail}>
               <p className={styles.detailLabel}>The Setting</p>
@@ -134,28 +142,6 @@ export default function HomePreview3Page() {
             </div>
           </div>
         </section>
-
-        {/* ---------- Quick links ---------- */}
-        <ul className={styles.links}>
-          <li>
-            <a href="/travel" className={styles.link}>
-              <span className={styles.linkNum}>01</span> Travel
-              <span className={styles.linkNote}>Flights, airports &amp; getting there</span>
-            </a>
-          </li>
-          <li>
-            <a href="/stay" className={styles.link}>
-              <span className={styles.linkNum}>02</span> Where You&rsquo;ll Stay
-              <span className={styles.linkNote}>The villa &amp; room details</span>
-            </a>
-          </li>
-          <li>
-            <a href="/our-weekend" className={styles.link}>
-              <span className={styles.linkNum}>03</span> Weekend Schedule
-              <span className={styles.linkNote}>Every event, welcome to farewell</span>
-            </a>
-          </li>
-        </ul>
       </main>
     </div>
   );

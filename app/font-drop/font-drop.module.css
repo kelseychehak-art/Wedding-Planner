@@ -1,0 +1,44 @@
+.page {
+  min-height: 100vh;
+  background: #efe6d4;
+  color: #2b2925;
+  padding: clamp(28px, 4vw, 56px) clamp(24px, 5vw, 72px) 72px;
+}
+
+.intro {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: #6c675d;
+  margin-bottom: 24px;
+}
+
+.row {
+  padding: 16px 0 26px;
+  border-top: 1px solid rgba(43, 41, 37, 0.16);
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #2b2925;
+  margin-bottom: 6px;
+}
+
+.sample {
+  font-size: clamp(52px, 7.5vw, 100px);
+  line-height: 1.1;
+  color: #2b2925;
+}
+
+.and {
+  font-size: 0.72em;
+}
+
+.sub {
+  font-size: clamp(26px, 3.2vw, 42px);
+  line-height: 1.15;
+  color: #2b2925;
+}
