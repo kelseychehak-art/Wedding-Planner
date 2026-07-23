@@ -1,53 +1,81 @@
+/* Mobile-native weekend schedule in the "scrapbook" style (matches
+   home-preview-3 / home-mobile): warm paper, charcoal, Allura script title,
+   small-caps labels, monochrome. Day-pager IA kept. Palette scoped locally. */
+
 .frame {
+  position: relative;
   min-height: 100dvh;
   max-width: 448px;
   margin: 0 auto;
-  background: var(--page-bg);
-  border-inline: 1px solid var(--border-soft);
-  position: relative;
+  background: #efe6d4;
+  color: #2b2925;
+  --ink: #2b2925;
+  --paper: #efe6d4;
+  --card: #fbf7ee;
+  --line: rgba(43, 41, 37, 0.18);
+  --muted: #6c675d;
+  --body: #4a463e;
+  --mnav-bg: color-mix(in srgb, #efe6d4 92%, transparent);
+  --mnav-border: rgba(43, 41, 37, 0.18);
+  --mnav-color: #6c675d;
+  --mnav-active: #2b2925;
+  border-inline: 1px solid var(--line);
+}
+
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
 /* ---- Header ---- */
 
 .head {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 18px 20px 12px;
+  gap: 14px;
+  padding: 20px 22px 14px;
 }
 
 .back {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border-soft);
+  border: 1.5px solid var(--ink);
   border-radius: 50%;
-  background: var(--surface);
-  color: var(--olive-dark);
+  background: transparent;
+  color: var(--ink);
   font-size: 18px;
   text-decoration: none;
 }
 
 .title {
-  font-family: var(--font-heading);
-  font-size: 25px;
-  font-weight: 500;
-  color: var(--olive-dark);
+  font-family: var(--font-allura);
+  font-weight: 400;
+  font-size: 40px;
+  color: var(--ink);
   margin: 0;
-  line-height: 1.05;
+  line-height: 0.95;
 }
 
 .sub {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--olive-muted);
-  margin: 3px 0 0;
+  color: var(--muted);
+  margin: 4px 0 0;
 }
 
 /* ---- Sticky day selector ---- */
@@ -60,9 +88,9 @@
   grid-template-columns: repeat(6, 1fr);
   gap: 6px;
   padding: 10px 16px;
-  background: color-mix(in srgb, var(--page-bg) 90%, transparent);
+  background: color-mix(in srgb, #efe6d4 90%, transparent);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--line);
 }
 
 .dayPill {
@@ -73,90 +101,96 @@
   padding: 8px 0;
   min-height: 48px;
   justify-content: center;
-  border: 1px solid var(--border-soft);
-  border-radius: 9px;
-  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--card);
   cursor: pointer;
   transition: all 140ms ease;
 }
 
 .dayLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--olive-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .dayDate {
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--ink);
   line-height: 1;
 }
 
 .dayPillActive {
-  background: var(--olive-dark);
-  border-color: var(--olive-dark);
+  background: var(--ink);
+  border-color: var(--ink);
 }
 
 .dayPillActive .dayLabel,
 .dayPillActive .dayDate {
-  color: var(--color-paper);
+  color: var(--paper);
 }
 
 /* ---- Day content ---- */
 
 .main {
-  padding: 18px 20px calc(84px + env(safe-area-inset-bottom, 0px));
+  position: relative;
+  z-index: 2;
+  padding: 20px 22px calc(84px + env(safe-area-inset-bottom, 0px));
 }
 
 .dayHeading {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--terracotta-dark);
-  margin: 0 0 12px;
+  color: var(--ink);
+  margin: 0 0 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
 }
 
 .dayHeadingDate {
-  color: var(--olive-muted);
+  color: var(--muted);
 }
 
+/* Event as a taped scrapbook photo card. */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+  position: relative;
+  background: var(--card);
+  padding: 12px 12px 22px;
+  box-shadow: 0 10px 26px rgba(43, 41, 37, 0.16);
 }
 
 .cardPhoto {
   display: block;
   width: 100%;
-  height: 200px;
+  aspect-ratio: 5 / 4;
   object-fit: cover;
 }
 
 .cardBody {
-  padding: 18px 18px 20px;
+  padding: 16px 4px 0;
 }
 
 .eventTitle {
-  font-family: var(--font-heading);
-  font-size: 24px;
-  font-weight: 500;
-  color: var(--olive-dark);
-  margin: 0 0 10px;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 27px;
+  color: var(--ink);
+  margin: 0 0 8px;
+  line-height: 1.05;
 }
 
 .meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: 6px 18px;
   margin-bottom: 12px;
 }
 
@@ -165,22 +199,24 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 12.5px;
+  font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--ink);
 }
 
 .metaIcon {
-  width: 15px;
-  height: 15px;
-  color: var(--olive);
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
 }
 
 .desc {
   font-family: var(--font-sans);
   font-size: 14.5px;
-  line-height: 1.55;
-  color: var(--ink);
+  line-height: 1.65;
+  color: var(--body);
   margin: 0;
 }
 
@@ -190,20 +226,22 @@
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  margin-top: 14px;
+  margin-top: 18px;
 }
 
 .pagerBtn {
   flex: 1;
   min-height: 44px;
   padding: 0 12px;
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
   font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--olive-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
@@ -218,14 +256,14 @@
 }
 
 .pagerBtn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: default;
 }
 
 .note {
-  margin: 16px 0 0;
+  margin: 18px 0 0;
   text-align: center;
   font-family: var(--font-sans);
-  font-size: 11.5px;
-  color: var(--olive-muted);
+  font-size: 11px;
+  color: var(--muted);
 }
