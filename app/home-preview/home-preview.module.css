@@ -1,0 +1,449 @@
+/* PROTOTYPE — homepage in the mockup direction.
+   Sidebar + seal, invitation centre (Playfair names + script accents), a
+   wavy-edged photo panel, scalloped colour cards. Local to this route. */
+
+.shell {
+  display: grid;
+  grid-template-columns: 264px 1fr;
+  min-height: 100vh;
+  background: var(--color-ivory);
+  color: var(--color-ink);
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 30px 26px;
+  border-right: 1px solid var(--color-border-soft);
+  background: var(--color-ivory);
+}
+
+.seal {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  color: var(--color-terracotta);
+  margin: 0 auto 6px;
+}
+
+.seal svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sealText {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  fill: var(--color-terracotta);
+}
+
+.sealArt {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  transition: var(--transition);
+}
+
+.navItem:hover {
+  background: var(--color-sand);
+  color: var(--color-terracotta-dark);
+}
+
+.navActive {
+  color: var(--color-terracotta);
+}
+
+.navIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.navDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 4px 0;
+  opacity: 0.9;
+}
+
+.rsvpBtn {
+  margin-top: auto;
+  display: block;
+  text-align: center;
+  padding: 13px 16px;
+  border-radius: 6px;
+  background: var(--color-terracotta);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.rsvpBtn:hover {
+  background: var(--color-terracotta-dark);
+}
+
+/* ---------- Main ---------- */
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr minmax(360px, 42%);
+  min-height: 100vh;
+}
+
+/* ---------- Invitation ---------- */
+
+.invite {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(36px, 5vw, 64px) clamp(28px, 4vw, 64px);
+}
+
+.villa {
+  color: var(--color-olive);
+  margin-bottom: 6px;
+}
+
+.pre {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 6px 0 2px;
+}
+
+.name {
+  font-family: var(--font-playfair);
+  font-weight: 500;
+  font-size: clamp(56px, 8vw, 104px);
+  line-height: 0.94;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+}
+
+.amp {
+  font-family: var(--font-script);
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 0.7;
+  color: var(--color-terracotta);
+  margin: -0.12em 0;
+}
+
+.inviteLine {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted-ink);
+  margin-top: 10px;
+}
+
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 14px;
+}
+
+.rule i {
+  display: block;
+  width: clamp(60px, 12vw, 130px);
+  height: 1px;
+  background: var(--color-citrus-gold);
+}
+
+.date {
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--color-terracotta);
+}
+
+.loc {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+  margin-top: 4px;
+}
+
+.dolce {
+  font-family: var(--font-script);
+  font-size: 30px;
+  color: var(--color-sky-blue-deep);
+  margin-top: 6px;
+}
+
+/* Ciao card */
+.ciao {
+  position: relative;
+  width: min(560px, 100%);
+  margin-top: 30px;
+  padding: 26px 32px;
+  text-align: left;
+  background: rgba(127, 162, 199, 0.12);
+  border-radius: 14px;
+}
+
+.ciaoTitle {
+  font-family: var(--font-script);
+  font-size: 30px;
+  color: var(--color-sky-blue-deep);
+}
+
+.ciaoBody {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-ink);
+  margin: 4px 0 12px;
+}
+
+.ciaoLink {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-sky-blue-deep);
+}
+
+.ciaoLink:hover {
+  color: var(--color-terracotta);
+}
+
+/* Three tiles */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: min(640px, 100%);
+  margin-top: 22px;
+}
+
+.tile {
+  display: flex;
+  gap: 10px;
+  text-align: left;
+}
+
+.tileIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: var(--color-olive-dark);
+}
+
+.tileBlue {
+  background: rgba(127, 162, 199, 0.22);
+}
+.tileOlive {
+  background: rgba(104, 122, 74, 0.2);
+}
+.tileRose {
+  background: rgba(224, 100, 84, 0.18);
+}
+
+.tileLabel {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+}
+
+.tileBody {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-muted-ink);
+  margin-top: 2px;
+}
+
+/* ---------- Photo panel ---------- */
+
+.photoPanel {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cream scalloped edge biting into the photo's left side. */
+.scallopEdge {
+  position: absolute;
+  left: -1px;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  background: radial-gradient(
+    circle at 0 50%,
+    var(--color-ivory) 0 15px,
+    transparent 15px
+  );
+  background-size: 30px 30px;
+  background-repeat: repeat-y;
+}
+
+.stamp {
+  position: absolute;
+  top: 26px;
+  right: 30px;
+  width: 108px;
+  z-index: 2;
+}
+
+/* Weekend Highlights card overlapping the photo. */
+.highlights {
+  position: absolute;
+  left: 26px;
+  bottom: 34px;
+  width: min(260px, 62%);
+  padding: 22px 24px 26px;
+  background: rgba(104, 122, 74, 0.9);
+  border-radius: 14px;
+  color: #f5efe4;
+  z-index: 2;
+}
+
+.highlightsHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #f5efe4;
+}
+
+.highlightsBody {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #f5efe4;
+  margin-top: 10px;
+}
+
+.highlightsLink {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 20px;
+  color: #f5efe4;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1080px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+  .seal {
+    margin: 0;
+    width: 56px;
+    height: 56px;
+  }
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .navItem {
+    text-transform: none;
+  }
+  .navDivider {
+    display: none;
+  }
+  .rsvpBtn {
+    margin: 0;
+  }
+  .main {
+    grid-template-columns: 1fr;
+  }
+  .photoPanel {
+    min-height: 52vh;
+  }
+  .scallopEdge {
+    display: none;
+  }
+}

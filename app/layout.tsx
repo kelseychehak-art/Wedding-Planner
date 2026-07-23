@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Fraunces, Instrument_Sans, Pinyon_Script } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  Fraunces,
+  Instrument_Sans,
+  Pinyon_Script,
+  Playfair_Display,
+} from "next/font/google";
 import "../styles/tokens.css";
 import "./globals.css";
 
@@ -34,6 +40,15 @@ const pinyonScript = Pinyon_Script({
   display: "swap",
 });
 
+// High-contrast Didone for the display names (the KELSEY / ANDREW look).
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Kelsey & Andrew's Wedding Week",
   description: "Join us for a week in Italy — Kelsey & Andrew's Wedding Week.",
@@ -47,7 +62,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable}`}
+      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable}`}
     >
       <body>{children}</body>
     </html>
