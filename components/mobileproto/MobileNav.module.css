@@ -1,0 +1,49 @@
+.nav {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 448px;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-soft);
+  /* respect the iOS home-indicator safe area */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  /* ≥44px tap target */
+  padding: 9px 0 8px;
+  min-height: 48px;
+  color: var(--olive-muted);
+  text-decoration: none;
+  transition: color 140ms ease;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.itemActive {
+  color: var(--olive-dark);
+}
+
+.item:active {
+  color: var(--olive-dark);
+}

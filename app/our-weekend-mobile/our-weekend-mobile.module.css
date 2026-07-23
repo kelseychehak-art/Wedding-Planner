@@ -1,0 +1,231 @@
+.frame {
+  min-height: 100dvh;
+  max-width: 448px;
+  margin: 0 auto;
+  background: var(--page-bg);
+  border-inline: 1px solid var(--border-soft);
+  position: relative;
+}
+
+/* ---- Header ---- */
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px 12px;
+}
+
+.back {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-soft);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--olive-dark);
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 25px;
+  font-weight: 500;
+  color: var(--olive-dark);
+  margin: 0;
+  line-height: 1.05;
+}
+
+.sub {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--olive-muted);
+  margin: 3px 0 0;
+}
+
+/* ---- Sticky day selector ---- */
+
+.dayBar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  padding: 10px 16px;
+  background: color-mix(in srgb, var(--page-bg) 90%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.dayPill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 0;
+  min-height: 48px;
+  justify-content: center;
+  border: 1px solid var(--border-soft);
+  border-radius: 9px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.dayLabel {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--olive-muted);
+}
+
+.dayDate {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.dayPillActive {
+  background: var(--olive-dark);
+  border-color: var(--olive-dark);
+}
+
+.dayPillActive .dayLabel,
+.dayPillActive .dayDate {
+  color: var(--color-paper);
+}
+
+/* ---- Day content ---- */
+
+.main {
+  padding: 18px 20px calc(84px + env(safe-area-inset-bottom, 0px));
+}
+
+.dayHeading {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--terracotta-dark);
+  margin: 0 0 12px;
+}
+
+.dayHeadingDate {
+  color: var(--olive-muted);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.cardPhoto {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.cardBody {
+  padding: 18px 18px 20px;
+}
+
+.eventTitle {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--olive-dark);
+  margin: 0 0 10px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.metaIcon {
+  width: 15px;
+  height: 15px;
+  color: var(--olive);
+}
+
+.desc {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ---- Pager ---- */
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.pagerBtn {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--olive-dark);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pagerBtn:first-child {
+  text-align: left;
+}
+.pagerBtn:last-child {
+  text-align: right;
+}
+
+.pagerBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.note {
+  margin: 16px 0 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--olive-muted);
+}
