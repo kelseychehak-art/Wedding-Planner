@@ -72,16 +72,38 @@ export const schedule: ScheduleDay[] = [
     label: "WED",
     dayName: "Wednesday",
     date: "Jun 18",
+    // The wedding day — ceremony, reception & dinner, then the after party.
+    // Times, venues and details are placeholders (officially TBD).
     events: [
       {
-        time: "10:30 AM",
-        endTime: "1:30 PM",
-        title: "Cooking Class",
+        time: "4:00 PM",
+        endTime: "4:45 PM",
+        title: "The Ceremony",
         description:
-          "Learn to make fresh pasta and classic Italian dishes, then sit down together to enjoy what you've made.",
-        location: "Villa Kitchen",
-        icon: "cooking",
+          "The moment we've been waiting for — we say “I do” in the garden, surrounded by everyone we love.",
+        location: "Villa Garden",
+        icon: "party",
         photo: "/assets/photos/cypress-drive.jpg",
+      },
+      {
+        time: "5:30 PM",
+        endTime: "9:00 PM",
+        title: "Reception & Dinner",
+        description:
+          "Cocktails, a long Tuscan dinner under the open sky, heartfelt toasts, and the first dances of the night.",
+        location: "Villa Terrace",
+        icon: "dinner",
+        photo: "/assets/photos/villa-lawn.jpg",
+      },
+      {
+        time: "9:00 PM",
+        endTime: "1:00 AM",
+        title: "After Party",
+        description:
+          "Keep the celebration going late — music, dancing, and a nightcap to remember under the stars.",
+        location: "The Cellar",
+        icon: "wine",
+        photo: "/assets/photos/olive-hills.jpg",
       },
     ],
   },
