@@ -14,6 +14,7 @@
   --ink: #2f2a24;
   --sea: #1f8aa8; /* sun-faded azure */
   --coral: #df674c; /* soft terracotta-coral */
+  --orange: #e97a2f; /* fun Tuscan-sun orange */
   --lemon: #edc14f; /* golden lemon */
   --olive: #7f8c4e;
   --muted: #8a8175; /* warm taupe */
@@ -79,7 +80,7 @@
 
 .tagline em {
   font-style: italic;
-  color: var(--sea);
+  color: var(--orange);
 }
 
 /* ---- Photo: elegant frame + a whisper of a lemon sun ---- */
@@ -256,7 +257,7 @@
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 1.15em;
-  color: var(--coral);
+  color: var(--ink);
 }
 
 /* ---- Section launcher: editorial list, colour accents ---- */
@@ -284,9 +285,9 @@
 
 .link {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
   padding: 20px 4px;
   border-top: 1px solid var(--line);
   text-decoration: none;
@@ -294,27 +295,6 @@
 
 .links li:last-child .link {
   border-bottom: 1px solid var(--line);
-}
-
-.linkNum {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: 28px;
-  color: var(--sea);
-  line-height: 1;
-  min-width: 30px;
-  text-align: center;
-  font-variant-numeric: lining-nums;
-}
-
-/* two-tone alternation (sea / coral) — cohesive, not a rainbow */
-.sea .linkNum,
-.sea .linkArrow {
-  color: var(--sea);
-}
-.coral .linkNum,
-.coral .linkArrow {
-  color: var(--coral);
 }
 
 .linkText {
@@ -340,7 +320,7 @@
 
 .linkArrow {
   font-size: 19px;
-  color: var(--sea);
+  color: var(--muted);
 }
 
 /* ---- Sign-off ---- */

@@ -20,11 +20,11 @@ export const metadata: Metadata = {
 };
 
 const SECTIONS = [
-  { href: "/our-weekend-mobile", num: "01", label: "Our Weekend", note: "Every event, welcome to farewell", tone: "sea" },
-  { href: "/travel", num: "02", label: "Travel", note: "Flights & getting there", tone: "coral" },
-  { href: "/stay", num: "03", label: "Where You'll Stay", note: "The villa & rooms", tone: "sea" },
-  { href: "/activities", num: "04", label: "Activities", note: "Optional experiences", tone: "coral" },
-  { href: "/faq", num: "05", label: "FAQ", note: "Answers to everything", tone: "sea" },
+  { href: "/our-weekend-mobile", label: "Our Weekend", note: "Every event, welcome to farewell" },
+  { href: "/travel", label: "Travel", note: "Flights & getting there" },
+  { href: "/stay", label: "Where You'll Stay", note: "The villa & rooms" },
+  { href: "/activities", label: "Activities", note: "Optional experiences" },
+  { href: "/faq", label: "FAQ", note: "Answers to everything" },
 ];
 
 // Ticker = the real week, pulled from the schedule so it stays in sync.
@@ -101,8 +101,7 @@ export default function HomeDolcePage() {
           <ul className={styles.links}>
             {SECTIONS.map((s) => (
               <li key={s.href}>
-                <a href={s.href} className={`${styles.link} ${styles[s.tone]}`}>
-                  <span className={styles.linkNum}>{s.num}</span>
+                <a href={s.href} className={styles.link}>
                   <span className={styles.linkText}>
                     <span className={styles.linkLabel}>{s.label}</span>
                     <span className={styles.linkNote}>{s.note}</span>
