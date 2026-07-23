@@ -110,9 +110,6 @@ export default function HomePreview2Page() {
 
       {/* ---------- Main ---------- */}
       <main className={styles.main}>
-        {/* Airmail rule — travel-journal motif. */}
-        <span className={styles.airmail} aria-hidden="true" />
-
         <div className={styles.hero}>
           {/* Left: the invitation type */}
           <div className={styles.inviteCol}>
