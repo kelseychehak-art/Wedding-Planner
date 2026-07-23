@@ -8,9 +8,9 @@
   z-index: 50;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  background: var(--mnav-bg, color-mix(in srgb, var(--surface) 92%, transparent));
   backdrop-filter: blur(10px);
-  border-top: 1px solid var(--border-soft);
+  border-top: 1px solid var(--mnav-border, var(--border-soft));
   /* respect the iOS home-indicator safe area */
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -23,7 +23,7 @@
   /* ≥44px tap target */
   padding: 9px 0 8px;
   min-height: 48px;
-  color: var(--olive-muted);
+  color: var(--mnav-color, var(--olive-muted));
   text-decoration: none;
   transition: color 140ms ease;
 }
@@ -41,9 +41,9 @@
 }
 
 .itemActive {
-  color: var(--olive-dark);
+  color: var(--mnav-active, var(--olive-dark));
 }
 
 .item:active {
-  color: var(--olive-dark);
+  color: var(--mnav-active, var(--olive-dark));
 }
