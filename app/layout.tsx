@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import {
+  Caveat,
   Cormorant_Garamond,
   Fraunces,
   Instrument_Sans,
@@ -49,6 +50,14 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+// Casual handwriting for scrapbook-style annotations.
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Kelsey & Andrew's Wedding Week",
   description: "Join us for a week in Italy — Kelsey & Andrew's Wedding Week.",
@@ -62,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable}`}
+      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable}`}
     >
       <body>{children}</body>
     </html>

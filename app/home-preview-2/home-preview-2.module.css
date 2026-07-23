@@ -1,0 +1,459 @@
+/* PROTOTYPE v2 — editorial-scrapbook base + whimsical colour accents.
+   Warm paper, taped polaroid, airmail rule, handwriting; colour ~25%. */
+
+.shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: 264px 1fr;
+  min-height: 100vh;
+  background: #f4ecdd; /* warmer paper than ivory */
+  color: var(--color-ink);
+
+  --rust: #b8462f;
+  --forest: #33503f;
+  --sky-deep: #4f77a3;
+  --sky: #a9c6de;
+  --blush: #edc4bc;
+  --sage: #97a35e;
+  --paper: #f4ecdd;
+}
+
+/* Faint grain for the "textured paper" scrapbook feel. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 30px 26px;
+  border-right: 1px solid rgba(63, 74, 54, 0.18);
+}
+
+.seal {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  color: var(--forest);
+  margin: 0 auto 6px;
+}
+
+.seal svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sealText {
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  fill: var(--forest);
+}
+
+.sealArt {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  transition: var(--transition);
+}
+
+.navItem:hover {
+  background: rgba(63, 74, 54, 0.07);
+  color: var(--rust);
+}
+
+.navActive {
+  color: var(--rust);
+}
+
+.navIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.rsvpBtn {
+  margin-top: auto;
+  display: block;
+  text-align: center;
+  padding: 13px 16px;
+  border-radius: 6px;
+  background: var(--rust);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.rsvpBtn:hover {
+  filter: brightness(0.92);
+}
+
+/* ---------- Main ---------- */
+
+.main {
+  position: relative;
+  padding: clamp(30px, 4vw, 56px) clamp(28px, 4vw, 64px) 64px;
+}
+
+/* Airmail rule — red/blue dashes, a travel-journal motif. */
+.airmail {
+  display: block;
+  height: 8px;
+  margin-bottom: clamp(24px, 4vh, 44px);
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--rust) 0 10px,
+    transparent 10px 20px,
+    var(--sky-deep) 20px 30px,
+    transparent 30px 40px
+  );
+  opacity: 0.85;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr minmax(320px, 44%);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+
+.inviteCol {
+  text-align: left;
+}
+
+.pre {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0 4px;
+}
+
+.name {
+  font-family: var(--font-playfair);
+  font-weight: 500;
+  font-size: clamp(52px, 6.5vw, 92px);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+
+.amp {
+  font-family: var(--font-script);
+  font-size: clamp(30px, 3.6vw, 48px);
+  line-height: 0.9;
+  color: var(--rust);
+  margin: -0.05em 0 -0.05em 0.05em;
+}
+
+.inviteLine {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted-ink);
+  margin-top: 12px;
+}
+
+.date {
+  font-family: var(--font-playfair);
+  font-style: italic;
+  font-size: clamp(24px, 2.6vw, 34px);
+  color: var(--rust);
+  margin-top: 22px;
+}
+
+.loc {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-olive-dark);
+  margin-top: 4px;
+}
+
+.dolce {
+  font-family: var(--font-caveat);
+  font-size: 34px;
+  font-weight: 600;
+  color: var(--sky-deep);
+  margin-top: 8px;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 13px 28px;
+  border-radius: 4px;
+  background: var(--forest);
+  color: #f4ecdd;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.cta:hover {
+  background: var(--rust);
+}
+
+/* ---------- Scrapbook column: taped polaroid + stamp ---------- */
+
+.scrapCol {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.polaroid {
+  position: relative;
+  width: min(340px, 100%);
+  margin: 0;
+  padding: 14px 14px 0;
+  background: #fffdf8;
+  box-shadow: 0 10px 28px rgba(48, 52, 45, 0.2);
+  transform: rotate(-3deg);
+}
+
+.tape {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-4deg);
+  width: 96px;
+  height: 26px;
+  background: rgba(169, 198, 222, 0.55);
+  border-left: 1px dashed rgba(79, 119, 163, 0.5);
+  border-right: 1px dashed rgba(79, 119, 163, 0.5);
+}
+
+.polaroidImg {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.polaroidCap {
+  font-family: var(--font-caveat);
+  font-size: 26px;
+  text-align: center;
+  color: var(--color-ink);
+  padding: 6px 0 14px;
+}
+
+.stamp {
+  position: absolute;
+  top: -22px;
+  right: 6px;
+  width: 82px;
+  color: var(--rust);
+  transform: rotate(8deg);
+  z-index: 2;
+  filter: drop-shadow(0 1px 2px rgba(48, 52, 45, 0.2));
+}
+
+.stampSvg {
+  width: 100%;
+  height: auto;
+}
+
+.stampText {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  fill: currentColor;
+}
+
+/* ---------- Lower: postcard + numbered links ---------- */
+
+.lower {
+  display: grid;
+  grid-template-columns: minmax(300px, 42%) 1fr;
+  gap: clamp(28px, 4vw, 52px);
+  align-items: center;
+  margin-top: clamp(40px, 6vh, 72px);
+}
+
+.postcard {
+  position: relative;
+  padding: 28px 32px;
+  background: var(--sky);
+  border-radius: 12px;
+}
+
+.postcardHi {
+  font-family: var(--font-caveat);
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--forest);
+  line-height: 0.9;
+}
+
+.postcardBody {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--forest);
+  margin: 8px 0 14px;
+}
+
+.postcardLink {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+
+.postcardLink:hover {
+  color: var(--rust);
+}
+
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 16px 4px;
+  border-top: 1px solid rgba(63, 74, 54, 0.16);
+}
+
+.links li:last-child .link {
+  border-bottom: 1px solid rgba(63, 74, 54, 0.16);
+}
+
+.linkNum {
+  font-family: var(--font-playfair);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--rust);
+  flex-shrink: 0;
+}
+
+.linkLabel {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+.linkNote {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-muted-ink);
+  margin-top: 1px;
+}
+
+.link:hover .linkLabel {
+  color: var(--rust);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1080px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-right: none;
+    border-bottom: 1px solid rgba(63, 74, 54, 0.18);
+  }
+  .seal {
+    margin: 0;
+    width: 54px;
+    height: 54px;
+  }
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .navItem {
+    text-transform: none;
+  }
+  .rsvpBtn {
+    margin: 0;
+  }
+  .hero,
+  .lower {
+    grid-template-columns: 1fr;
+  }
+  .scrapCol {
+    order: -1;
+    margin-bottom: 20px;
+  }
+}
