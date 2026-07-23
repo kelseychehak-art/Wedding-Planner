@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MobileNav from "@/components/mobileproto/MobileNav";
 import { schedule, formatTimeRange } from "@/data/schedule";
 import styles from "./our-weekend-mobile.module.css";
@@ -15,6 +15,14 @@ import styles from "./our-weekend-mobile.module.css";
 
 export default function OurWeekendMobilePage() {
   const [activeKey, setActiveKey] = useState(schedule[0].key);
+
+  // Deep-link support: /our-weekend-mobile?day=fri opens Friday (used by the
+  // week view). Read on the client so there's no SSR/Suspense friction.
+  useEffect(() => {
+    const day = new URLSearchParams(window.location.search).get("day");
+    if (day && schedule.some((d) => d.key === day)) setActiveKey(day);
+  }, []);
+
   const activeIndex = schedule.findIndex((d) => d.key === activeKey);
   const day = schedule[activeIndex];
   const event = day.events[0];
@@ -36,6 +44,16 @@ export default function OurWeekendMobilePage() {
           <p className={styles.sub}>June 16 – 21, 2027 · Tuscany</p>
         </div>
       </header>
+
+      {/* ---- Day / Week view toggle ---- */}
+      <div className={styles.viewToggle} role="tablist" aria-label="Schedule view">
+        <span className={`${styles.viewSeg} ${styles.viewSegActive}`} role="tab" aria-selected="true">
+          Day
+        </span>
+        <a href="/our-weekend-mobile/week" className={styles.viewSeg} role="tab" aria-selected="false">
+          Week
+        </a>
+      </div>
 
       {/* ---- Sticky day selector ---- */}
       <div className={styles.dayBar}>
