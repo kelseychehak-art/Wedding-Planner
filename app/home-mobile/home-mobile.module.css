@@ -75,6 +75,9 @@
   width: 50%;
   top: 2%;
   left: 2%;
+  /* No caption here (only the front has one), so give it the classic thick
+     polaroid bottom border instead of running the photo to the edge. */
+  padding-bottom: 24px;
   transform: rotate(-5deg);
 }
 
