@@ -69,6 +69,12 @@ See [`docs/design-system.md`](./docs/design-system.md) for the full inventory an
 - **Breakpoints in use:** `767px` (mobile, dominant), `899px` (PageHero only), `768–1199px` (tablet
   band), `1200–1599px` (large-desktop hero), `1099px` (page-shell gutter step). Reuse these; don't
   invent new ones.
+- **RULE — mobile-first, not mobile-tolerant.** A large share of guests visit on their phones, so
+  the phone layout is the *primary* target, not a fallback. A page isn't done until it is genuinely
+  **good at 375–390px** — no horizontal scroll, tap targets ≥44px, readable type (16px+ body), and
+  layouts that **reflow** (stack, wrap, collapse) rather than just shrink. **Verify every page at
+  phone width before calling it complete** (this is an acceptance criterion, not a nice-to-have).
+  Desktop is the enhancement layered on top. See `docs/design-system.md` → Mobile acceptance.
 - **RULE — adapt, never duplicate.** Extend existing tokens/components. Do **not** introduce a
   parallel token set (e.g. `--home-*`), a second global stylesheet, or duplicate header/hero
   components. This keeps the brand consistent across every page.
