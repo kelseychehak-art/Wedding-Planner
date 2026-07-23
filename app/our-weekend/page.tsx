@@ -56,19 +56,18 @@ export default function OurWeekendPage() {
           <section className={styles.glance}>
             <h2 className={styles.glanceTitle}>At a Glance</h2>
             <ul className={styles.glanceList}>
-              {schedule.map((day) => {
-                const ev = day.events[0];
-                return (
-                  <li key={day.key} className={styles.glanceRow}>
-                    <span className={styles.glanceDay}>
-                      {day.label} · {day.date}
-                    </span>
-                    <span className={styles.glanceEvent}>
+              {schedule.map((day) => (
+                <li key={day.key} className={styles.glanceRow}>
+                  <span className={styles.glanceDay}>
+                    {day.label} · {day.date}
+                  </span>
+                  {day.events.map((ev, i) => (
+                    <span key={i} className={styles.glanceEvent}>
                       {ev.title} · {ev.time}
                     </span>
-                  </li>
-                );
-              })}
+                  ))}
+                </li>
+              ))}
             </ul>
           </section>
 
@@ -96,47 +95,48 @@ export default function OurWeekendPage() {
 
         {/* ---------- Right timeline ---------- */}
         <div className={styles.timeline}>
-          {schedule.map((day) => {
-            const ev = day.events[0];
-            return (
-              <article key={day.key} className={styles.dayRow}>
-                <div className={styles.dayIcon} aria-hidden="true">
-                  <Illustration name={ICON_NAME[ev.icon]} size={30} />
-                </div>
+          {schedule.map((day) => (
+            <article key={day.key} className={styles.dayRow}>
+              <div className={styles.dayIcon} aria-hidden="true">
+                <Illustration name={ICON_NAME[day.events[0].icon]} size={30} />
+              </div>
 
-                <div className={styles.dayCard}>
-                  <p className={styles.dayLabel}>
-                    {day.dayName} · {day.date}
-                  </p>
-                  <div className={styles.dayInner}>
-                    {ev.photo && (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={ev.photo}
-                        alt=""
-                        className={styles.dayPhoto}
-                        loading="lazy"
-                      />
-                    )}
-                    <div className={styles.dayContent}>
-                      <h3 className={styles.dayTitle}>{ev.title}</h3>
-                      <p className={styles.dayDesc}>{ev.description}</p>
-                      <div className={styles.dayMeta}>
-                        <span className={styles.metaItem}>
-                          <ClockIcon />
-                          {formatTimeRange(ev.time, ev.endTime)}
-                        </span>
-                        <span className={styles.metaItem}>
-                          <PinIcon />
-                          {ev.location}
-                        </span>
+              <div className={styles.dayCard}>
+                <p className={styles.dayLabel}>
+                  {day.dayName} · {day.date}
+                </p>
+                <div className={styles.dayEvents}>
+                  {day.events.map((ev, i) => (
+                    <div key={i} className={styles.dayInner}>
+                      {ev.photo && (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={ev.photo}
+                          alt=""
+                          className={styles.dayPhoto}
+                          loading="lazy"
+                        />
+                      )}
+                      <div className={styles.dayContent}>
+                        <h3 className={styles.dayTitle}>{ev.title}</h3>
+                        <p className={styles.dayDesc}>{ev.description}</p>
+                        <div className={styles.dayMeta}>
+                          <span className={styles.metaItem}>
+                            <ClockIcon />
+                            {formatTimeRange(ev.time, ev.endTime)}
+                          </span>
+                          <span className={styles.metaItem}>
+                            <PinIcon />
+                            {ev.location}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              </article>
-            );
-          })}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
 
