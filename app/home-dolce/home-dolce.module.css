@@ -238,9 +238,8 @@
 }
 
 .introHi {
-  font-family: var(--font-allura);
-  font-weight: 400;
-  font-size: 1.35em;
+  font-style: italic;
+  font-weight: 500;
   color: var(--sea);
 }
 
@@ -298,11 +297,14 @@
 }
 
 .linkNum {
-  font-family: var(--font-allura);
-  font-size: 40px;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--sea);
   line-height: 1;
-  min-width: 34px;
+  min-width: 30px;
   text-align: center;
+  font-variant-numeric: lining-nums;
 }
 
 .linkText {
@@ -328,24 +330,7 @@
 
 .linkArrow {
   font-size: 19px;
-}
-
-/* per-section colour accents (numbers + arrow) */
-.sea .linkNum,
-.sea .linkArrow {
   color: var(--sea);
-}
-.coral .linkNum,
-.coral .linkArrow {
-  color: var(--coral);
-}
-.lemon .linkNum,
-.lemon .linkArrow {
-  color: #d5a01f; /* readable golden on cream */
-}
-.olive .linkNum,
-.olive .linkArrow {
-  color: var(--olive);
 }
 
 /* ---- Sign-off ---- */

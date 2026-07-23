@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import MobileNav from "@/components/mobileproto/MobileNav";
 import { siteContent } from "@/data/siteContent";
+import { schedule } from "@/data/schedule";
 import styles from "./home-dolce.module.css";
 
 /*
@@ -19,14 +20,15 @@ export const metadata: Metadata = {
 };
 
 const SECTIONS = [
-  { href: "/our-weekend-mobile", num: "01", label: "Our Weekend", note: "Every event, welcome to farewell", tone: "sea" },
-  { href: "/travel", num: "02", label: "Travel", note: "Flights & getting there", tone: "coral" },
-  { href: "/stay", num: "03", label: "Where You'll Stay", note: "The villa & rooms", tone: "lemon" },
-  { href: "/activities", num: "04", label: "Activities", note: "Optional experiences", tone: "olive" },
-  { href: "/faq", num: "05", label: "FAQ", note: "Answers to everything", tone: "sea" },
+  { href: "/our-weekend-mobile", num: "01", label: "Our Weekend", note: "Every event, welcome to farewell" },
+  { href: "/travel", num: "02", label: "Travel", note: "Flights & getting there" },
+  { href: "/stay", num: "03", label: "Where You'll Stay", note: "The villa & rooms" },
+  { href: "/activities", num: "04", label: "Activities", note: "Optional experiences" },
+  { href: "/faq", num: "05", label: "FAQ", note: "Answers to everything" },
 ];
 
-const TICKER = ["Sole", "Mare", "Amore", "Dolce Vita"];
+// Ticker = the real week, pulled from the schedule so it stays in sync.
+const TICKER = schedule.map((d) => d.events[0].title);
 
 export default function HomeDolcePage() {
   const { couple, wedding } = siteContent;
@@ -99,7 +101,7 @@ export default function HomeDolcePage() {
           <ul className={styles.links}>
             {SECTIONS.map((s) => (
               <li key={s.href}>
-                <a href={s.href} className={`${styles.link} ${styles[s.tone]}`}>
+                <a href={s.href} className={styles.link}>
                   <span className={styles.linkNum}>{s.num}</span>
                   <span className={styles.linkText}>
                     <span className={styles.linkLabel}>{s.label}</span>
