@@ -1,0 +1,372 @@
+/* "Dolce" art direction — the merge. Editorial elegance (Allura script, warm
+   cream, Cormorant serif, airy whitespace, small-caps labels) + Riviera joy as
+   tasteful accents (full-colour photography, a sun-faded summer palette used as
+   colour accents). Palette scoped locally (prototype). */
+
+.frame {
+  position: relative;
+  min-height: 100dvh;
+  max-width: 448px;
+  margin: 0 auto;
+  background: #f6eddd; /* soft warm cream */
+  color: #2f2a24; /* warm charcoal */
+  --paper: #f6eddd;
+  --ink: #2f2a24;
+  --sea: #1f8aa8; /* sun-faded azure */
+  --coral: #df674c; /* soft terracotta-coral */
+  --lemon: #edc14f; /* golden lemon */
+  --olive: #7f8c4e;
+  --muted: #8a8175; /* warm taupe */
+  --line: rgba(47, 42, 36, 0.16);
+  /* theme the shared bottom nav — cream, sea-blue active */
+  --mnav-bg: color-mix(in srgb, #f6eddd 92%, transparent);
+  --mnav-border: rgba(47, 42, 36, 0.14);
+  --mnav-color: #8a8175;
+  --mnav-active: #1f8aa8;
+  overflow: hidden;
+}
+
+.main {
+  position: relative;
+  z-index: 2;
+  padding: 0 24px;
+}
+
+/* ---- Hero ---- */
+
+.hero {
+  text-align: center;
+  padding-top: 30px;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--sea);
+  margin: 0 0 6px;
+}
+
+.names {
+  font-family: var(--font-allura);
+  font-weight: 400;
+  margin: 0;
+  line-height: 0.9;
+  color: var(--ink);
+}
+
+.nameLine {
+  display: block;
+  font-size: clamp(58px, 19vw, 84px);
+}
+
+.amp {
+  display: block;
+  font-size: 0.5em;
+  color: var(--coral);
+  line-height: 1.1;
+}
+
+.tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 21px;
+  color: var(--ink);
+  margin: 10px 0 0;
+}
+
+.tagline em {
+  font-style: italic;
+  color: var(--sea);
+}
+
+/* ---- Photo: elegant frame + a whisper of a lemon sun ---- */
+
+.photoWrap {
+  position: relative;
+  width: 82%;
+  margin: 26px auto 24px;
+}
+
+.sun {
+  position: absolute;
+  z-index: 0;
+  top: -20px;
+  right: -20px;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: var(--lemon);
+  opacity: 0.5;
+}
+
+.photo {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 9px;
+  background: #fffaf0;
+  box-shadow: 0 14px 30px rgba(47, 42, 36, 0.16);
+}
+
+.photoImg {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  filter: saturate(1.06);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.dot {
+  color: var(--coral);
+}
+
+.cta {
+  display: inline-block;
+  margin: 24px 0 32px;
+  padding: 14px 38px;
+  border-radius: 999px;
+  border: 1.5px solid var(--coral);
+  background: transparent;
+  color: var(--coral);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.cta:active {
+  background: var(--coral);
+  color: #fff;
+}
+
+/* ---- Understated ticker ---- */
+
+.ticker {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+  background: color-mix(in srgb, var(--lemon) 12%, var(--paper));
+}
+
+.tickerTrack {
+  display: flex;
+  width: max-content;
+  animation: scrollTicker 30s linear infinite;
+}
+
+.tickerItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding-right: 18px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.tickerStar {
+  font-size: 11px;
+  color: var(--coral);
+  font-style: normal;
+}
+
+@keyframes scrollTicker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tickerTrack {
+    animation: none;
+  }
+}
+
+/* ---- Intro band ---- */
+
+.intro {
+  text-align: center;
+  padding: 42px 0 8px;
+}
+
+.introLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin: 0 0 10px;
+}
+
+.introHead {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(32px, 9vw, 42px);
+  line-height: 1.06;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.introHi {
+  font-family: var(--font-allura);
+  font-weight: 400;
+  font-size: 1.35em;
+  color: var(--sea);
+}
+
+.introBody {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink);
+  margin: 0 auto;
+  max-width: 32ch;
+}
+
+.introBody em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.15em;
+  color: var(--coral);
+}
+
+/* ---- Section launcher: editorial list, colour accents ---- */
+
+.explore {
+  margin-top: 36px;
+}
+
+.exploreLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  margin: 0 0 8px;
+}
+
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 4px;
+  border-top: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.links li:last-child .link {
+  border-bottom: 1px solid var(--line);
+}
+
+.linkNum {
+  font-family: var(--font-allura);
+  font-size: 40px;
+  line-height: 1;
+  min-width: 34px;
+  text-align: center;
+}
+
+.linkText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.linkLabel {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 23px;
+  color: var(--ink);
+  line-height: 1.05;
+}
+
+.linkNote {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.linkArrow {
+  font-size: 19px;
+}
+
+/* per-section colour accents (numbers + arrow) */
+.sea .linkNum,
+.sea .linkArrow {
+  color: var(--sea);
+}
+.coral .linkNum,
+.coral .linkArrow {
+  color: var(--coral);
+}
+.lemon .linkNum,
+.lemon .linkArrow {
+  color: #d5a01f; /* readable golden on cream */
+}
+.olive .linkNum,
+.olive .linkArrow {
+  color: var(--olive);
+}
+
+/* ---- Sign-off ---- */
+
+.sign {
+  margin: 40px 0 0;
+  text-align: center;
+  font-family: var(--font-allura);
+  font-size: 40px;
+  line-height: 1;
+  color: var(--sea);
+}
+
+.signSub {
+  margin: 8px 0 0;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
