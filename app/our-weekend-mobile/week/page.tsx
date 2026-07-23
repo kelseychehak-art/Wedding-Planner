@@ -43,29 +43,30 @@ export default function WeekViewPage() {
       {/* ---- Whole week, one timeline ---- */}
       <main className={styles.main}>
         <ol className={styles.timeline}>
-          {schedule.map((d) => {
-            const ev = d.events[0];
-            return (
-              <li key={d.key} className={styles.tlItem}>
-                <div className={styles.tlDate}>
-                  <span className={styles.tlDay}>{d.label}</span>
-                  <span className={styles.tlNum}>{d.date.replace(/^\w+ /, "")}</span>
-                </div>
-                <a href={`/our-weekend-mobile?day=${d.key}`} className={styles.tlCard}>
-                  <span className={styles.tlText}>
-                    <span className={styles.tlTitle}>{ev.title}</span>
-                    <span className={styles.tlMeta}>
-                      {formatTimeRange(ev.time, ev.endTime)} · {ev.location}
+          {schedule.map((d) => (
+            <li key={d.key} className={styles.tlItem}>
+              <div className={styles.tlDate}>
+                <span className={styles.tlDay}>{d.label}</span>
+                <span className={styles.tlNum}>{d.date.replace(/^\w+ /, "")}</span>
+              </div>
+              <div className={styles.tlDayEvents}>
+                {d.events.map((ev, i) => (
+                  <a key={i} href={`/our-weekend-mobile?day=${d.key}`} className={styles.tlCard}>
+                    <span className={styles.tlText}>
+                      <span className={styles.tlTitle}>{ev.title}</span>
+                      <span className={styles.tlMeta}>
+                        {formatTimeRange(ev.time, ev.endTime)} · {ev.location}
+                      </span>
                     </span>
-                  </span>
-                  {ev.photo && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={ev.photo} alt="" className={styles.tlThumb} />
-                  )}
-                </a>
-              </li>
-            );
-          })}
+                    {ev.photo && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={ev.photo} alt="" className={styles.tlThumb} />
+                    )}
+                  </a>
+                ))}
+              </div>
+            </li>
+          ))}
         </ol>
 
         <p className={styles.note}>Tap any day to open it in detail.</p>

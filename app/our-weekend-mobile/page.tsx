@@ -25,7 +25,6 @@ export default function OurWeekendMobilePage() {
 
   const activeIndex = schedule.findIndex((d) => d.key === activeKey);
   const day = schedule[activeIndex];
-  const event = day.events[0];
 
   function go(delta: number) {
     const next = Math.min(schedule.length - 1, Math.max(0, activeIndex + delta));
@@ -75,34 +74,41 @@ export default function OurWeekendMobilePage() {
       <main className={styles.main}>
         <p className={styles.dayHeading}>
           {day.dayName} · <span className={styles.dayHeadingDate}>{day.date}</span>
+          {day.events.length > 1 && (
+            <span className={styles.dayCount}> · {day.events.length} events</span>
+          )}
         </p>
 
-        <article className={styles.card}>
-          {event.photo && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={event.photo} alt="" className={styles.cardPhoto} />
-          )}
-          <div className={styles.cardBody}>
-            <h2 className={styles.eventTitle}>{event.title}</h2>
-            <div className={styles.meta}>
-              <span className={styles.metaItem}>
-                <svg viewBox="0 0 24 24" className={styles.metaIcon} fill="none" stroke="currentColor" strokeWidth="1.6">
-                  <circle cx="12" cy="12" r="8" />
-                  <path d="M12 8v4l3 2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                {formatTimeRange(event.time, event.endTime)}
-              </span>
-              <span className={styles.metaItem}>
-                <svg viewBox="0 0 24 24" className={styles.metaIcon} fill="none" stroke="currentColor" strokeWidth="1.6">
-                  <path d="M12 21c4-3.6 6.5-6.6 6.5-10a6.5 6.5 0 1 0-13 0c0 3.4 2.5 6.4 6.5 10Z" strokeLinejoin="round" />
-                  <circle cx="12" cy="11" r="2.2" />
-                </svg>
-                {event.location}
-              </span>
-            </div>
-            <p className={styles.desc}>{event.description}</p>
-          </div>
-        </article>
+        <div className={styles.cards}>
+          {day.events.map((event, i) => (
+            <article key={i} className={styles.card}>
+              {event.photo && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={event.photo} alt="" className={styles.cardPhoto} />
+              )}
+              <div className={styles.cardBody}>
+                <h2 className={styles.eventTitle}>{event.title}</h2>
+                <div className={styles.meta}>
+                  <span className={styles.metaItem}>
+                    <svg viewBox="0 0 24 24" className={styles.metaIcon} fill="none" stroke="currentColor" strokeWidth="1.6">
+                      <circle cx="12" cy="12" r="8" />
+                      <path d="M12 8v4l3 2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {formatTimeRange(event.time, event.endTime)}
+                  </span>
+                  <span className={styles.metaItem}>
+                    <svg viewBox="0 0 24 24" className={styles.metaIcon} fill="none" stroke="currentColor" strokeWidth="1.6">
+                      <path d="M12 21c4-3.6 6.5-6.6 6.5-10a6.5 6.5 0 1 0-13 0c0 3.4 2.5 6.4 6.5 10Z" strokeLinejoin="round" />
+                      <circle cx="12" cy="11" r="2.2" />
+                    </svg>
+                    {event.location}
+                  </span>
+                </div>
+                <p className={styles.desc}>{event.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
 
         {/* ---- Pager ---- */}
         <div className={styles.pager}>

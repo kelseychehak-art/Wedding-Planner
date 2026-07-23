@@ -145,6 +145,17 @@
   color: var(--orange);
 }
 
+.dayCount {
+  color: var(--muted);
+}
+
+/* Stack of event cards for the day (one, or several on the wedding day). */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 /* Event as an elegantly matted photo card (matches the home hero frame). */
 .card {
   position: relative;
@@ -321,8 +332,15 @@
   display: grid;
   grid-template-columns: 54px 1fr;
   gap: 14px;
-  align-items: center;
+  align-items: start;
   padding: 9px 0;
+}
+
+/* a day's events (one, or a stack on the wedding day) */
+.tlDayEvents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .tlDate {
