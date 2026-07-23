@@ -6,6 +6,7 @@ import {
   Instrument_Sans,
   Pinyon_Script,
   Playfair_Display,
+  Sacramento,
 } from "next/font/google";
 import "../styles/tokens.css";
 import "./globals.css";
@@ -58,6 +59,14 @@ const caveat = Caveat({
   display: "swap",
 });
 
+// Thin signature script for the couple names (the scrapbook template look).
+const sacramento = Sacramento({
+  variable: "--font-sacramento",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Kelsey & Andrew's Wedding Week",
   description: "Join us for a week in Italy — Kelsey & Andrew's Wedding Week.",
@@ -71,7 +80,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable}`}
+      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable}`}
     >
       <body>{children}</body>
     </html>
