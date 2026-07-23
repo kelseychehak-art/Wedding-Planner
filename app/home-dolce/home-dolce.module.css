@@ -307,6 +307,16 @@
   font-variant-numeric: lining-nums;
 }
 
+/* two-tone alternation (sea / coral) — cohesive, not a rainbow */
+.sea .linkNum,
+.sea .linkArrow {
+  color: var(--sea);
+}
+.coral .linkNum,
+.coral .linkArrow {
+  color: var(--coral);
+}
+
 .linkText {
   display: flex;
   flex-direction: column;
