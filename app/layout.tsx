@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import {
+  Allura,
   Caveat,
   Cormorant_Garamond,
   Fraunces,
@@ -67,6 +68,14 @@ const sacramento = Sacramento({
   display: "swap",
 });
 
+// Elegant signature script — the scrapbook template's real hand.
+const allura = Allura({
+  variable: "--font-allura",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Kelsey & Andrew's Wedding Week",
   description: "Join us for a week in Italy — Kelsey & Andrew's Wedding Week.",
@@ -80,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable}`}
+      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable} ${allura.variable}`}
     >
       <body>{children}</body>
     </html>
