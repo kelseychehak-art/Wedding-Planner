@@ -12,18 +12,17 @@ export const metadata: Metadata = {
 };
 
 const OPTIONS: { key: string; label: string; var: string; note: string }[] = [
-  { key: "greatvibes", label: "Great Vibes", var: "--font-greatvibes", note: "Dramatic capitals, high contrast — the most 'accentuated'." },
+  { key: "windsong", label: "WindSong", var: "--font-windsong", note: "Whimsical, looping, lots of flourish." },
+  { key: "luxurious", label: "Luxurious Script", var: "--font-luxurious", note: "Fine, high-contrast, dramatic capitals." },
   { key: "pinyon", label: "Pinyon Script", var: "--font-pinyon", note: "Formal calligraphy, ornate flourishes." },
-  { key: "tangerine", label: "Tangerine", var: "--font-tangerine", note: "Elegant, flowing, lighter." },
-  { key: "parisienne", label: "Parisienne", var: "--font-parisienne", note: "Casual-elegant signature." },
-  { key: "allura", label: "Allura (current)", var: "--font-allura", note: "Restrained signature — what's on preview-3 now." },
+  { key: "greatvibes", label: "Great Vibes", var: "--font-greatvibes", note: "Bold, dramatic capitals, high contrast." },
 ];
 
 export default function ScriptComparePage() {
   return (
     <div className={styles.page}>
       <p className={styles.intro}>
-        Same words, five scripts. Tell me the one closest to your template &mdash; or the number.
+        Same words, four scripts. Tell me the one closest to your template &mdash; or the number.
       </p>
 
       {OPTIONS.map((o, i) => (

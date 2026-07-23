@@ -6,11 +6,13 @@ import {
   Fraunces,
   Great_Vibes,
   Instrument_Sans,
+  Luxurious_Script,
   Parisienne,
   Pinyon_Script,
   Playfair_Display,
   Sacramento,
   Tangerine,
+  WindSong,
 } from "next/font/google";
 import "../styles/tokens.css";
 import "./globals.css";
@@ -98,6 +100,18 @@ const parisienne = Parisienne({
   weight: ["400"],
   display: "swap",
 });
+const windsong = WindSong({
+  variable: "--font-windsong",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+});
+const luxurious = Luxurious_Script({
+  variable: "--font-luxurious",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Kelsey & Andrew's Wedding Week",
@@ -112,7 +126,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable} ${allura.variable} ${greatVibes.variable} ${tangerine.variable} ${parisienne.variable}`}
+      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable} ${allura.variable} ${greatVibes.variable} ${tangerine.variable} ${parisienne.variable} ${windsong.variable} ${luxurious.variable}`}
     >
       <body>{children}</body>
     </html>
