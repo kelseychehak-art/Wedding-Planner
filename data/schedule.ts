@@ -19,6 +19,11 @@ export type ScheduleEvent = {
   location: string;
   icon: ScheduleIcon;
   photo?: string; // [SWAP] interim countryside photo
+  // Expanded detail shown in the event drawer. All optional + DRAFT copy —
+  // edit freely as plans firm up (venue/timings officially TBD).
+  dressCode?: string;
+  bring?: string[]; // "things to bring" checklist
+  note?: string; // logistics: transport, timing, good-to-knows
 };
 
 export type ScheduleDay = {
@@ -46,6 +51,9 @@ export const schedule: ScheduleDay[] = [
         location: "Villa Courtyard",
         icon: "dinner",
         photo: "/assets/photos/villa-lawn.jpg",
+        dressCode: "Garden-party smart casual. Comfortable shoes for the lawn.",
+        bring: ["A light layer for the evening", "Your appetite"],
+        note: "Welcome drinks from 6:00; dinner served around 7:00. No need to travel — it's all at the villa.",
       },
     ],
   },
@@ -64,6 +72,9 @@ export const schedule: ScheduleDay[] = [
         location: "Local Vineyard",
         icon: "wine",
         photo: "/assets/photos/olive-hills.jpg",
+        dressCode: "Casual and comfortable — you'll be walking through the vines.",
+        bring: ["Sunglasses and a hat", "A camera for the views"],
+        note: "Shuttles leave the villa at 3:30. The tasting includes light bites; come a little hungry.",
       },
     ],
   },
@@ -84,6 +95,9 @@ export const schedule: ScheduleDay[] = [
         location: "Villa Garden",
         icon: "party",
         photo: "/assets/photos/cypress-drive.jpg",
+        dressCode: "Formal / cocktail. The ceremony is on grass — block heels are your friend.",
+        bring: ["Sunglasses", "A tissue or two, just in case"],
+        note: "Please be seated by 3:45. The ceremony is outdoors; we'll move straight into cocktails after.",
       },
       {
         time: "5:30 PM",
@@ -94,6 +108,8 @@ export const schedule: ScheduleDay[] = [
         location: "Villa Terrace",
         icon: "dinner",
         photo: "/assets/photos/villa-lawn.jpg",
+        dressCode: "Formal — carry your ceremony look right through the night.",
+        note: "Cocktail hour on the terrace flows into a seated Tuscan dinner under the open sky, toasts, and first dances.",
       },
       {
         time: "9:00 PM",
@@ -104,6 +120,9 @@ export const schedule: ScheduleDay[] = [
         location: "The Cellar",
         icon: "wine",
         photo: "/assets/photos/olive-hills.jpg",
+        dressCode: "However you're most comfortable dancing — kick off your shoes.",
+        bring: ["Your dancing energy"],
+        note: "Music, nightcaps, and dancing in the cellar until 1:00 AM. Come and go as you please.",
       },
     ],
   },
@@ -122,6 +141,9 @@ export const schedule: ScheduleDay[] = [
         location: "Villa Pool",
         icon: "pool",
         photo: "/assets/photos/villa-lawn.jpg",
+        dressCode: "Swimwear and cover-ups — fully relaxed.",
+        bring: ["Swimsuit and towel (towels also provided)", "Sunscreen", "A good book"],
+        note: "No set schedule — drop in any time between noon and 4:00. Lunch served poolside.",
       },
     ],
   },
@@ -140,6 +162,9 @@ export const schedule: ScheduleDay[] = [
         location: "Nearby Hill Town",
         icon: "town",
         photo: "/assets/photos/olive-hills.jpg",
+        dressCode: "Comfortable walking attire and good shoes — there are cobblestones.",
+        bring: ["Comfortable walking shoes", "A cross-body bag", "A few euros for small shops"],
+        note: "Shuttles leave the villa at 3:00. We'll shop, sip an aperitivo, and have dinner in the piazza.",
       },
     ],
   },
@@ -158,6 +183,9 @@ export const schedule: ScheduleDay[] = [
         location: "Under the Stars",
         icon: "party",
         photo: "/assets/photos/cypress-drive.jpg",
+        dressCode: "Festive — one last chance to dress up.",
+        bring: ["Your best memories from the week"],
+        note: "Dinner and dancing under the stars to send off the week together.",
       },
     ],
   },

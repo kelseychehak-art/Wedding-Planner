@@ -21,7 +21,9 @@
   --accent: #d96b3f;
 }
 .vintage {
-  --sea: #b26a41;
+  /* Cornflower blue = informational accent (section labels, callouts, dates);
+     terracotta stays identity/action. Matches DolcePage.vintage. */
+  --sea: #6f9fce;
   --accent: #e0946b;
 }
 

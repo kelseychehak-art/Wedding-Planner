@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import MobileNav from "@/components/mobileproto/MobileNav";
-import { schedule, formatTimeRange } from "@/data/schedule";
+import EventDrawer from "@/components/mobileproto/EventDrawer";
+import { schedule, formatTimeRange, type ScheduleEvent } from "@/data/schedule";
 import styles from "./WeekendPager.module.css";
 
 /*
@@ -12,6 +13,7 @@ import styles from "./WeekendPager.module.css";
  */
 export default function WeekendPager({ backHref = "/" }: { backHref?: string }) {
   const [activeKey, setActiveKey] = useState(schedule[0].key);
+  const [selected, setSelected] = useState<ScheduleEvent | null>(null);
 
   useEffect(() => {
     const day = new URLSearchParams(window.location.search).get("day");
@@ -63,7 +65,20 @@ export default function WeekendPager({ backHref = "/" }: { backHref?: string }) 
 
         <div className={styles.cards}>
           {day.events.map((event, i) => (
-            <article key={i} className={styles.card}>
+            <article
+              key={i}
+              className={styles.card}
+              role="button"
+              tabIndex={0}
+              aria-label={`${event.title} — view details`}
+              onClick={() => setSelected(event)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelected(event);
+                }
+              }}
+            >
               {event.photo && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={event.photo} alt="" className={styles.cardPhoto} />
@@ -87,6 +102,9 @@ export default function WeekendPager({ backHref = "/" }: { backHref?: string }) 
                   </span>
                 </div>
                 <p className={styles.desc}>{event.description}</p>
+                <span className={styles.detailsHint} aria-hidden="true">
+                  View details →
+                </span>
               </div>
             </article>
           ))}
@@ -105,6 +123,8 @@ export default function WeekendPager({ backHref = "/" }: { backHref?: string }) 
       </main>
 
       <MobileNav active="weekend" variant="vintage" />
+
+      <EventDrawer event={selected} dayName={day.dayName} onClose={() => setSelected(null)} />
     </div>
   );
 }

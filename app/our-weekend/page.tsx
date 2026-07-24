@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import DesktopContentPage from "@/components/mobileproto/DesktopContentPage";
 import WeekendPager from "@/components/mobileproto/WeekendPager";
-import { weekendMeta, WeekendBody } from "@/components/mobileproto/tabs";
+import WeekendAgenda from "@/components/mobileproto/WeekendAgenda";
+import { weekendMeta } from "@/components/mobileproto/tabs";
 import rt from "@/components/mobileproto/ResponsiveTab.module.css";
 
 export const metadata: Metadata = {
@@ -30,7 +31,7 @@ export default function OurWeekendPage() {
           subtitle={weekendMeta.subtitle}
           active="weekend"
         >
-          <WeekendBody />
+          <WeekendAgenda />
         </DesktopContentPage>
       </div>
     </>

@@ -30,7 +30,9 @@
    plain header for a painterly band that feathers into the cream page. */
 
 .vintage {
-  --sea: #b26a41; /* section labels / eyebrows → terracotta */
+  /* Cornflower blue is the informational accent — section labels, info
+     callouts, dates. Terracotta (--coral) stays identity/action. */
+  --sea: #6f9fce;
   --mnav-active: #b26a41;
 }
 
@@ -434,6 +436,35 @@
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+}
+.evChip:hover {
+  background: color-mix(in srgb, var(--sea) 8%, transparent);
+  border-color: color-mix(in srgb, var(--sea) 32%, transparent);
+}
+.evChip:focus-visible {
+  outline: 2px solid var(--sea);
+  outline-offset: 2px;
+}
+/* hover-revealed affordance (desktop agenda) */
+.evChip::after {
+  content: "View details →";
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--coral);
+  opacity: 0;
+  transition: opacity 0.16s ease;
+  margin-top: 2px;
+}
+.evChip:hover::after,
+.evChip:focus-visible::after {
+  opacity: 1;
 }
 .evTitle {
   font-family: var(--font-serif);
@@ -698,7 +729,7 @@
   font-family: var(--font-names);
   font-size: 34px;
   line-height: 1;
-  color: var(--sea);
+  color: var(--coral); /* brand sign-off stays warm, independent of the blue accent */
 }
 .signSub {
   margin: 4px 0 0;
