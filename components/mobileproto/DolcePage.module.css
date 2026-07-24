@@ -1,0 +1,337 @@
+/* Shared "Dolce" mobile content-page chrome + reusable content primitives.
+   Palette mirrors app/home-dolce so every tab feels like one site. */
+
+.frame {
+  position: relative;
+  min-height: 100dvh;
+  max-width: 448px;
+  margin: 0 auto;
+  padding-bottom: 92px; /* clear the sticky bottom nav */
+  background: #f6eddd;
+  color: #2f2a24;
+  --paper: #f6eddd;
+  --card: #fbf4e7;
+  --ink: #2f2a24;
+  --sea: #1f8aa8;
+  --coral: #df674c;
+  --orange: #e97a2f;
+  --lemon: #edc14f;
+  --olive: #7f8c4e;
+  --muted: #8a8175;
+  --line: rgba(47, 42, 36, 0.16);
+  --mnav-bg: color-mix(in srgb, #f6eddd 92%, transparent);
+  --mnav-border: rgba(47, 42, 36, 0.14);
+  --mnav-color: #8a8175;
+  --mnav-active: #1f8aa8;
+}
+
+/* ---- Header ---- */
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 22px 22px 8px;
+}
+
+.back {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink);
+  font-size: 18px;
+  text-decoration: none;
+  background: var(--card);
+}
+
+.headText {
+  padding-top: 2px;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--sea);
+  margin: 0 0 2px;
+}
+
+.title {
+  font-family: var(--font-names);
+  font-weight: 400;
+  font-size: 46px;
+  line-height: 0.95;
+  color: var(--ink);
+  margin: 0;
+}
+
+.titleCoral {
+  color: var(--coral);
+}
+.titleSea {
+  color: var(--sea);
+}
+
+.sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+
+/* ---- Main ---- */
+
+.main {
+  padding: 12px 22px 0;
+}
+
+/* ---- Section ---- */
+
+.section {
+  margin-top: 30px;
+}
+
+.sectionLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sea);
+  margin: 0 0 4px;
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.lead {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+/* ---- Plain card ---- */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.cardTitle {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.cardText {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #4a463e;
+  margin: 0;
+}
+
+/* ---- Photo card (image + body) ---- */
+
+.imgCard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 22px rgba(47, 42, 36, 0.07);
+}
+
+.imgCardPhoto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.imgCardBody {
+  padding: 16px 18px 18px;
+}
+
+.imgCardTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.imgCardTitle {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.imgCardMeta {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.imgCardText {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #4a463e;
+  margin: 6px 0 0;
+}
+
+/* ---- Badge / pill ---- */
+
+.badge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+.badgeTerra {
+  background: color-mix(in srgb, var(--coral) 16%, transparent);
+  color: var(--coral);
+}
+.badgeOlive {
+  background: color-mix(in srgb, var(--olive) 18%, transparent);
+  color: #5f6a37;
+}
+
+/* ---- Rows (airports, facts, etc.) ---- */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid var(--line);
+}
+.row:first-child {
+  border-top: none;
+}
+
+.rowLead {
+  flex-shrink: 0;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--coral);
+  min-width: 46px;
+}
+
+.rowText {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.rowText strong {
+  font-weight: 700;
+}
+.rowNote {
+  color: var(--muted);
+}
+
+/* ---- Callout ---- */
+
+.callout {
+  display: flex;
+  gap: 9px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--sea) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sea) 22%, transparent);
+}
+
+.calloutText {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #3c4a4f;
+}
+.calloutText strong {
+  color: var(--ink);
+}
+
+/* ---- Link ---- */
+
+.link {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--coral);
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+/* ---- CTA pill (outlined, Dolce) ---- */
+
+.cta {
+  display: block;
+  text-align: center;
+  margin: 22px 0 0;
+  padding: 15px 20px;
+  border: 1.5px solid var(--coral);
+  border-radius: 999px;
+  color: var(--coral);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* ---- Sign-off ---- */
+
+.sign {
+  margin: 34px 0 4px;
+  text-align: center;
+  font-family: var(--font-names);
+  font-size: 40px;
+  line-height: 1;
+  color: var(--sea);
+}
+.signSub {
+  margin: 4px 0 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}

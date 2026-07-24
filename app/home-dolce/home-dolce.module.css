@@ -51,7 +51,7 @@
 }
 
 .names {
-  font-family: var(--font-allura);
+  font-family: var(--font-names);
   font-weight: 400;
   margin: 0;
   line-height: 0.9;
@@ -65,8 +65,11 @@
 
 .amp {
   display: block;
-  font-size: 0.5em;
-  color: var(--coral);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.42em;
+  color: var(--orange);
   line-height: 1.1;
 }
 
@@ -328,8 +331,8 @@
 .sign {
   margin: 40px 0 0;
   text-align: center;
-  font-family: var(--font-allura);
-  font-size: 40px;
+  font-family: var(--font-names);
+  font-size: 46px;
   line-height: 1;
   color: var(--sea);
 }

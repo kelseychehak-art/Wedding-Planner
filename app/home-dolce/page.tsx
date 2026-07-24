@@ -21,10 +21,10 @@ export const metadata: Metadata = {
 
 const SECTIONS = [
   { href: "/our-weekend-mobile", label: "Our Weekend", note: "Every event, welcome to farewell" },
-  { href: "/travel", label: "Travel", note: "Flights & getting there" },
-  { href: "/stay", label: "Where You'll Stay", note: "The villa & rooms" },
-  { href: "/activities", label: "Activities", note: "Optional experiences" },
-  { href: "/faq", label: "FAQ", note: "Answers to everything" },
+  { href: "/travel-mobile", label: "Travel", note: "Flights & getting there" },
+  { href: "/stay-mobile", label: "Where You'll Stay", note: "The villa & rooms" },
+  { href: "/activities-mobile", label: "Activities", note: "Optional experiences" },
+  { href: "/faq-mobile", label: "FAQ", note: "Answers to everything" },
 ];
 
 // Ticker = the real week, pulled from the schedule so it stays in sync.
@@ -64,7 +64,7 @@ export default function HomeDolcePage() {
             <span>{wedding.locationLabel}</span>
           </p>
 
-          <a href="/rsvp" className={styles.cta}>
+          <a href="/rsvp-mobile" className={styles.cta}>
             RSVP &amp; Details
           </a>
         </section>

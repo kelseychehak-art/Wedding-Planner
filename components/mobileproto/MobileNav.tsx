@@ -14,7 +14,7 @@ const ITEMS: { key: Key; label: string; href: string; icon: React.ReactNode }[] 
   {
     key: "home",
     label: "Home",
-    href: "/home-mobile",
+    href: "/home-dolce",
     icon: <path d="M4 11.5 12 5l8 6.5M6 10v9h12v-9" />,
   },
   {
@@ -31,24 +31,24 @@ const ITEMS: { key: Key; label: string; href: string; icon: React.ReactNode }[] 
   {
     key: "travel",
     label: "Travel",
-    href: "/travel",
+    href: "/travel-mobile",
     icon: <path d="M20 5 4 11l6 2.5L13 20l7-15Z" />,
   },
   {
     key: "stay",
     label: "Stay",
-    href: "/stay",
+    href: "/stay-mobile",
     icon: <path d="M3 18v-6a2 2 0 0 1 2-2h9a3 3 0 0 1 3 3v5M3 14h18M21 18v-4" />,
   },
   {
     key: "rsvp",
     label: "RSVP",
-    href: "/rsvp",
+    href: "/rsvp-mobile",
     icon: <path d="M12 20s-7-4.4-7-9.3A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 7 2.7C19 15.6 12 20 12 20Z" />,
   },
 ];
 
-export default function MobileNav({ active }: { active: Key }) {
+export default function MobileNav({ active }: { active: Key | "" }) {
   return (
     <nav className={styles.nav} aria-label="Primary">
       {ITEMS.map((item) => (
