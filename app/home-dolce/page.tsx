@@ -85,13 +85,13 @@ export default function HomeDolcePage() {
       <div className={styles.main}>
         {/* ---- Intro band ---- */}
         <section className={styles.intro}>
-          <p className={styles.introLabel}>Benvenuti</p>
+          <p className={styles.introLabel}>With love</p>
           <h2 className={styles.introHead}>
-            One golden week <span className={styles.introHi}>in Italy</span>
+            One <span className={styles.introHi}>unforgettable</span> week
           </h2>
           <p className={styles.introBody}>
-            Sun-warmed hills, long lunches, and the two of us saying <em>I do</em>. Here&rsquo;s
-            everything you&rsquo;ll need to come celebrate with us.
+            We&rsquo;re gathering everyone in Tuscany for five days of celebrating. Consider this
+            your home base for all the details.
           </p>
         </section>
 

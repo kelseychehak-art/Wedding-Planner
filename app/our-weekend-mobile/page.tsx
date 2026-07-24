@@ -35,10 +35,11 @@ export default function OurWeekendMobilePage() {
     <div className={styles.frame}>
       {/* ---- Compact header ---- */}
       <header className={styles.head}>
-        <a href="/home-mobile" className={styles.back} aria-label="Back to home">
+        <a href="/home-dolce" className={styles.back} aria-label="Back to home">
           ←
         </a>
         <div>
+          <p className={styles.eyebrow}>Day by day</p>
           <h1 className={styles.title}>Weekend Schedule</h1>
           <p className={styles.sub}>June 16 – 21, 2027 · Tuscany</p>
         </div>

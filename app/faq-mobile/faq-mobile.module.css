@@ -38,7 +38,7 @@
   flex-shrink: 0;
   font-size: 20px;
   line-height: 1;
-  color: var(--coral, #df674c);
+  color: var(--olive, #6e8b3d);
   transition: transform 0.2s ease;
 }
 details[open] .sign {

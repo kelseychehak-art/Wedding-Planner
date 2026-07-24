@@ -25,6 +25,7 @@ export default function WeekViewPage() {
           ←
         </a>
         <div>
+          <p className={styles.eyebrow}>At a glance</p>
           <h1 className={styles.title}>The Full Week</h1>
           <p className={styles.sub}>June 16 – 21, 2027 · Tuscany</p>
         </div>

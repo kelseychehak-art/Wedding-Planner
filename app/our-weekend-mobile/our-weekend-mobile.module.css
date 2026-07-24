@@ -8,62 +8,72 @@
   min-height: 100dvh;
   max-width: 448px;
   margin: 0 auto;
-  background: #f6eddd; /* soft warm cream */
+  background: #faf6ec; /* light ivory */
   color: #2f2a24; /* warm charcoal */
-  --paper: #f6eddd;
+  --paper: #faf6ec;
+  --card: #fdfaf3;
   --ink: #2f2a24;
-  --sea: #1f8aa8;
-  --coral: #df674c;
-  --orange: #e97a2f;
+  --sea: #6f9fce; /* cornflower blue */
+  --coral: #d96b3f; /* terracotta */
+  --orange: #d9702f; /* aperol orange */
+  --olive: #6e8b3d; /* herb green */
   --muted: #8a8175;
   --line: rgba(47, 42, 36, 0.16);
-  --mnav-bg: color-mix(in srgb, #f6eddd 92%, transparent);
+  --mnav-bg: color-mix(in srgb, #faf6ec 92%, transparent);
   --mnav-border: rgba(47, 42, 36, 0.14);
   --mnav-color: #8a8175;
-  --mnav-active: #1f8aa8;
+  --mnav-active: #d96b3f;
 }
 
 /* ---- Header ---- */
 
 .head {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 22px 22px 14px;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 22px 22px 8px;
 }
 
 .back {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px solid var(--ink);
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
   border-radius: 50%;
-  background: transparent;
+  background: var(--card);
   color: var(--ink);
-  font-size: 19px;
+  font-size: 18px;
   text-decoration: none;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--sea);
+  margin: 0 0 2px;
 }
 
 .title {
   font-family: var(--font-names);
   font-weight: 400;
-  font-size: 46px;
-  line-height: 0.9;
+  font-size: 38px;
+  line-height: 0.95;
   color: var(--ink);
   margin: 0;
 }
 
 .sub {
-  font-family: var(--font-sans);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.4;
   color: var(--muted);
-  margin: 4px 0 0;
+  margin: 5px 0 0;
 }
 
 /* ---- Sticky day selector ---- */

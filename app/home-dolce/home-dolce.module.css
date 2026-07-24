@@ -8,22 +8,22 @@
   min-height: 100dvh;
   max-width: 448px;
   margin: 0 auto;
-  background: #f6eddd; /* soft warm cream */
+  background: #faf6ec; /* light ivory — lets colour pop */
   color: #2f2a24; /* warm charcoal */
-  --paper: #f6eddd;
+  --paper: #faf6ec;
   --ink: #2f2a24;
-  --sea: #1f8aa8; /* sun-faded azure */
-  --coral: #df674c; /* soft terracotta-coral */
-  --orange: #e97a2f; /* fun Tuscan-sun orange */
-  --lemon: #edc14f; /* golden lemon */
-  --olive: #7f8c4e;
+  --sea: #6f9fce; /* cornflower blue (from the delphiniums) */
+  --coral: #d96b3f; /* terracotta — primary warm */
+  --orange: #d9702f; /* aperol orange — Tuscan sun */
+  --lemon: #e8b23e; /* golden (the lemons) */
+  --olive: #6e8b3d; /* herb green */
   --muted: #8a8175; /* warm taupe */
   --line: rgba(47, 42, 36, 0.16);
   /* theme the shared bottom nav — cream, sea-blue active */
   --mnav-bg: color-mix(in srgb, #f6eddd 92%, transparent);
   --mnav-border: rgba(47, 42, 36, 0.14);
   --mnav-color: #8a8175;
-  --mnav-active: #1f8aa8;
+  --mnav-active: #d96b3f;
   overflow: hidden;
 }
 
@@ -196,7 +196,7 @@
 
 .tickerStar {
   font-size: 11px;
-  color: var(--coral);
+  color: var(--olive);
   font-style: normal;
 }
 
@@ -242,9 +242,12 @@
 }
 
 .introHi {
-  font-style: italic;
-  font-weight: 500;
-  color: var(--sea);
+  font-family: var(--font-names);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.15em;
+  color: var(--olive);
+  -webkit-text-stroke: 0.6px var(--olive);
 }
 
 .introBody {
@@ -323,7 +326,7 @@
 
 .linkArrow {
   font-size: 19px;
-  color: var(--muted);
+  color: var(--olive);
 }
 
 /* ---- Sign-off ---- */

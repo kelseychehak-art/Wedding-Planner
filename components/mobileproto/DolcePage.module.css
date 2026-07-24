@@ -7,22 +7,22 @@
   max-width: 448px;
   margin: 0 auto;
   padding-bottom: 92px; /* clear the sticky bottom nav */
-  background: #f6eddd;
+  background: #faf6ec;
   color: #2f2a24;
-  --paper: #f6eddd;
-  --card: #fbf4e7;
+  --paper: #faf6ec;
+  --card: #fdfaf3;
   --ink: #2f2a24;
-  --sea: #1f8aa8;
-  --coral: #df674c;
-  --orange: #e97a2f;
-  --lemon: #edc14f;
-  --olive: #7f8c4e;
+  --sea: #6f9fce; /* cornflower blue */
+  --coral: #d96b3f; /* terracotta */
+  --orange: #d9702f; /* aperol orange */
+  --lemon: #e8b23e; /* golden */
+  --olive: #6e8b3d; /* herb green */
   --muted: #8a8175;
   --line: rgba(47, 42, 36, 0.16);
-  --mnav-bg: color-mix(in srgb, #f6eddd 92%, transparent);
+  --mnav-bg: color-mix(in srgb, #faf6ec 92%, transparent);
   --mnav-border: rgba(47, 42, 36, 0.14);
   --mnav-color: #8a8175;
-  --mnav-active: #1f8aa8;
+  --mnav-active: #d96b3f;
 }
 
 /* ---- Header ---- */
