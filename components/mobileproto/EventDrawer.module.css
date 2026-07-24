@@ -161,6 +161,26 @@
   background: var(--sea);
 }
 
+/* Sign-up CTA (Activities) — routes to RSVP for now. */
+.cta {
+  display: block;
+  margin-top: 24px;
+  padding: 14px 20px;
+  border-radius: 999px;
+  background: var(--coral);
+  color: #fbf6ea;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-decoration: none;
+  transition: filter 0.16s ease;
+}
+.cta:hover {
+  filter: brightness(1.06);
+}
+
 @keyframes fade {
   from { opacity: 0; }
   to { opacity: 1; }

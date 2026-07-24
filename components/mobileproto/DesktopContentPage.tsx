@@ -42,6 +42,7 @@ export default function DesktopContentPage({
   eyebrow,
   title,
   subtitle,
+  subTone,
   titleTone,
   active = "",
   art,
@@ -51,11 +52,14 @@ export default function DesktopContentPage({
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  /** Tint the subtitle (e.g. Weekend's date range) with the cornflower accent. */
+  subTone?: "sea";
   titleTone?: "sea" | "coral";
   active?: string;
   art?: string;
   children: React.ReactNode;
 }) {
+  const subClass = `${styles.sub} ${subTone === "sea" ? styles.subSea : ""}`;
   const isVintage = variant === "vintage";
   const nav = NAV[variant];
 
@@ -89,7 +93,7 @@ export default function DesktopContentPage({
           <div className={styles.bandText}>
             {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
             <h1 className={styles.title}>{title}</h1>
-            {subtitle && <p className={styles.sub}>{subtitle}</p>}
+            {subtitle && <p className={subClass}>{subtitle}</p>}
           </div>
         </section>
       ) : (
@@ -100,7 +104,7 @@ export default function DesktopContentPage({
             <h1 className={`${styles.title} ${titleTone === "coral" ? styles.titleCoral : ""}`}>
               {title}
             </h1>
-            {subtitle && <p className={styles.sub}>{subtitle}</p>}
+            {subtitle && <p className={subClass}>{subtitle}</p>}
           </div>
         </>
       )}

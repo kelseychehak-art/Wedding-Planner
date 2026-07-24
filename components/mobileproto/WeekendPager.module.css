@@ -72,7 +72,7 @@
   font-style: italic;
   font-size: 15px;
   line-height: 1.4;
-  color: var(--muted);
+  color: #6f9fce; /* cornflower — the top date range is the blue accent */
   margin: 5px 0 0;
 }
 

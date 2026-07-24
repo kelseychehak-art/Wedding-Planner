@@ -13,10 +13,15 @@ import styles from "./EventDrawer.module.css";
 export default function EventDrawer({
   event,
   dayName,
+  ctaHref,
+  ctaLabel,
   onClose,
 }: {
   event: ScheduleEvent | null;
   dayName?: string;
+  /** Optional sign-up CTA (Activities routes this to the RSVP page for now). */
+  ctaHref?: string;
+  ctaLabel?: string;
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -104,6 +109,12 @@ export default function EventDrawer({
               <p className={styles.detailLabel}>Good to know</p>
               <p className={styles.detailText}>{event.note}</p>
             </div>
+          )}
+
+          {ctaHref && ctaLabel && (
+            <a href={ctaHref} className={styles.cta}>
+              {ctaLabel}
+            </a>
           )}
         </div>
       </div>

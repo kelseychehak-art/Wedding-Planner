@@ -29,6 +29,7 @@ export default function OurWeekendPage() {
           eyebrow={weekendMeta.eyebrow}
           title={weekendMeta.title}
           subtitle={weekendMeta.subtitle}
+          subTone="sea"
           active="weekend"
         >
           <WeekendAgenda />

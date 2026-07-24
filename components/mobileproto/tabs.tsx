@@ -1,7 +1,8 @@
 import { dolce as d } from "@/components/mobileproto/DolcePage";
 import KindlyRespondCard from "@/components/KindlyRespondCard";
+import ActivitiesSchedule from "@/components/mobileproto/ActivitiesSchedule";
 import { siteContent } from "@/data/siteContent";
-import { schedule, formatTimeRange, type ScheduleIcon } from "@/data/schedule";
+import { schedule, formatTimeRange } from "@/data/schedule";
 import faq from "@/components/mobileproto/tabs.module.css";
 
 /*
@@ -220,24 +221,6 @@ export const activitiesMeta: TabMeta = {
   art: "/assets/art/redon-bouquet.jpg", // vibrant Redon flowers — the joyful tab
 };
 
-const ACTIVITY_PHOTO: Partial<Record<ScheduleIcon, string>> = {
-  dinner: "/assets/activities/italian-table.jpg",
-  wine: "/assets/activities/wine-tasting.jpg",
-  cooking: "/assets/activities/pizza-making.jpg",
-  pool: "/assets/activities/pool-day.jpg",
-  party: "/assets/activities/after-party.jpg",
-};
-const TITLE_PHOTO: Record<string, string> = {
-  "Farewell Party": "/assets/activities/aperitivo.jpg",
-};
-const BADGE: Record<string, { label: string; cls: string }> = {
-  mon: { label: "Requires RSVP", cls: d.badgeTerra },
-  tue: { label: "Requires RSVP", cls: d.badgeTerra },
-  wed: { label: "Requires RSVP", cls: d.badgeTerra },
-  thu: { label: "No RSVP Needed", cls: d.badgeOlive },
-  fri: { label: "Optional", cls: d.badgeOlive },
-  sat: { label: "No RSVP Needed", cls: d.badgeOlive },
-};
 const THINGS = [
   { name: "Explore Local Towns", desc: "Montepulciano, Montalcino, and Pienza are all close by." },
   { name: "Hike & Nature Walks", desc: "Scenic trails and long countryside views everywhere you look." },
@@ -248,39 +231,10 @@ const THINGS = [
 ];
 
 export function ActivitiesBody() {
-  const events = schedule.flatMap((day) =>
-    day.events.map((ev) => ({ ...ev, dayKey: day.key, dayName: day.dayName, date: day.date }))
-  );
   return (
     <>
-      <section className={d.section}>
-        <p className={d.sectionLabel}>Planned together</p>
-        <h2 className={d.sectionTitle}>On the schedule</h2>
-        {/* Compact tiles — three across on desktop so the whole week is visible
-            at a glance; one column on a phone. */}
-        <div className={d.cardGrid}>
-          {events.map((ev, i) => {
-            const photo = TITLE_PHOTO[ev.title] ?? ACTIVITY_PHOTO[ev.icon] ?? ev.photo;
-            const badge = BADGE[ev.dayKey];
-            return (
-              <article key={i} className={d.cCard}>
-                {photo && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={photo} alt="" className={d.cCardPhoto} />
-                )}
-                <div className={d.cCardBody}>
-                  {badge && <span className={`${d.badge} ${badge.cls}`}>{badge.label}</span>}
-                  <h3 className={d.cCardTitle}>{ev.title}</h3>
-                  <span className={d.cCardMeta}>
-                    {ev.dayName} · {formatTimeRange(ev.time, ev.endTime)}
-                  </span>
-                  <p className={d.cCardText}>{ev.description}</p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+      {/* Clickable activity tiles → detail drawer + sign-up CTA (client). */}
+      <ActivitiesSchedule />
 
       <section className={d.section}>
         <p className={d.sectionLabel}>On your own</p>
