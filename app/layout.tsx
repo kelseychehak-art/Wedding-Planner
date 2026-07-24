@@ -116,6 +116,10 @@ const luxurious = Luxurious_Script({
 export const metadata: Metadata = {
   title: "Kelsey & Andrew's Wedding Week",
   description: "Join us for a week in Italy — Kelsey & Andrew's Wedding Week.",
+  // Keep the whole site out of search results. Cascades to every route unless
+  // overridden; crawling stays allowed in robots.ts so this noindex is actually
+  // read (a blanket robots.txt block can leave un-removable URL-only listings).
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
