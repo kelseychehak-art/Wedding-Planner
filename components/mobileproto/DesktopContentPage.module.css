@@ -1,0 +1,216 @@
+/* Shared desktop content-tab shell. Cream by default (blue eyebrows, parity
+   with the mobile cream tabs); `.vintage` remaps accents to terracotta and the
+   header becomes a painting band feathering into cream. Defines the dolce CSS
+   vars locally so the imported card classes render outside DolcePage's frame. */
+
+.page {
+  min-height: 100vh;
+  background: #faf6ec;
+  color: #2f2a24;
+  padding-bottom: 56px;
+  --paper: #faf6ec;
+  --card: #fdfaf3;
+  --ink: #2f2a24;
+  --sea: #6f9fce;
+  --coral: #d96b3f;
+  --orange: #d9702f;
+  --lemon: #e8b23e;
+  --olive: #6e8b3d;
+  --muted: #8a8175;
+  --line: rgba(47, 42, 36, 0.16);
+  --accent: #d96b3f;
+}
+.vintage {
+  --sea: #b26a41;
+  --accent: #e0946b;
+}
+
+/* ---- Top nav bar ---- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px clamp(24px, 5vw, 64px);
+}
+.brand {
+  font-family: var(--font-names);
+  font-size: 32px;
+  line-height: 1;
+  color: #2f2a24;
+  text-decoration: none;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 32px);
+}
+.navLink {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6f675c;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.navLink:hover {
+  color: #2f2a24;
+}
+.navActive {
+  color: var(--accent);
+}
+.navRsvp {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--coral);
+  text-decoration: none;
+  padding: 9px 20px;
+  border: 1.5px solid var(--coral);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+.navRsvp:hover {
+  background: color-mix(in srgb, var(--coral) 10%, transparent);
+}
+
+/* ---- Cream header (no painting) ---- */
+
+.head {
+  text-align: center;
+  padding: 18px 24px 6px;
+}
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--sea);
+  /* extra gap so the script title's tall ascenders never touch the eyebrow */
+  margin: 0 0 10px;
+}
+.title {
+  font-family: var(--font-names);
+  font-weight: 400;
+  /* larger, so the script fills the line — extra leading + the eyebrow/sub gaps
+     above keep its loops from overlapping neighbours */
+  font-size: clamp(60px, 10vw, 150px);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+}
+.titleCoral {
+  color: var(--coral);
+}
+.sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(15px, 1.4vw, 19px);
+  color: var(--muted);
+  /* tight to the script title */
+  margin: 6px auto 0;
+  max-width: 480px;
+}
+
+/* ---- Painting band (vintage) ---- */
+
+.band {
+  position: relative;
+  min-height: 48vh;
+  background-size: cover;
+  background-position: center 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Bias the centered block downward — more air between the nav and the title.
+     min-height stays 48vh, so the band (and everything below it) doesn't move. */
+  padding-top: 80px;
+  isolation: isolate;
+}
+/* Two layers: a dark veil that holds the cream type legible over ANY painting
+   (pastoral is very light), and a cream feather confined to the bottom edge. */
+.band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to bottom, rgba(250, 246, 236, 0) 74%, #faf6ec 100%),
+    linear-gradient(
+      to bottom,
+      rgba(26, 21, 15, 0.56) 0%,
+      rgba(26, 21, 15, 0.36) 38%,
+      rgba(26, 21, 15, 0.34) 68%,
+      rgba(26, 21, 15, 0) 96%
+    );
+}
+.band .topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+}
+.band .brand {
+  color: #fbf6ea;
+  text-shadow: 0 1px 12px rgba(20, 16, 12, 0.5);
+}
+.band .navLink {
+  color: rgba(247, 239, 223, 0.9);
+  text-shadow: 0 1px 10px rgba(20, 16, 12, 0.5);
+}
+.band .navLink:hover {
+  color: #fff;
+}
+.band .navActive {
+  color: var(--accent);
+}
+.band .navRsvp {
+  color: #faf6ec;
+  border-color: rgba(247, 239, 223, 0.75);
+}
+.band .navRsvp:hover {
+  background: rgba(247, 239, 223, 0.14);
+}
+
+.bandText {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 24px 44px;
+}
+.bandText .eyebrow {
+  color: #f3ead6;
+  text-shadow: 0 1px 12px rgba(20, 16, 12, 0.5);
+}
+.bandText .title {
+  color: #fbf6ea;
+  text-shadow: 0 2px 20px rgba(20, 16, 12, 0.5);
+}
+.bandText .sub {
+  color: #efe4cf;
+  text-shadow: 0 1px 14px rgba(20, 16, 12, 0.55);
+}
+
+/* ---- Body: centered readable column ---- */
+
+.body {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 6px clamp(20px, 4vw, 36px) 0;
+  container-type: inline-size;
+}
+
+@media (max-width: 680px) {
+  .nav {
+    display: none;
+  }
+  .topbar {
+    justify-content: center;
+  }
+}

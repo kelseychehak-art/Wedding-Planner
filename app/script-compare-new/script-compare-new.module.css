@@ -1,0 +1,134 @@
+/* Local demo/candidate scripts for comparison against Cherolina. Files live in
+   the gitignored candidates dir, so these render on localhost only. */
+
+@font-face { font-family: "CmpCherolina"; src: url("/fonts/candidates/ttf/cherolina.otf"); font-display: swap; }
+@font-face { font-family: "CmpQuetine"; src: url("/fonts/candidates/ttf/quetine.ttf"); font-display: swap; }
+@font-face { font-family: "CmpRoyalty"; src: url("/fonts/candidates/ttf/royalty_free.otf"); font-display: swap; }
+@font-face { font-family: "CmpSientta"; src: url("/fonts/candidates/ttf/sientta.ttf"); font-display: swap; }
+@font-face { font-family: "CmpAnita"; src: url("/fonts/candidates/ttf/anita_jane.otf"); font-display: swap; }
+@font-face { font-family: "CmpBotterill"; src: url("/fonts/candidates/ttf/botterill.otf"); font-display: swap; }
+@font-face { font-family: "CmpMichael"; src: url("/fonts/candidates/ttf/michael.ttf"); font-display: swap; }
+@font-face { font-family: "CmpClarissa"; src: url("/fonts/candidates/ttf/clarissa.ttf"); font-display: swap; }
+@font-face { font-family: "CmpAdelia"; src: url("/fonts/candidates/ttf/adelia.otf"); font-display: swap; }
+@font-face { font-family: "CmpFrutilla"; src: url("/fonts/candidates/ttf/frutilla.ttf"); font-display: swap; }
+@font-face { font-family: "CmpAndrea"; src: url("/fonts/candidates/ttf/andrea_bellarosa.ttf"); font-display: swap; }
+
+.fCherolina { font-family: "CmpCherolina", cursive; }
+.fQuetine { font-family: "CmpQuetine", cursive; }
+.fRoyalty { font-family: "CmpRoyalty", cursive; }
+/* faux-thinned: a card-coloured stroke erodes the glyph edges (works only on a
+   solid, known background — which the homepage names are). */
+.fRoyaltyThin {
+  font-family: "CmpRoyalty", cursive;
+  -webkit-text-stroke: 0.9px #fdfaf3;
+}
+.fSientta { font-family: "CmpSientta", cursive; }
+.fAnita { font-family: "CmpAnita", cursive; }
+.fBotterill { font-family: "CmpBotterill", cursive; }
+.fMichael { font-family: "CmpMichael", cursive; }
+.fClarissa { font-family: "CmpClarissa", cursive; }
+.fAdelia { font-family: "CmpAdelia", cursive; }
+.fFrutilla { font-family: "CmpFrutilla", cursive; }
+.fAndrea { font-family: "CmpAndrea", cursive; }
+
+.page {
+  min-height: 100vh;
+  background: #faf6ec;
+  color: #2f2a24;
+  padding: clamp(28px, 5vw, 56px) clamp(20px, 5vw, 64px) 80px;
+}
+.head {
+  text-align: center;
+  max-width: 660px;
+  margin: 0 auto 40px;
+}
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #b26a41;
+  margin: 0 0 6px;
+}
+.h1 {
+  font-family: var(--font-names);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 66px);
+  line-height: 0.95;
+  margin: 0;
+}
+.sub {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6f675c;
+  margin: 12px 0 0;
+}
+
+.card {
+  max-width: 860px;
+  margin: 0 auto 16px;
+  background: #fdfaf3;
+  border: 1px solid rgba(47, 42, 36, 0.14);
+  border-radius: 16px;
+  padding: 22px 30px 30px;
+}
+.cardRef {
+  border: 1.5px solid #cf7a52;
+  background: #fbf3ea;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  padding-bottom: 14px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(47, 42, 36, 0.1);
+}
+.name {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: #2f2a24;
+}
+.badge {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.free { background: #e2edd8; color: #4b6b32; }
+.paid { background: #f6e6cf; color: #9a6a26; }
+.no { background: #f2d9d4; color: #a5402f; }
+.unknown { background: #e7e2d8; color: #7a7266; }
+.note {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-style: italic;
+  color: #8a8175;
+}
+
+/* the couple names rendered in the candidate font */
+.names {
+  text-align: center;
+  line-height: 0.9;
+  color: #2f2a24;
+  margin: 18px 0 8px;
+  font-size: clamp(56px, 8vw, 104px);
+}
+.names span { display: block; }
+.amp {
+  font-size: 0.42em;
+  color: #cf7a52;
+  margin: 4px 0;
+}
+.tag {
+  text-align: center;
+  font-size: clamp(22px, 2.6vw, 34px);
+  color: #4a463e;
+  margin: 0;
+}

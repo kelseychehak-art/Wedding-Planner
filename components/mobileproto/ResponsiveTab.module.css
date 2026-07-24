@@ -1,0 +1,17 @@
+/* Show the phone shell below 768px, the desktop shell at 768px and up.
+   768px is the project's canonical mobile breakpoint (CLAUDE.md). */
+.mobile {
+  display: block;
+}
+.desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile {
+    display: none;
+  }
+  .desktop {
+    display: block;
+  }
+}

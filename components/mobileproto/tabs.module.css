@@ -1,0 +1,72 @@
+/* FAQ accordion styles, shared by every FAQ variant (mobile/desktop, cream/vintage).
+   Colors come from the dolce CSS vars the surrounding shell defines. */
+
+.group {
+  margin-top: 26px;
+}
+
+.groupTitle {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink, #2f2a24);
+  margin: 0 0 10px;
+}
+
+.item {
+  border-top: 1px solid var(--line, rgba(47, 42, 36, 0.16));
+}
+.item:last-child {
+  border-bottom: 1px solid var(--line, rgba(47, 42, 36, 0.16));
+}
+
+.q {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 2px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink, #2f2a24);
+}
+.q::-webkit-details-marker {
+  display: none;
+}
+
+.plus {
+  flex-shrink: 0;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--olive, #6e8b3d);
+  transition: transform 0.2s ease;
+}
+details[open] .plus {
+  transform: rotate(45deg);
+}
+
+.a {
+  padding: 0 2px 16px;
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #4a463e;
+  margin: 0;
+}
+
+/* Two-column FAQ groups on wide screens */
+.faqGrid {
+  display: grid;
+  gap: 0 clamp(24px, 4vw, 48px);
+}
+@media (min-width: 720px) {
+  .faqGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .faqGrid .group:nth-child(-n + 2) {
+    margin-top: 8px;
+  }
+}

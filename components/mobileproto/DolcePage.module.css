@@ -25,6 +25,65 @@
   --mnav-active: #d96b3f;
 }
 
+/* ---- Vintage treatment (opt-in via `art` prop) ----
+   Remaps the blue accents to the restrained terracotta/olive set and swaps the
+   plain header for a painterly band that feathers into the cream page. */
+
+.vintage {
+  --sea: #b26a41; /* section labels / eyebrows → terracotta */
+  --mnav-active: #b26a41;
+}
+
+.artHead {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 20px 22px 46px;
+  min-height: 226px;
+  background-size: cover;
+  background-position: center 32%;
+  isolation: isolate;
+}
+
+/* Two layers: a dark veil that keeps the cream type legible over ANY painting
+   (some are very light), and a cream feather confined to the bottom edge. */
+.artHead::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to bottom, rgba(250, 246, 236, 0) 70%, #faf6ec 100%),
+    linear-gradient(
+      to bottom,
+      rgba(26, 21, 15, 0.52) 0%,
+      rgba(26, 21, 15, 0.36) 42%,
+      rgba(26, 21, 15, 0.28) 64%,
+      rgba(26, 21, 15, 0) 92%
+    );
+}
+
+.artHead .back {
+  color: #faf6ec;
+  border-color: rgba(247, 239, 223, 0.5);
+  background: rgba(26, 21, 15, 0.28);
+}
+.artHead .eyebrow {
+  color: #f3ead6;
+  text-shadow: 0 1px 10px rgba(20, 16, 12, 0.55);
+  /* the script title's ascenders are tall — keep them off the eyebrow */
+  margin-bottom: 8px;
+}
+.artHead .title {
+  color: #fbf6ea;
+  text-shadow: 0 2px 16px rgba(20, 16, 12, 0.5);
+}
+.artHead .sub {
+  color: #efe4cf;
+  text-shadow: 0 1px 12px rgba(20, 16, 12, 0.55);
+}
+
 /* ---- Header ---- */
 
 .head {
@@ -91,6 +150,7 @@
 
 .main {
   padding: 12px 22px 0;
+  container-type: inline-size;
 }
 
 /* ---- Section ---- */
@@ -150,6 +210,319 @@
   line-height: 1.6;
   color: #4a463e;
   margin: 0;
+}
+
+/* Card grid. Single column in the narrow mobile frame; spreads to two/three
+   columns when its container is wide (the desktop shell) — driven by a
+   container query so viewing a mobile page on desktop stays single-column. */
+.roomGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@container (min-width: 620px) {
+  .roomGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@container (min-width: 1000px) {
+  .roomGrid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* ---- Desktop-shaped layouts ----
+   All gated on container width, so the narrow mobile frame keeps its stacked
+   phone layout and only the wide desktop column reflows. */
+
+/* Horizontal card: stacked like a phone card by default, image-left /
+   text-right once the container is wide. */
+.hStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hCard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(47, 42, 36, 0.07);
+}
+.hCardPhoto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+.hCardBody {
+  padding: 16px 18px 18px;
+}
+
+@container (min-width: 620px) {
+  .hCard {
+    display: grid;
+    grid-template-columns: minmax(240px, 36%) 1fr;
+    align-items: stretch;
+  }
+  /* aspect-ratio governs how tall the card *wants* to be (so a portrait photo
+     can't stretch it); height:100% then fills the row when the text is taller. */
+  .hCardPhoto {
+    aspect-ratio: 4 / 3;
+    height: 100%;
+    min-height: 190px;
+  }
+  .hCardBody {
+    padding: 24px 28px;
+    align-self: center;
+  }
+}
+
+/* Compact card grid — small tiles, three across on a wide container, so more
+   is visible without scrolling (Activities). */
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@container (min-width: 560px) {
+  .cardGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@container (min-width: 780px) {
+  .cardGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+}
+
+.cCard {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(47, 42, 36, 0.06);
+}
+.cCardPhoto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+.cCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 15px 16px;
+}
+.cCardBody .badge {
+  align-self: flex-start;
+  margin-bottom: 0;
+}
+.cCardTitle {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0;
+}
+.cCardMeta {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+/* Clamp the blurb so every tile is a similar height and the grid stays tight. */
+.cCardText {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #4a463e;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@container (min-width: 780px) {
+  .cCardTitle {
+    font-size: 16px;
+  }
+  .cCardText {
+    font-size: 13px;
+  }
+}
+
+/* Agenda — one row per day, that day's events spreading ACROSS the row rather
+   than stacking. A 3-event wedding day stays the same height as a 1-event day,
+   so the week reads as an even list instead of one tower. */
+/* Type-only: no photos, no card chrome — just hairline rules on cream, like a
+   printed programme. Reads editorial and keeps stock imagery off the page. */
+.agenda {
+  border-top: 1px solid var(--line);
+}
+
+.agendaRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 20px 2px;
+  border-bottom: 1px solid var(--line);
+}
+@container (min-width: 620px) {
+  .agendaRow {
+    grid-template-columns: 168px 1fr;
+    align-items: baseline;
+    gap: 28px;
+    padding: 24px 2px;
+  }
+}
+
+.agendaDate {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sea);
+  margin: 0;
+}
+.agendaName {
+  font-family: var(--font-serif);
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 3px 0 0;
+}
+
+/* events run ACROSS the row: 1 fills it, 3 split it in thirds — so a busy day
+   never grows taller than a quiet one. */
+.agendaEvents {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@container (min-width: 620px) {
+  .agendaEvents {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    column-gap: 44px;
+  }
+  /* Divider lives in the gap, not inside a column — so every event column keeps
+     exactly the same content width (padding on later ones made the first look
+     wider). */
+  .evChip + .evChip::before {
+    content: "";
+    position: absolute;
+    left: -22px;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid var(--line);
+  }
+}
+
+.evChip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.evTitle {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink);
+}
+.evMeta {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--coral);
+  font-variant-numeric: tabular-nums;
+}
+.evLoc {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--muted);
+}
+
+/* Two sections side by side on a wide container. */
+.twoUp {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(18px, 3vw, 34px);
+}
+.twoUp > * {
+  margin-top: 0;
+}
+@container (min-width: 620px) {
+  .twoUp {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* A list of .row items that splits into two columns on a wide container. */
+.rowCols {
+  column-gap: clamp(24px, 4vw, 44px);
+}
+@container (min-width: 620px) {
+  .rowCols {
+    column-count: 2;
+  }
+}
+
+/* Three equal tiles (e.g. airport codes) instead of a stacked list. */
+.tripleGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@container (min-width: 620px) {
+  .tripleGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.tile {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+@container (min-width: 620px) {
+  .tile {
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+    padding: 22px 18px;
+  }
+}
+.tileLead {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--coral);
+}
+.tileText {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink);
 }
 
 /* ---- Photo card (image + body) ---- */
@@ -236,6 +609,7 @@
   gap: 12px;
   padding: 11px 0;
   border-top: 1px solid var(--line);
+  break-inside: avoid; /* keep a row whole when .rowCols splits into columns */
 }
 .row:first-child {
   border-top: none;

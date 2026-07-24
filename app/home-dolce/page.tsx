@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import MobileNav from "@/components/mobileproto/MobileNav";
+import Countdown from "@/components/mobileproto/Countdown";
 import { siteContent } from "@/data/siteContent";
 import { schedule } from "@/data/schedule";
 import styles from "./home-dolce.module.css";
@@ -47,7 +48,7 @@ export default function HomeDolcePage() {
           </h1>
 
           <p className={styles.tagline}>
-            are getting married in the <em>Tuscan sun</em>
+            are getting married under the <em>Tuscan sun</em>
           </p>
 
           <div className={styles.photoWrap}>
@@ -67,6 +68,10 @@ export default function HomeDolcePage() {
           <a href="/rsvp-mobile" className={styles.cta}>
             RSVP &amp; Details
           </a>
+
+          <div style={{ marginTop: 24 }}>
+            <Countdown />
+          </div>
         </section>
       </main>
 

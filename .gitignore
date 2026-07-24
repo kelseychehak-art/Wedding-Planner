@@ -58,3 +58,6 @@ next-env.d.ts
 # (third-party copyright; used locally to sample palette, must not deploy)
 /public/assets/_*.jpeg
 /public/assets/_*.jpg
+
+# Purchased font source files (webfont license) — keep out of git & web root
+/licenses/

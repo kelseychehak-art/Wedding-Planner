@@ -1,10 +1,11 @@
-/* Cherolina — the couple's signature script (Kelsey's pick). Demo/personal-use
-   font in the gitignored candidates dir, so it renders on localhost only; the
-   live site gracefully falls back to Allura until the webfont is licensed.
-   Referenced everywhere via --font-names. */
+/* Cherolina — the couple's signature script (Kelsey's pick). Licensed webfont
+   (Almarkha Type, webfont/@font-face license — source files in /licenses).
+   Referenced everywhere via --font-names; Allura is only a load-time fallback. */
 @font-face {
   font-family: "Cherolina";
-  src: url("/fonts/candidates/ttf/cherolina.otf") format("opentype");
+  src:
+    url("/fonts/cherolina.woff2") format("woff2"),
+    url("/fonts/cherolina.woff") format("woff");
   font-display: swap;
 }
 

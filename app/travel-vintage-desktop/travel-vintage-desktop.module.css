@@ -1,0 +1,172 @@
+/* Desktop "vintage" content tab — wide painting header band feathering into a
+   centered column of the shared cream cards (dolce class library). Defines the
+   dolce CSS vars locally (with the terracotta/olive vintage remap) so the
+   imported card classes render outside DolcePage's own .frame. */
+
+.page {
+  min-height: 100vh;
+  background: #faf6ec;
+  color: #2f2a24;
+  padding-bottom: 40px;
+  --paper: #faf6ec;
+  --card: #fdfaf3;
+  --ink: #2f2a24;
+  --sea: #b26a41; /* section labels / eyebrows → terracotta (vintage remap) */
+  --coral: #d96b3f;
+  --orange: #d9702f;
+  --lemon: #e8b23e;
+  --olive: #6e8b3d;
+  --muted: #8a8175;
+  --line: rgba(47, 42, 36, 0.16);
+  --accent: #e0946b;
+}
+
+/* ---- Painting header band ---- */
+
+.band {
+  position: relative;
+  min-height: 44vh;
+  background-size: cover;
+  background-position: center 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  isolation: isolate;
+}
+.band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 21, 15, 0.5) 0%,
+    rgba(26, 21, 15, 0.12) 30%,
+    rgba(250, 246, 236, 0) 62%,
+    #faf6ec 100%
+  );
+}
+
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px clamp(24px, 5vw, 64px);
+}
+.brand {
+  font-family: var(--font-names);
+  font-size: 32px;
+  line-height: 1;
+  color: #fbf6ea;
+  text-decoration: none;
+  text-shadow: 0 1px 12px rgba(20, 16, 12, 0.5);
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.4vw, 34px);
+}
+.navLink {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(247, 239, 223, 0.9);
+  text-decoration: none;
+  text-shadow: 0 1px 10px rgba(20, 16, 12, 0.5);
+  transition: color 0.2s ease;
+}
+.navLink:hover {
+  color: #fff;
+}
+.navActive {
+  color: var(--accent);
+}
+.navRsvp {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #faf6ec;
+  text-decoration: none;
+  padding: 9px 20px;
+  border: 1.5px solid rgba(247, 239, 223, 0.75);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+.navRsvp:hover {
+  background: rgba(247, 239, 223, 0.14);
+}
+
+.bandText {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 24px 44px;
+}
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #f3ead6;
+  margin: 0 0 6px;
+  text-shadow: 0 1px 12px rgba(20, 16, 12, 0.5);
+}
+.title {
+  font-family: var(--font-names);
+  font-weight: 400;
+  font-size: clamp(52px, 7vw, 104px);
+  line-height: 0.9;
+  color: #fbf6ea;
+  margin: 0;
+  text-shadow: 0 2px 20px rgba(20, 16, 12, 0.5);
+}
+.sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(16px, 1.5vw, 20px);
+  color: #efe4cf;
+  margin: 12px auto 0;
+  max-width: 520px;
+  text-shadow: 0 1px 14px rgba(20, 16, 12, 0.55);
+}
+
+/* ---- Body: centered readable column of cream cards ---- */
+
+.body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 8px clamp(20px, 4vw, 32px) 0;
+}
+
+/* Two-up the middle sections on wide screens for a less "phone-tall" feel. */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 34px);
+  margin-top: 26px;
+}
+.grid > * {
+  margin-top: 0;
+}
+
+@media (max-width: 680px) {
+  .nav {
+    display: none;
+  }
+  .topbar {
+    justify-content: center;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

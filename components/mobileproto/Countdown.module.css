@@ -1,0 +1,79 @@
+.wrap {
+  text-align: center;
+  margin: 4px 0 0;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted, #8a8175);
+  margin: 0 0 10px;
+}
+
+.units {
+  display: inline-flex;
+  gap: 14px;
+}
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 46px;
+}
+
+.num {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--coral, #d96b3f);
+  font-variant-numeric: tabular-nums;
+}
+
+.unitLabel {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted, #8a8175);
+  margin-top: 5px;
+}
+
+/* Over a photo: ivory type + soft shadow so it stays legible on any image,
+   and larger so it reads as a hero moment. */
+.onImage .num {
+  color: #fbf6ea;
+  font-size: clamp(40px, 4vw, 54px);
+  text-shadow: 0 2px 16px rgba(20, 16, 12, 0.55);
+}
+.onImage .units {
+  gap: clamp(16px, 2vw, 28px);
+}
+.onImage .unit {
+  min-width: clamp(54px, 5vw, 68px);
+}
+/* the "celebration begins in" line in the script hand — faux-bolded with a
+   stroke (Cherolina is single-weight) so it reads clearly over the photo */
+.onImage .label {
+  font-family: var(--font-names);
+  text-transform: none;
+  font-weight: 400;
+  font-size: clamp(26px, 3vw, 40px);
+  letter-spacing: 0.01em;
+  margin-bottom: 12px;
+  -webkit-text-stroke: 0.7px rgba(251, 246, 234, 0.95);
+}
+.onImage .unitLabel {
+  font-size: 11px;
+  margin-top: 7px;
+}
+.onImage .label,
+.onImage .unitLabel {
+  color: rgba(247, 239, 223, 0.9);
+  text-shadow: 0 1px 10px rgba(20, 16, 12, 0.6);
+}

@@ -1,0 +1,180 @@
+/* "Vintage romance" hero — a public-domain landscape PAINTING fills the hero,
+   names + countdown layered over it. A soft scrim keeps text legible without
+   muddying the art. Dolce Vita accents. */
+
+.frame {
+  position: relative;
+  min-height: 100dvh;
+  max-width: 448px;
+  margin: 0 auto;
+  padding-bottom: 92px;
+  background: #2b2925;
+  color: #faf6ec;
+  overflow: hidden;
+  --paper: #faf6ec;
+  --ivory: #f3ead6;
+  /* Single warm accent, drawn from the painting's own ochre earth — no yellow. */
+  --accent: #cf7a52;
+  --muted: rgba(247, 239, 223, 0.75);
+  --mnav-bg: color-mix(in srgb, #2b2925 55%, transparent);
+  --mnav-border: rgba(247, 239, 223, 0.18);
+  --mnav-color: rgba(247, 239, 223, 0.7);
+  --mnav-active: #e09168;
+}
+
+.hero {
+  position: relative;
+  min-height: 100dvh;
+}
+
+.art {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+/* Soft scrim: darker at top & bottom for legibility, art shows through the middle. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(28, 24, 20, 0.5) 0%,
+    rgba(28, 24, 20, 0.12) 30%,
+    rgba(28, 24, 20, 0.12) 58%,
+    rgba(28, 24, 20, 0.66) 100%
+  );
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 46px 26px 104px;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #f7efdf;
+  margin: 0 0 4px;
+  text-shadow: 0 1px 12px rgba(20, 16, 12, 0.5);
+}
+
+.names {
+  font-family: var(--font-names);
+  font-weight: 400;
+  line-height: 0.9;
+  font-size: 74px;
+  color: #fbf6ea;
+  margin: 0;
+  text-shadow: 0 2px 20px rgba(20, 16, 12, 0.55);
+}
+.nameLine {
+  display: block;
+}
+.amp {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.4em;
+  color: var(--accent);
+  margin: 2px 0;
+}
+
+.tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 19px;
+  color: #f7efdf;
+  margin: 14px 0 0;
+  text-shadow: 0 1px 14px rgba(20, 16, 12, 0.55);
+}
+.tagline em {
+  color: var(--accent);
+}
+
+.meta {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f7efdf;
+  margin: 14px 0 0;
+  text-shadow: 0 1px 12px rgba(20, 16, 12, 0.6);
+}
+.dot {
+  margin: 0 8px;
+  color: var(--accent);
+}
+
+.cta {
+  display: inline-block;
+  margin: 20px 0 0;
+  padding: 14px 30px;
+  border: 1.5px solid rgba(247, 239, 223, 0.85);
+  border-radius: 999px;
+  color: #faf6ec;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: rgba(28, 24, 20, 0.18);
+  backdrop-filter: blur(2px);
+}
+
+.countdown {
+  margin-top: auto;
+}
+.cdLabel {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+  text-shadow: 0 1px 10px rgba(20, 16, 12, 0.6);
+}
+.cdUnits {
+  display: inline-flex;
+  gap: 16px;
+}
+.cdUnit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
+}
+.cdNum {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ivory);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 14px rgba(20, 16, 12, 0.6);
+}
+.cdUnitLabel {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 5px;
+}
