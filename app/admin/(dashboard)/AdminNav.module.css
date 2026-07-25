@@ -1,6 +1,8 @@
 /* ---- Admin shell ---- */
 
 .shell {
+  /* Palette is remapped to the guest brand on the /admin root layout
+     (admin-theme.module.css), so it covers login + dashboard alike. */
   min-height: 100vh;
   display: grid;
   grid-template-columns: 232px 1fr;
@@ -57,12 +59,12 @@
 }
 
 .wordmarkNames {
-  font-family: var(--font-script);
-  font-size: 27px;
+  font-family: var(--font-names); /* Cherolina — matches the guest site's names */
+  font-size: 34px;
   font-weight: 400;
-  color: var(--olive-dark);
+  color: var(--ink);
   margin: 2px 0 6px;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .wordmarkEyebrow {

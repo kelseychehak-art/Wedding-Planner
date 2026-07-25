@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import theme from "./admin-theme.module.css";
 
 /*
  * The back-office is private. The proxy already redirects unauthenticated
@@ -11,5 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  // theme.theme remaps the palette to the guest brand for everything under /admin.
+  return <div className={theme.theme}>{children}</div>;
 }
