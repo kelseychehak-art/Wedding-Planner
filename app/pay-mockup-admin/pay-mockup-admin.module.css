@@ -1,0 +1,253 @@
+/* MOCKUP — admin payments panel. Uses the admin token aliases with hex
+   fallbacks so it renders faithfully to the back-office look. */
+
+.frame {
+  min-height: 100dvh;
+  background: #eeeae0;
+  padding: 26px 0 60px;
+  --a-ink: var(--ink, #2b2925);
+  --a-surface: var(--surface, #fffdf8);
+  --a-border: var(--border-soft, #e6dfd1);
+  --a-border-strong: var(--border, #d9d0be);
+  --a-muted: var(--olive-muted, #8a8472);
+  --a-olive: var(--olive-dark, #55611f);
+  --a-terra: var(--terracotta, #c06a4b);
+  --a-citrus: var(--citrus, #b98900);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.mockNote {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--a-muted);
+  background: rgba(233, 122, 47, 0.12);
+  border: 1px dashed rgba(233, 122, 47, 0.5);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin: 0 0 18px;
+}
+
+.panel {
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(43, 41, 37, 0.06);
+  padding: 22px 24px 20px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.h1 {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--a-ink);
+  margin: 0;
+}
+
+.sub {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--a-muted);
+  margin: 4px 0 0;
+}
+
+.exportBtn {
+  flex-shrink: 0;
+  padding: 9px 16px;
+  border: 1px solid var(--a-border-strong);
+  border-radius: 7px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--a-ink);
+  cursor: pointer;
+}
+
+/* summary stats */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: #faf7f0;
+  border: 1px solid var(--a-border);
+  border-radius: 9px;
+}
+
+.statLabel {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+}
+
+.statValue {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--a-ink);
+}
+
+.statOutstanding {
+  color: var(--a-terra);
+}
+
+.statMuted {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--a-muted);
+}
+
+/* table */
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  text-align: left;
+  padding: 0 14px 10px;
+  border-bottom: 1px solid var(--a-border-strong);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--a-border);
+  vertical-align: middle;
+}
+
+.right { text-align: right; }
+.center { text-align: center; }
+
+.partyCell {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--a-ink);
+  white-space: nowrap;
+}
+
+.roomCell {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--a-muted);
+  white-space: nowrap;
+}
+
+.amountStatic {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--a-ink);
+}
+
+/* the editable amount field */
+.rowEditing {
+  background: #fbf8f1;
+}
+
+.amountInput {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 12px;
+  min-width: 118px;
+  justify-content: flex-end;
+  background: #fff;
+  border: 2px solid var(--a-olive);
+  border-radius: 7px;
+  box-shadow: 0 0 0 3px rgba(85, 97, 31, 0.14);
+}
+
+.dollar {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--a-muted);
+}
+
+.amountVal {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--a-ink);
+}
+
+.caret {
+  width: 1px;
+  height: 16px;
+  margin-left: 2px;
+  background: var(--a-olive);
+}
+
+/* status pills */
+.pill {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.pillPaid {
+  background: rgba(85, 97, 31, 0.14);
+  color: var(--a-olive);
+}
+
+.pillUnpaid {
+  background: rgba(192, 106, 75, 0.14);
+  color: var(--a-terra);
+}
+
+.hint {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--a-muted);
+  margin: 18px 0 0;
+}
+
+.hint strong {
+  color: var(--a-olive);
+  font-weight: 700;
+}
