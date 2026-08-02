@@ -82,3 +82,38 @@ file tree.
 6. **Cross-page overlaps to build once, not twice.** Adult/child-age rules (Settings ↔ Guest List ↔
    Activities ↔ Lodging); Gmail ingest (Budget ↔ Vendors); vendor payments ↔ budget committed/paid;
    activity age-eligibility ↔ guest child data.
+
+## Upcoming admin work & notes (captured — not yet built)
+
+Forward-looking notes for the next round of admin work. Nothing here is built or wired yet.
+
+1. **Admin pages must be mobile-friendly (make it a requirement).** The admin was built
+   **desktop-first**, and the site-wide mobile-first rule (**D20** in `docs/design-system.md` /
+   `CLAUDE.md`) currently scopes itself to the **guest** site — it explicitly says "*guest-facing;
+   `/admin` unchanged.*" **That exclusion no longer holds.** The admin will be used on a phone during
+   the wedding week — seating guests, checking payments, updating RSVPs on the go — so every
+   `/admin/*` surface needs a genuine phone layout, not just a shrunk desktop one:
+   - No horizontal scroll at **375–390px**; treat phone as a target, not a fallback.
+   - Tap targets **≥44px**; readable body type (16px+).
+   - **Wide tables reflow** to stacked cards / key-value rows (guest list, budget, vendors,
+     lodging), or scroll inside their own container — never force the page to scroll sideways.
+   - Sidebar collapses to a drawer / bottom nav; sticky headers and action bars must not crowd
+     content or overlap the keyboard on inputs.
+   - **Audit all nine admin surfaces** (Dashboard, Guest List, Travel, Itinerary, Budget, Settings,
+     Activities, Lodging, Communications, Vendors) once the pattern is set.
+
+2. **Guest accommodation payments (Stripe) — leaning full integration.** For when the venue won't
+   take payments directly from guests. Add an `amount_owed` + `paid` concept per **party**, an admin
+   field to set/track it (Collected / Outstanding / paid count), and a guest-facing "Your Stay"
+   balance-due → Stripe checkout → auto-**Paid** flow. Processor fee (~2.9%+30¢) applies whether
+   integrated or a plain link. **Visual mockups prototyped on this branch:** `/pay-mockup` (guest,
+   Dolce style) and `/pay-mockup-admin` (admin field + tracking) — concept only, not wired to Stripe.
+
+3. **Interactive seating chart (admin) — keep it SUPER simple.** Plated/serviced dinner needs
+   names-to-seats. Scope: **black-and-white basic shapes only** (circles = round tables, rectangles =
+   banquet/head), labelled with a seated count; **drag names from the RSVP'd-yes list onto tables**,
+   drag to rearrange; **pull meal choice + dietary restrictions straight from the RSVP data** and show
+   them as small **text tags** (no colour, since it's B&W); one-click **caterer export** (per-table
+   meal counts + allergy flags). Open decision: **table-level** assignment (recommended — hassle-free,
+   all a plated caterer needs) vs. **seat-level** (assigned chairs, more fiddly). No images, no floor
+   plan, no 3D. Mockup still to build.

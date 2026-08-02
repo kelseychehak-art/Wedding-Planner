@@ -1,0 +1,270 @@
+/* MOCKUP — guest accommodation payment screen, "Dolce" art direction. */
+
+.frame {
+  min-height: 100dvh;
+  background: #ece2cf; /* slightly deeper cream so the screen frames read */
+  padding: 22px 0 60px;
+  --paper: #f6eddd;
+  --ink: #2f2a24;
+  --sea: #1f8aa8;
+  --coral: #df674c;
+  --orange: #e97a2f;
+  --olive: #6f8a3f;
+  --muted: #8a8175;
+  --line: rgba(47, 42, 36, 0.16);
+}
+
+.wrap {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+.mockNote {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: rgba(233, 122, 47, 0.14);
+  border: 1px dashed rgba(233, 122, 47, 0.5);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin: 0 0 20px;
+}
+
+.stateLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 18px 0 10px;
+}
+
+/* one "phone screen" */
+.screen {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px 24px 26px;
+  text-align: center;
+  box-shadow: 0 18px 40px rgba(47, 42, 36, 0.12);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--sea);
+  margin: 0 0 2px;
+}
+
+.title {
+  font-family: var(--font-allura);
+  font-weight: 400;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+}
+
+.intro {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 10px auto 0;
+  max-width: 30ch;
+}
+
+/* the matted balance card */
+.card {
+  position: relative;
+  margin-top: 22px;
+  background: #fffaf0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px 22px;
+  box-shadow: 0 10px 24px rgba(47, 42, 36, 0.1);
+  text-align: left;
+}
+
+.party {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--ink);
+  margin: 0 0 14px;
+  text-align: center;
+}
+
+.details {
+  margin: 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detailRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.detailRow dt {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.detailRow dd {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: right;
+}
+
+.balanceBlock {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 18px 0 20px;
+}
+
+.balanceLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.balanceAmount {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 34px;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.payBtn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 999px;
+  background: var(--coral);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(223, 103, 76, 0.32);
+}
+
+.secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 14px 0 0;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.lock {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: var(--olive);
+}
+
+.note {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 18px 0 0;
+}
+
+.link {
+  color: var(--sea);
+  font-weight: 600;
+}
+
+/* ---- paid state ---- */
+
+.cardPaid {
+  padding-top: 30px;
+}
+
+.paidPill {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: var(--olive);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 14px rgba(111, 138, 63, 0.4);
+}
+
+.check {
+  width: 13px;
+  height: 13px;
+}
+
+.thanks {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink);
+  text-align: center;
+  margin: 0 0 14px;
+}
+
+.receiptBtn {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
