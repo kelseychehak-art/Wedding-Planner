@@ -74,7 +74,10 @@ burgundy 8‑12% / mauve 8‑12% / terracotta+gold accent only. No single card u
 **Type (locked):** **Cherolina** (script — names/monogram/short Italian lines only, large sizes) ·
 **Fraunces** (display — names, MENU, DETAILS, big titles) · **Cormorant Garamond** (serif — body,
 menu descriptions, italics) · **Instrument Sans** (uppercase labels, dates, URLs, QR captions).
-⚠️ Cherolina is licensed for **web**; confirm a **desktop/print** license before it goes on paper.
+⚠️ **Cherolina's license is web‑only — do NOT put it on print.** Substitute a free OFL script:
+**Allura** (closest match to Cherolina, and already the site's fallback — best for signature/names) or
+**Pinyon Script** (more formal, ornate — great for "Benvenuti"). Both are free for commercial print
+and available in Canva. Fraunces, Cormorant Garamond, and Instrument Sans are free for any use.
 
 ---
 
