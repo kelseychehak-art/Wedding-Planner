@@ -117,3 +117,17 @@ Forward-looking notes for the next round of admin work. Nothing here is built or
    meal counts + allergy flags). Open decision: **table-level** assignment (recommended — hassle-free,
    all a plated caterer needs) vs. **seat-level** (assigned chairs, more fiddly). No images, no floor
    plan, no 3D. Mockup still to build.
+
+4. **RSVP — per-person confirmation with children handling.** Guests RSVP by name+email lookup
+   (existing `get_party_for_rsvp` / `submit_rsvp`), then confirm **each invited person individually**
+   rather than answering "how many kids?". Pre-list every invited guest — **including each child by
+   name** — on their party; this controls who's invited (a family's kids only appear if invited, which
+   quietly enforces adults-only for others) and yields exact counts. Per person: **Coming / Can't**.
+   For **children** additionally: **kids-menu vs regular-menu** choice (older kids may want the adult
+   meal — don't assume child = kids menu), a **dietary/allergies** field, and an optional
+   **highchair/infant** flag. Reuses the existing adult/child age classification. **Phase it around
+   the venue:** capture attendance + a simple kids-meal toggle now; swap in the real menu options once
+   the venue/menu is locked (nudge already-RSVP'd guests to pick a specific dish later). This child
+   meal + dietary data flows straight into the **caterer export** and **seating chart** (item 3) — one
+   capture, reused everywhere. **Visual mockup prototyped on this branch:** `/rsvp-kids-mockup` (guest,
+   Dolce style) — concept only, not wired to the real RSVP/Supabase.
