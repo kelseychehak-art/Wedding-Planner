@@ -1,0 +1,259 @@
+/* MOCKUP — per-person RSVP with children handling, "Dolce" art direction. */
+
+.frame {
+  min-height: 100dvh;
+  background: #ece2cf;
+  padding: 22px 0 60px;
+  --paper: #f6eddd;
+  --ink: #2f2a24;
+  --sea: #1f8aa8;
+  --coral: #df674c;
+  --orange: #e97a2f;
+  --olive: #6f8a3f;
+  --muted: #8a8175;
+  --line: rgba(47, 42, 36, 0.16);
+}
+
+.wrap {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+.mockNote {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: rgba(233, 122, 47, 0.14);
+  border: 1px dashed rgba(233, 122, 47, 0.5);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin: 0 0 20px;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--sea);
+  text-align: center;
+  margin: 0 0 2px;
+}
+
+.title {
+  font-family: var(--font-allura);
+  font-weight: 400;
+  font-size: 54px;
+  line-height: 1;
+  color: var(--ink);
+  text-align: center;
+  margin: 0;
+}
+
+.intro {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+  margin: 10px auto 0;
+  max-width: 34ch;
+}
+
+.intro strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.card {
+  margin-top: 22px;
+  background: #fffaf0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 6px 18px;
+  box-shadow: 0 12px 26px rgba(47, 42, 36, 0.1);
+}
+
+/* ---- member row ---- */
+
+.member {
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+
+.member:first-child {
+  border-top: none;
+}
+
+.memberTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.name {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--ink);
+}
+
+.childTag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(31, 138, 168, 0.13);
+  color: var(--sea);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 2px;
+}
+
+/* ---- segmented toggle ---- */
+
+.seg {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  background: #f1e9d9;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.segItem {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.segOn {
+  background: var(--sea);
+  color: #fffaf0;
+}
+
+/* ---- child extras ---- */
+
+.memberChild {
+  background: rgba(31, 138, 168, 0.04);
+  margin: 0 -18px;
+  padding-left: 18px;
+  padding-right: 18px;
+  border-left: 3px solid var(--sea);
+}
+
+.kidExtras {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+  padding-left: 2px;
+}
+
+.kidField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.kidLabel {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.input {
+  min-width: 130px;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: right;
+}
+
+.inputEmpty {
+  color: var(--muted);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.box {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--line);
+  border-radius: 5px;
+  background: #fff;
+  font-size: 12px;
+  color: transparent;
+}
+
+.boxOn {
+  background: var(--olive);
+  border-color: var(--olive);
+  color: #fff;
+}
+
+/* ---- submit + footer ---- */
+
+.submit {
+  display: block;
+  width: 100%;
+  margin-top: 22px;
+  padding: 16px;
+  border: none;
+  border-radius: 999px;
+  background: var(--coral);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(223, 103, 76, 0.3);
+}
+
+.foot {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+  margin: 16px 0 0;
+}
