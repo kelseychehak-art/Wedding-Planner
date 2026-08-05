@@ -7,10 +7,9 @@ import styles from "./HeroPreviewMobile.module.css";
  * PREVIEW ONLY (noindex /hero-preview) — mobile flipped hero: serif names +
  * script phrase. Copy of HomeMobile with only the hero-text block changed. The
  * script font comes from `--preview-script` (set by the switcher; falls back to
- * Cherolina).
+ * Cherolina). Background + framed treatment come from PreviewControls via
+ * `--preview-bg` and the [data-framed] ancestor attribute.
  */
-const HERO_IMAGE = "/assets/fluid/federico.jpg";
-
 const SECTIONS = [
   { href: "/our-weekend", label: "Our Weekend", note: "Every event, welcome to farewell" },
   { href: "/travel", label: "Travel", note: "Flights & getting there" },
@@ -37,7 +36,7 @@ export default function HeroPreviewMobile() {
           </p>
         </div>
 
-        <div className={styles.fluidImg} style={{ backgroundImage: `url(${HERO_IMAGE})` }} aria-hidden="true" />
+        <div className={styles.fluidImg} aria-hidden="true" />
         <div className={styles.heroCountdown}>
           <Countdown tone="onImage" />
         </div>

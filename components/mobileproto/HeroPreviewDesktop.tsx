@@ -8,9 +8,9 @@ import styles from "./HeroPreviewDesktop.module.css";
  * HomeDesktop with only the hero-text block changed, so the live homepage is
  * untouched. The script font is `--preview-script` (Cherolina stand-in today);
  * swap that one line to Franchesca once the webfont is licensed.
+ * The background image + framed treatment come from PreviewControls via
+ * `--preview-bg` and the [data-framed] ancestor attribute.
  */
-const HERO_IMAGE = "/assets/fluid/federico.jpg";
-
 const NAV = [
   { href: "/our-weekend", label: "Our Weekend" },
   { href: "/travel", label: "Travel" },
@@ -50,7 +50,7 @@ export default function HeroPreviewDesktop() {
             {wedding.dateLabel} <span className={styles.dot}>·</span> {wedding.locationLabel}
           </p>
         </div>
-        <div className={styles.fluidImg} style={{ backgroundImage: `url(${HERO_IMAGE})` }} aria-hidden="true" />
+        <div className={styles.fluidImg} aria-hidden="true" />
         <div className={styles.heroCountdown}>
           <Countdown tone="onImage" />
         </div>

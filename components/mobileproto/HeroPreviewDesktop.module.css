@@ -165,11 +165,48 @@
   right: 0;
   bottom: 0;
   height: 54%;
+  background-image: var(--preview-bg, url("/assets/fluid/federico.jpg"));
   background-size: cover;
   background-position: center 92%;
   z-index: 1;
   -webkit-mask-image: linear-gradient(to top, #000 62%, rgba(0, 0, 0, 0.55) 82%, transparent 100%);
   mask-image: linear-gradient(to top, #000 62%, rgba(0, 0, 0, 0.55) 82%, transparent 100%);
+}
+
+/* ---- FRAMED treatment (espresso panel over a full-bleed painting) ----
+   Previews the stationery look on the web: image fills, text sits inside an
+   espresso-brown cartouche panel. Toggled by [data-framed] on an ancestor. */
+:global([data-framed="true"]) .hero::after {
+  background: rgba(47, 42, 36, 0.28);
+}
+:global([data-framed="true"]) .fluidImg {
+  inset: 0;
+  height: 100%;
+  background-position: center 60%;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+:global([data-framed="true"]) .heroText {
+  max-width: 720px;
+  margin: clamp(24px, 5vh, 64px) auto 0;
+  padding: clamp(32px, 5vh, 56px) clamp(28px, 4vw, 64px);
+  background: rgba(47, 42, 36, 0.9);
+  border: 1px solid rgba(240, 228, 208, 0.5);
+  outline: 1px solid rgba(240, 228, 208, 0.5);
+  outline-offset: 6px;
+  border-radius: 180px / 120px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+:global([data-framed="true"]) .names,
+:global([data-framed="true"]) .leadin,
+:global([data-framed="true"]) .meta {
+  color: #f4ecdd;
+}
+:global([data-framed="true"]) .eyebrow {
+  color: #dcb48f;
+}
+:global([data-framed="true"]) .scriptPhrase {
+  color: #e6a988;
 }
 
 @media (max-width: 860px) {

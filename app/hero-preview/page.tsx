@@ -18,16 +18,10 @@ export const metadata = {
 const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-great-vibes" });
 const pinyon = Pinyon_Script({ weight: "400", subsets: ["latin"], variable: "--font-pinyon" });
 
-const SCRIPT_OPTIONS = [
-  { key: "franchesca", label: "≈ Franchesca", sub: "Great Vibes", value: "var(--font-great-vibes)" },
-  { key: "charlune", label: "≈ La Charlune", sub: "Pinyon Script", value: "var(--font-pinyon)" },
-  { key: "cherolina", label: "Cherolina", sub: "current", value: "var(--font-names)" },
-];
-
 export default function HeroPreviewPage() {
   return (
     <div className={`${greatVibes.variable} ${pinyon.variable}`}>
-      <ScriptSwitcher options={SCRIPT_OPTIONS}>
+      <ScriptSwitcher>
         <div className={rt.mobile}>
           <HeroPreviewMobile />
         </div>

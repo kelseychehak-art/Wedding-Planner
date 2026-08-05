@@ -103,11 +103,45 @@
   right: 0;
   bottom: 0;
   height: 46%;
+  background-image: var(--preview-bg, url("/assets/fluid/federico.jpg"));
   background-size: cover;
   background-position: center 90%;
   z-index: 1;
   -webkit-mask-image: linear-gradient(to top, #000 60%, rgba(0, 0, 0, 0.5) 82%, transparent 100%);
   mask-image: linear-gradient(to top, #000 60%, rgba(0, 0, 0, 0.5) 82%, transparent 100%);
+}
+
+/* ---- FRAMED treatment (espresso panel over a full-bleed painting) ---- */
+:global([data-framed="true"]) .hero::after {
+  background: rgba(47, 42, 36, 0.3);
+}
+:global([data-framed="true"]) .fluidImg {
+  inset: 0;
+  height: 100%;
+  background-position: center 55%;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+:global([data-framed="true"]) .content {
+  margin: 20px 4px 0;
+  padding: 30px 22px 34px;
+  background: rgba(47, 42, 36, 0.9);
+  border: 1px solid rgba(240, 228, 208, 0.5);
+  outline: 1px solid rgba(240, 228, 208, 0.5);
+  outline-offset: 5px;
+  border-radius: 120px / 90px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
+}
+:global([data-framed="true"]) .names,
+:global([data-framed="true"]) .leadin,
+:global([data-framed="true"]) .meta {
+  color: #f4ecdd;
+}
+:global([data-framed="true"]) .eyebrow {
+  color: #dcb48f;
+}
+:global([data-framed="true"]) .scriptPhrase {
+  color: #e6a988;
 }
 .heroCountdown {
   position: absolute;
