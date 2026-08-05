@@ -26,8 +26,9 @@ const SCRIPTS: Opt[] = [
 const BACKGROUNDS: Opt[] = [
   { key: "photo", label: "Photo", sub: "current", value: "url(/assets/fluid/federico.jpg)" },
   { key: "oak-valley", label: "Oak valley", sub: "Canva", value: "url(/assets/art/ai-oak-valley.jpg)" },
-  { key: "tuscan-valley", label: "Tuscan valley", value: "url(/assets/art/ai-tuscan-valley.jpg)" },
-  { key: "swan-lake", label: "Swan lake", value: "url(/assets/art/ai-swan-lake.jpg)" },
+  { key: "landscape-1", label: "Landscape 1", value: "url(/assets/art/landscape-1.jpg)" },
+  { key: "landscape-2", label: "Landscape 2", value: "url(/assets/art/landscape-2.jpg)" },
+  { key: "swan-1", label: "Swan 1", value: "url(/assets/art/swan-1.jpg)" },
   { key: "misty-valley", label: "Misty valley", value: "url(/assets/art/ai-misty-valley.jpg)" },
 ];
 
