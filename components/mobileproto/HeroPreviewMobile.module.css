@@ -24,10 +24,11 @@
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgba(250, 246, 236, 0) 44%,
-    rgba(250, 246, 236, 0.42) 54%,
-    rgba(250, 246, 236, 0.3) 63%,
-    rgba(250, 246, 236, 0) 78%
+    rgba(250, 246, 236, 0.6) 0%,
+    rgba(250, 246, 236, 0.3) 22%,
+    rgba(250, 246, 236, 0) 46%,
+    rgba(47, 42, 36, 0) 82%,
+    rgba(47, 42, 36, 0.24) 100%
   );
 }
 
@@ -46,9 +47,9 @@
   margin: 0 0 26px;
 }
 
-/* FLIP: serif names */
+/* FLIP: serif names (switcher sets --preview-names) */
 .names {
-  font-family: var(--font-display);
+  font-family: var(--preview-names, var(--font-display));
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.045em;
@@ -99,16 +100,12 @@
 
 .fluidImg {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 46%;
+  inset: 0;
+  height: 100%;
   background-image: var(--preview-bg, url("/assets/fluid/federico.jpg"));
   background-size: cover;
-  background-position: center 90%;
-  z-index: 1;
-  -webkit-mask-image: linear-gradient(to top, #000 86%, rgba(0, 0, 0, 0.7) 95%, transparent 100%);
-  mask-image: linear-gradient(to top, #000 86%, rgba(0, 0, 0, 0.7) 95%, transparent 100%);
+  background-position: center 60%;
+  z-index: 0;
 }
 
 /* ---- FRAMED treatment (espresso panel over a full-bleed painting) ---- */

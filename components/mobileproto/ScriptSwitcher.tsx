@@ -13,6 +13,12 @@ import styles from "./ScriptSwitcher.module.css";
  */
 type Opt = { key: string; label: string; sub?: string; value: string };
 
+const NAMES: Opt[] = [
+  { key: "playfair", label: "Playfair", sub: "Didone", value: "var(--font-playfair-p)" },
+  { key: "cormorant", label: "Cormorant", sub: "garamond", value: "var(--font-cormorant-p)" },
+  { key: "fraunces", label: "Fraunces", sub: "modern", value: "var(--font-fraunces-p)" },
+];
+
 const SCRIPTS: Opt[] = [
   { key: "franchesca", label: "≈ Franchesca", sub: "Great Vibes", value: "var(--font-great-vibes)" },
   { key: "charlune", label: "≈ La Charlune", sub: "Pinyon", value: "var(--font-pinyon)" },
@@ -32,6 +38,7 @@ const FRAMES: Opt[] = [
 ];
 
 export default function ScriptSwitcher({ children }: { children: React.ReactNode }) {
+  const [names, setNames] = useState(NAMES[0]);
   const [script, setScript] = useState(SCRIPTS[0]);
   const [bg, setBg] = useState(BACKGROUNDS[0]);
   const [frame, setFrame] = useState(FRAMES[0]);
@@ -62,11 +69,13 @@ export default function ScriptSwitcher({ children }: { children: React.ReactNode
     <div
       data-framed={frame.value}
       style={{
+        ["--preview-names" as string]: names.value,
         ["--preview-script" as string]: script.value,
         ["--preview-bg" as string]: bg.value,
       }}
     >
       <div className={styles.bar}>
+        {row("Names", NAMES, names, setNames)}
         {row("Script", SCRIPTS, script, setScript)}
         {row("Image", BACKGROUNDS, bg, setBg)}
         {row("Layout", FRAMES, frame, setFrame)}

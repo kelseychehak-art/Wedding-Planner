@@ -15,10 +15,13 @@
   --line: rgba(47, 42, 36, 0.16);
 }
 
-/* ---- Top bar ---- */
+/* ---- Top bar (floats over the full-bleed image) ---- */
 .topbar {
-  position: relative;
-  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -60,7 +63,7 @@
   border-radius: 999px;
 }
 
-/* ---- Hero ---- */
+/* ---- Hero: full-bleed image, type overlaid ---- */
 .hero {
   position: relative;
   flex: 1;
@@ -73,20 +76,23 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  /* Light touch — just enough to seat the dates where type meets image. */
+  /* Soft veil — heavier at the very top so the nav + names read, gone by
+     mid-hero so the painting stays rich; a whisper of dark at the base for
+     the white countdown. */
   background: linear-gradient(
     to bottom,
-    rgba(250, 246, 236, 0) 50%,
-    rgba(250, 246, 236, 0.4) 60%,
-    rgba(250, 246, 236, 0.28) 67%,
-    rgba(250, 246, 236, 0) 82%
+    rgba(250, 246, 236, 0.55) 0%,
+    rgba(250, 246, 236, 0.28) 20%,
+    rgba(250, 246, 236, 0) 44%,
+    rgba(47, 42, 36, 0) 80%,
+    rgba(47, 42, 36, 0.26) 100%
   );
 }
 .heroText {
   position: relative;
   z-index: 2;
   text-align: center;
-  padding: clamp(18px, 3vh, 40px) 24px 0;
+  padding: clamp(84px, 12vh, 132px) 24px 0;
 }
 .eyebrow {
   font-family: var(--font-sans);
@@ -98,9 +104,9 @@
   margin: 0 0 32px;
 }
 
-/* FLIP: names now in an elegant serif */
+/* FLIP: names now in an elegant serif (switcher sets --preview-names) */
 .names {
-  font-family: var(--font-display);
+  font-family: var(--preview-names, var(--font-display));
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -162,16 +168,12 @@
 
 .fluidImg {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 54%;
+  inset: 0;
+  height: 100%;
   background-image: var(--preview-bg, url("/assets/fluid/federico.jpg"));
   background-size: cover;
-  background-position: center 92%;
-  z-index: 1;
-  -webkit-mask-image: linear-gradient(to top, #000 86%, rgba(0, 0, 0, 0.7) 95%, transparent 100%);
-  mask-image: linear-gradient(to top, #000 86%, rgba(0, 0, 0, 0.7) 95%, transparent 100%);
+  background-position: center 62%;
+  z-index: 0;
 }
 
 /* ---- FRAMED treatment (espresso panel over a full-bleed painting) ----
