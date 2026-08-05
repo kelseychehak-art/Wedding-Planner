@@ -1,0 +1,185 @@
+/* PREVIEW ONLY — flipped hero (serif names + script phrase). Copy of
+   HomeDesktop.module.css; only the hero-text block differs. */
+
+.page {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #faf6ec;
+  color: #2f2a24;
+  --sea: #6f9fce;
+  --coral: #d96b3f;
+  --orange: #d9702f;
+  --muted: #8a8175;
+  --line: rgba(47, 42, 36, 0.16);
+}
+
+/* ---- Top bar ---- */
+.topbar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px clamp(24px, 5vw, 64px);
+}
+.brand {
+  font-family: var(--font-names);
+  font-size: 42px;
+  line-height: 1;
+  color: #2f2a24;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 32px);
+}
+.navLink {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6f675c;
+  text-decoration: none;
+}
+.navLink:hover {
+  color: #2f2a24;
+}
+.navRsvp {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--coral);
+  text-decoration: none;
+  padding: 9px 20px;
+  border: 1.5px solid var(--coral);
+  border-radius: 999px;
+}
+
+/* ---- Hero ---- */
+.hero {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(250, 246, 236, 0) 46%,
+    rgba(250, 246, 236, 0.88) 57%,
+    rgba(250, 246, 236, 0.82) 65%,
+    rgba(250, 246, 236, 0) 80%
+  );
+}
+.heroText {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: clamp(18px, 3vh, 40px) 24px 0;
+}
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin: 0 0 32px;
+}
+
+/* FLIP: names now in an elegant serif */
+.names {
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  font-size: clamp(48px, 6.4vw, 104px);
+  color: #2f2a24;
+  margin: 0;
+}
+.amp {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
+  font-size: 0.62em;
+  color: var(--coral);
+  margin: 0 0.14em;
+}
+
+/* FLIP: small serif lead-in, then the script phrase carries the romance */
+.leadin {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(18px, 1.7vw, 24px);
+  color: var(--ink);
+  margin: 22px 0 0;
+}
+.scriptPhrase {
+  /* switcher sets --preview-script; falls back to Cherolina */
+  font-family: var(--preview-script, var(--font-names));
+  font-size: clamp(44px, 5.6vw, 92px);
+  line-height: 0.95;
+  color: var(--coral);
+  margin: 2px 0 0;
+}
+
+.meta {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 22px 0 0;
+}
+.dot {
+  margin: 0 8px;
+  color: var(--coral);
+}
+
+.heroCountdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(28px, 5vh, 56px);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.fluidImg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 54%;
+  background-size: cover;
+  background-position: center 92%;
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(to top, #000 62%, rgba(0, 0, 0, 0.55) 82%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 62%, rgba(0, 0, 0, 0.55) 82%, transparent 100%);
+}
+
+@media (max-width: 860px) {
+  .names {
+    font-size: clamp(40px, 11vw, 72px);
+  }
+  .nav {
+    display: none;
+  }
+  .topbar {
+    justify-content: center;
+  }
+}
