@@ -13,6 +13,7 @@
   --orange: #d9702f;
   --muted: #8a8175;
   --line: rgba(47, 42, 36, 0.16);
+  --espresso: #43301f;
 }
 
 /* ---- Top bar (floats over the full-bleed image) ---- */
@@ -100,7 +101,7 @@
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--coral);
+  color: var(--espresso);
   margin: 0 0 32px;
 }
 
@@ -112,7 +113,7 @@
   letter-spacing: 0.05em;
   line-height: 1;
   font-size: clamp(48px, 6.4vw, 104px);
-  color: #2f2a24;
+  color: var(--espresso);
   margin: 0;
 }
 .amp {
@@ -121,7 +122,7 @@
   font-weight: 500;
   text-transform: none;
   font-size: 0.62em;
-  color: var(--coral);
+  color: var(--espresso);
   margin: 0 0.14em;
 }
 
@@ -130,7 +131,7 @@
   font-family: var(--font-serif);
   font-style: italic;
   font-size: clamp(18px, 1.7vw, 24px);
-  color: var(--ink);
+  color: var(--espresso);
   margin: 22px 0 0;
 }
 .scriptPhrase {
@@ -138,7 +139,7 @@
   font-family: var(--preview-script, var(--font-names));
   font-size: clamp(44px, 5.6vw, 92px);
   line-height: 0.95;
-  color: var(--coral);
+  color: var(--espresso);
   margin: 2px 0 0;
 }
 
@@ -148,12 +149,12 @@
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--espresso);
   margin: 22px 0 0;
 }
 .dot {
   margin: 0 8px;
-  color: var(--coral);
+  color: var(--espresso);
 }
 
 .heroCountdown {
