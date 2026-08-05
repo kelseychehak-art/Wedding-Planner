@@ -1,15 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./ScriptSwitcher.module.css";
 
 /*
- * PREVIEW ONLY — playground controls for /hero-preview. Three rows:
- *  - Script: swaps the hero script font via `--preview-script`
- *  - Background: swaps the hero image via `--preview-bg`
- *  - Frame: toggles the espresso panel treatment via [data-framed]
- * All state is applied on a single wrapper so the (server) hero components
- * just read the CSS vars / attribute.
+ * PREVIEW ONLY — playground controls for /hero-preview.
+ * Rows: Names / Script / Image / Layout, plus a "Place" row that lets you DRAG
+ * the background image to position it (updates `--preview-pos`) and copy the
+ * resulting `background-position` so it can be baked into the real page.
  */
 type Opt = { key: string; label: string; sub?: string; value: string };
 
@@ -27,9 +25,10 @@ const SCRIPTS: Opt[] = [
 
 const BACKGROUNDS: Opt[] = [
   { key: "photo", label: "Photo", sub: "current", value: "url(/assets/fluid/federico.jpg)" },
-  { key: "valley", label: "Tuscan valley", value: "url(/assets/art/ai-tuscan-valley.jpg)" },
-  { key: "swan", label: "Swan lake", value: "url(/assets/art/ai-swan-lake.jpg)" },
-  { key: "misty", label: "Misty valley", value: "url(/assets/art/ai-misty-valley.jpg)" },
+  { key: "oak-valley", label: "Oak valley", sub: "Canva", value: "url(/assets/art/ai-oak-valley.jpg)" },
+  { key: "tuscan-valley", label: "Tuscan valley", value: "url(/assets/art/ai-tuscan-valley.jpg)" },
+  { key: "swan-lake", label: "Swan lake", value: "url(/assets/art/ai-swan-lake.jpg)" },
+  { key: "misty-valley", label: "Misty valley", value: "url(/assets/art/ai-misty-valley.jpg)" },
 ];
 
 const FRAMES: Opt[] = [
@@ -37,18 +36,48 @@ const FRAMES: Opt[] = [
   { key: "on", label: "Framed", sub: "espresso", value: "true" },
 ];
 
+const clamp = (v: number) => Math.max(0, Math.min(100, v));
+
 export default function ScriptSwitcher({ children }: { children: React.ReactNode }) {
   const [names, setNames] = useState(NAMES[0]);
   const [script, setScript] = useState(SCRIPTS[0]);
   const [bg, setBg] = useState(BACKGROUNDS[0]);
   const [frame, setFrame] = useState(FRAMES[0]);
+  const [pos, setPos] = useState({ x: 50, y: 55 });
+  const [placing, setPlacing] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const posRef = useRef(pos);
+  posRef.current = pos;
 
-  const row = (
-    title: string,
-    opts: Opt[],
-    active: Opt,
-    set: (o: Opt) => void,
-  ) => (
+  // Drag anywhere on the image to pan it. Window-level listeners so the gesture
+  // keeps tracking even if the pointer leaves the layer, and preventDefault so
+  // the browser doesn't start a text selection instead.
+  const onDown = (e: React.PointerEvent) => {
+    e.preventDefault();
+    const start = { x: e.clientX, y: e.clientY, px: posRef.current.x, py: posRef.current.y };
+    const s = 0.09;
+    const move = (ev: PointerEvent) => {
+      setPos({
+        x: clamp(start.px - (ev.clientX - start.x) * s),
+        y: clamp(start.py - (ev.clientY - start.y) * s),
+      });
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  };
+
+  const posStr = `${Math.round(pos.x)}% ${Math.round(pos.y)}%`;
+  const copy = () => {
+    navigator.clipboard?.writeText(`${bg.key} → background-position: ${posStr}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1400);
+  };
+
+  const row = (title: string, opts: Opt[], active: Opt, set: (o: Opt) => void) => (
     <div className={styles.row}>
       <span className={styles.title}>{title}</span>
       {opts.map((o) => (
@@ -72,13 +101,45 @@ export default function ScriptSwitcher({ children }: { children: React.ReactNode
         ["--preview-names" as string]: names.value,
         ["--preview-script" as string]: script.value,
         ["--preview-bg" as string]: bg.value,
+        ["--preview-pos" as string]: posStr,
       }}
     >
+      <div
+        onPointerDown={onDown}
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 45,
+          cursor: "grab",
+          touchAction: "none",
+          userSelect: "none",
+          WebkitUserSelect: "none",
+          pointerEvents: placing ? "auto" : "none",
+        }}
+      />
+
       <div className={styles.bar}>
         {row("Names", NAMES, names, setNames)}
         {row("Script", SCRIPTS, script, setScript)}
         {row("Image", BACKGROUNDS, bg, setBg)}
         {row("Layout", FRAMES, frame, setFrame)}
+        <div className={styles.row}>
+          <span className={styles.title}>Place</span>
+          <button
+            type="button"
+            className={`${styles.btn} ${placing ? styles.active : ""}`}
+            onClick={() => setPlacing((p) => !p)}
+          >
+            <span className={styles.btnLabel}>{placing ? "Drag the image…" : "Drag to place"}</span>
+          </button>
+          <span className={styles.readout}>{posStr}</span>
+          <button type="button" className={styles.btn} onClick={copy}>
+            <span className={styles.btnLabel}>{copied ? "Copied ✓" : "Copy"}</span>
+          </button>
+          <button type="button" className={styles.btn} onClick={() => setPos({ x: 50, y: 55 })}>
+            <span className={styles.btnLabel}>Reset</span>
+          </button>
+        </div>
       </div>
       {children}
     </div>

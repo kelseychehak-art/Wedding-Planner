@@ -50,6 +50,32 @@
   background: #d96b3f;
   color: #fff;
 }
+.readout {
+  align-self: center;
+  font-family: var(--font-sans), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f4ecdd;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 999px;
+  min-width: 78px;
+  text-align: center;
+}
+/* Full-screen transparent surface that captures drags to pan the image.
+   Sits below the control bar (z-50) so the bar stays clickable. */
+.dragLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.dragLayer:active {
+  cursor: grabbing;
+}
 .btnLabel {
   font-family: var(--font-sans);
   font-size: 12px;

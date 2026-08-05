@@ -173,7 +173,7 @@
   height: 100%;
   background-image: var(--preview-bg, url("/assets/fluid/federico.jpg"));
   background-size: cover;
-  background-position: center 62%;
+  background-position: var(--preview-pos, center 62%);
   z-index: 0;
 }
 
@@ -186,7 +186,6 @@
 :global([data-framed="true"]) .fluidImg {
   inset: 0;
   height: 100%;
-  background-position: center 60%;
   -webkit-mask-image: none;
   mask-image: none;
 }
