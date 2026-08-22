@@ -1,0 +1,239 @@
+/* PREVIEW ONLY — new brand skin over the REAL Travel tab. */
+
+.page {
+  --ivory: #f5efe3;
+  --ivory-panel: #fbf7ee;
+  --espresso: #3b2a1e;
+  --espresso-dim: #6e5b46;
+  --wine: #6e2438;
+  --wine-bright: #832c42;
+  --olive: #575c36;
+  --mauve: #be8e90;
+  --line: rgba(59, 42, 30, 0.14);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background: var(--ivory);
+  color: var(--espresso);
+  padding-bottom: 56px;
+  font-family: var(--font-serif, Georgia, serif);
+}
+/* Full painting behind the whole page — visible, lightly blurred. */
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url("/assets/art/ai-oak-valley.jpg") center / cover no-repeat;
+  filter: blur(3px);
+  transform: scale(1.04);
+}
+/* readability veil over the painting (image stays visible, text stays legible) */
+.page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(245, 239, 227, var(--veil-opacity, 0.52));
+}
+
+/* ============ HEADER BAND (echoes the homepage hero) ============ */
+.band {
+  position: relative;
+  z-index: 1;
+  min-height: 34vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding-top: 58px;
+}
+/* header shares the page's continuous painting; no separate hero image */
+.bandArt {
+  display: none;
+}
+.bandVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    62% 68% at 50% 48%,
+    rgba(245, 239, 227, 0.5) 0%,
+    rgba(245, 239, 227, 0) 78%
+  );
+}
+
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px clamp(24px, 5vw, 64px);
+}
+/* Monogram button → home. Initials overlaid on the swan pair (crest). */
+.brand {
+  position: relative;
+  display: inline-block;
+  width: 92px;
+  height: 52px;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+.brandSwan {
+  position: absolute;
+  inset: 0;
+  background: url("/assets/motifs/swans-together.png") center / contain no-repeat;
+  filter: drop-shadow(0 2px 6px rgba(59, 42, 30, 0.2));
+}
+.brandInitials {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 52%;
+  text-align: center;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--espresso);
+}
+.brand:hover {
+  transform: translateY(-2px);
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 30px);
+}
+.navLink {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  text-decoration: none;
+}
+.navLink:hover {
+  color: var(--wine);
+}
+.navActive {
+  color: var(--wine);
+}
+.navRsvp {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  padding: 9px 22px;
+  border-radius: 999px;
+  background: var(--wine);
+}
+.navRsvp:hover {
+  background: var(--wine-bright);
+}
+
+.bandText {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 24px 24px;
+}
+.eyebrow {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  margin: 0 0 14px;
+}
+.title {
+  font-family: var(--font-script, cursive);
+  font-weight: 400;
+  font-size: clamp(56px, 7.5vw, 108px);
+  line-height: 1.02;
+  letter-spacing: 0;
+  color: var(--espresso);
+  margin: 0;
+}
+.sub {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: clamp(16px, 1.5vw, 20px);
+  color: var(--espresso);
+  margin: 14px auto 0;
+  max-width: 500px;
+}
+
+/* ============ BRIDGE: swan + lace divider ============ */
+.bridge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 0 6px;
+}
+.swan {
+  width: 116px;
+  height: 60px;
+  background: url("/assets/motifs/swans-together.png") center / contain no-repeat;
+  filter: drop-shadow(0 4px 10px rgba(59, 42, 30, 0.16));
+}
+.lace {
+  width: min(360px, 74vw);
+  height: 22px;
+  background-color: var(--olive);
+  -webkit-mask: url("/assets/motifs/lace-strip-4.png") center / auto 100% repeat-x;
+  mask: url("/assets/motifs/lace-strip-4.png") center / auto 100% repeat-x;
+}
+
+/* ============ BODY — REAL dolce cards, remapped palette ============ */
+.body {
+  /* the variables the dolce card classes read — new palette */
+  --paper: var(--ivory);
+  --card: var(--ivory-panel);
+  --ink: var(--espresso);
+  --muted: var(--espresso-dim);
+  --sea: var(--espresso);     /* section labels → espresso, matching the homepage */
+  --coral: var(--wine);       /* identity / action: CTA, sign, strong */
+  --orange: var(--wine);
+  --lemon: var(--mauve);
+  --olive: var(--olive);
+  --line: var(--line);
+  /* signoff script ("Buon viaggio") uses --font-names */
+  --font-names: var(--font-script, cursive);
+
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 6px clamp(20px, 4vw, 36px) 0;
+  container-type: inline-size;
+}
+
+@media (max-width: 680px) {
+  .nav {
+    display: none;
+  }
+  .topbar {
+    justify-content: center;
+  }
+  /* clear the fixed bottom tab bar */
+  .page {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+}

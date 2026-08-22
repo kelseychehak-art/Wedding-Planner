@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import ResponsiveTab from "@/components/mobileproto/ResponsiveTab";
+import ShowcaseTab from "@/components/mobileproto/ShowcaseTab";
 import { travelMeta, TravelBody } from "@/components/mobileproto/tabs";
 
 export const metadata: Metadata = {
   title: "Travel · Kelsey & Andrew's Wedding Week",
   description:
-    "Flights, transfers, and a few tips for the journey to Tuscany for Kelsey & Andrew's wedding week.",
+    "Flights, transfers, and a few tips for the journey to Umbria for Kelsey & Andrew's wedding week.",
 };
 
 export default function TravelPage() {
   return (
-    <ResponsiveTab meta={travelMeta}>
+    <ShowcaseTab title={travelMeta.title} subtitle={travelMeta.subtitle} activeKey="travel">
       <TravelBody rsvpHref="/rsvp" />
-    </ResponsiveTab>
+    </ShowcaseTab>
   );
 }

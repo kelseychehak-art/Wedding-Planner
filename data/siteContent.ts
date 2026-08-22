@@ -12,10 +12,10 @@ export const siteContent = {
     destination: "Italy",
     eventName: "Wedding Week",
     eyebrow: "Join us for a week in",
-    // Venue + exact date still officially TBD (docs/decisions.md D3).
-    dateLabel: "June 16 – 21, 2027",
-    locationLabel: "Tuscany, Italy",
-    rsvpDeadlineLabel: "By April 1, 2027",
+    // Venue: SPAO Borgo San Pietro (Allerona, Umbria) — being finalized Aug 2026.
+    dateLabel: "June 12 – 15, 2028",
+    locationLabel: "Umbria, Italy",
+    rsvpDeadlineLabel: "By April 1, 2028",
   },
   /*
    * The one place a guest can reach you. Deliberately EMPTY until Kelsey picks

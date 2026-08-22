@@ -1,4 +1,5 @@
 import { siteContent } from "@/data/siteContent";
+import { LaceDivider, LaceCorner } from "./Lace";
 import styles from "./LightHome.module.css";
 
 /*
@@ -24,22 +25,6 @@ const SECTIONS = [
   { label: "Activities", note: "Optional experiences" },
   { label: "FAQ", note: "Answers to everything" },
 ];
-
-function Lace() {
-  return (
-    <div className={styles.lace} aria-hidden="true">
-      <svg width="240" height="16" viewBox="0 0 240 16" fill="none">
-        <path
-          d="M2 12 Q 12 2 22 12 T 42 12 T 62 12 T 82 12 T 102 12 T 122 12 T 142 12 T 162 12 T 182 12 T 202 12 T 222 12 T 238 12"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          fill="none"
-        />
-        <circle cx="120" cy="12" r="2.2" fill="currentColor" />
-      </svg>
-    </div>
-  );
-}
 
 export default function LightHome() {
   const { couple, wedding } = siteContent;
@@ -83,7 +68,9 @@ export default function LightHome() {
         </div>
       </section>
 
-      <Lace />
+      <div className={styles.dividerWrap}>
+        <LaceDivider className={styles.laceDivider} />
+      </div>
 
       <section className={styles.intro}>
         <p className={styles.kicker}>With love</p>
@@ -108,6 +95,24 @@ export default function LightHome() {
           <span className={styles.dotChip} style={{ background: "#BE8E90", color: "#3B2A1E" }}>Mauve</span>
           <span className={styles.dotChip} style={{ background: "#3B2A1E" }}>Espresso</span>
           <span className={styles.dotChip} style={{ background: "#F5EFE3", color: "#3B2A1E", border: "1px solid #d8ccb8" }}>Ivory</span>
+        </div>
+      </section>
+
+      {/* lace showcase */}
+      <section className={styles.sampler}>
+        <p className={styles.kicker}>Lace — first pass (drawn, recolorable)</p>
+        <div className={styles.laceShow}>
+          <LaceDivider className={styles.laceOlive} />
+          <LaceDivider className={styles.laceWine} />
+          <LaceDivider className={styles.laceMauve} />
+        </div>
+        <div className={styles.laceFrame}>
+          <LaceCorner className={`${styles.corner} ${styles.cTL}`} />
+          <LaceCorner className={`${styles.corner} ${styles.cTR}`} />
+          <LaceCorner className={`${styles.corner} ${styles.cBL}`} />
+          <LaceCorner className={`${styles.corner} ${styles.cBR}`} />
+          <p className={styles.frameTitle}>The Details</p>
+          <p className={styles.frameNote}>a lace-cornered panel</p>
         </div>
       </section>
 

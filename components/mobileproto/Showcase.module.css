@@ -1,0 +1,534 @@
+/* PREVIEW ONLY — new brand direction, everything together.
+   Reads live-switch vars from ShowcaseControls:
+     --sc-hero (url), --sc-swan (url), --sc-script (font-family) */
+
+.page {
+  --ivory: #f5efe3;
+  --ivory-panel: #fbf7ee;
+  --espresso: #3b2a1e;
+  --espresso-dim: #6e5b46;
+  --wine: #6e2438;
+  --wine-bright: #832c42;
+  --olive: #575c36;
+  --olive-soft: #6b7046;
+  --mauve: #be8e90;
+  --line: rgba(59, 42, 30, 0.14);
+
+  background: var(--ivory);
+  color: var(--espresso);
+  font-family: var(--font-serif, Georgia, serif);
+}
+
+/* ============ HERO (locked one screen) ============ */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 620px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+}
+.heroArt {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--sc-hero, url("/assets/art/ai-oak-valley.jpg"));
+  background-size: cover;
+  background-position: center 58%;
+}
+.heroVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      56% 44% at 50% 47%,
+      rgba(245, 239, 227, 0.62) 0%,
+      rgba(245, 239, 227, 0.24) 52%,
+      rgba(245, 239, 227, 0) 78%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(245, 239, 227, 0.46) 0%,
+      rgba(245, 239, 227, 0.1) 24%,
+      rgba(245, 239, 227, 0) 46%,
+      rgba(245, 239, 227, 0) 74%,
+      rgba(245, 239, 227, 0.5) 100%
+    );
+}
+/* adjustable flat veil for testing an overall wash on the homepage (default 0) */
+.heroTestVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(245, 239, 227, var(--veil-opacity, 0.52));
+}
+
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px clamp(24px, 5vw, 64px);
+}
+.brand {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 30px;
+  letter-spacing: 0.02em;
+  color: var(--espresso);
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 30px);
+}
+.navLink {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  text-decoration: none;
+}
+.navLink:hover {
+  color: var(--wine);
+}
+.navRsvp {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  padding: 9px 22px;
+  border-radius: 999px;
+  background: var(--wine);
+}
+.navRsvp:hover {
+  background: var(--wine-bright);
+}
+
+.heroInner {
+  position: relative;
+  z-index: 2;
+  padding: 40px 24px;
+  max-width: 900px;
+}
+.heroSwan {
+  width: clamp(150px, 20vw, 260px);
+  height: clamp(78px, 10vw, 132px);
+  margin: 0 auto 10px;
+  background: var(--sc-swan, url("/assets/motifs/swans-together.png")) center bottom / contain no-repeat;
+  filter: drop-shadow(0 4px 10px rgba(59, 42, 30, 0.35));
+}
+.eyebrow {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  margin: 0 0 18px;
+}
+.names {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.04;
+  font-size: clamp(30px, 5.4vw, 96px);
+  color: var(--espresso);
+  margin: 0;
+}
+.amp {
+  font-family: var(--font-display, Georgia, serif);
+  font-style: italic;
+  text-transform: none;
+  font-size: 0.55em;
+  color: var(--espresso);
+  margin: 0 0.12em;
+  /* grow the glyph visually only — transform doesn't affect layout, so the
+     names keep their exact positions and gap (no push, no collision) */
+  display: inline-block;
+  vertical-align: middle;
+  /* lift so the glyph's optical center aligns with the caps' center
+     (uppercase names have no descenders; the & would otherwise hang low) */
+  transform: translateY(-0.12em) scale(1.55);
+  transform-origin: center;
+}
+.leadin {
+  font-family: var(--font-sans, sans-serif);
+  font-style: normal;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  margin: 22px 0 6px;
+}
+.script {
+  font-family: var(--sc-script, var(--font-script, cursive));
+  font-size: clamp(42px, 6.4vw, 108px);
+  line-height: 1;
+  color: var(--espresso);
+  margin: 0;
+}
+.meta {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  margin: 20px 0 0;
+}
+.dot {
+  margin: 0 8px;
+  color: var(--espresso);
+}
+.cta {
+  display: inline-block;
+  margin: 28px 0 0;
+  padding: 14px 38px;
+  border-radius: 999px;
+  background: var(--wine);
+  color: #fff;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.cta:hover {
+  background: var(--wine-bright);
+}
+.scrollHint {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  text-align: center;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--espresso-dim);
+}
+
+/* ============ SHARED ============ */
+.kicker {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin: 0 0 14px;
+  text-align: center;
+}
+.kickerLight {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #e7cfcf;
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+/* Real-lace ribbon: white lace on a soft olive band so it reads on ivory. */
+.laceRibbon {
+  width: min(460px, 82vw);
+  height: 30px;
+  margin: 0 auto;
+  background-color: var(--olive);
+  border-radius: 4px;
+  -webkit-mask: url("/assets/motifs/lace-strip-4.png") center / auto 100% repeat-x;
+  mask: url("/assets/motifs/lace-strip-4.png") center / auto 100% repeat-x;
+}
+
+/* ============ INTRO ============ */
+.intro {
+  padding: 54px 24px 44px;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.introHead {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 500;
+  font-size: clamp(30px, 4vw, 52px);
+  color: var(--espresso);
+  margin: 0;
+}
+.introBody {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.6;
+  color: var(--espresso-dim);
+  margin: 0;
+}
+.introBody em {
+  color: var(--wine);
+  font-style: italic;
+}
+
+/* ============ DETAILS PANEL (doily reads on tinted panel) ============ */
+.detailsWrap {
+  padding: 24px 24px 40px;
+  display: flex;
+  justify-content: center;
+}
+.detailsPanel {
+  position: relative;
+  width: min(560px, 92vw);
+  padding: clamp(48px, 8vw, 80px) clamp(32px, 7vw, 72px);
+  background: linear-gradient(160deg, var(--wine) 0%, #5c1e30 100%);
+  border-radius: 14px;
+  overflow: hidden;
+  text-align: center;
+}
+.doily {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(104%, 560px);
+  aspect-ratio: 1148 / 1364;
+  background: url("/assets/motifs/lace-doily.png") center / contain no-repeat;
+  opacity: 0.94;
+  filter: drop-shadow(0 8px 22px rgba(30, 12, 18, 0.35));
+  pointer-events: none;
+}
+/* dark ink inside the doily's white medallion, kept within the oval */
+.detailsInner {
+  position: relative;
+  z-index: 1;
+  max-width: 360px;
+  margin: 0 auto;
+}
+.kickerLight {
+  color: var(--wine) !important;
+}
+.detailsScript {
+  font-family: var(--sc-script, var(--font-script, cursive));
+  font-size: clamp(46px, 6.6vw, 72px);
+  line-height: 1.02;
+  color: var(--wine);
+  margin: 0 0 10px;
+}
+.detailsBody {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--espresso);
+  margin: 0 0 24px;
+}
+.ctaLight {
+  display: inline-block;
+  padding: 13px 40px;
+  border-radius: 999px;
+  background: var(--wine);
+  color: var(--ivory);
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.ctaLight:hover {
+  background: var(--wine-bright);
+}
+
+/* ============ EXPLORE CARDS ============ */
+.explore {
+  padding: 20px clamp(24px, 5vw, 64px) 60px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 30px 46px 26px 24px;
+  background: var(--ivory-panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+/* real lace strip along the card top, tinted olive via mask */
+.cardLace {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background-color: var(--olive);
+  -webkit-mask: url("/assets/motifs/lace-strip-4.png") top left / auto 100% repeat-x;
+  mask: url("/assets/motifs/lace-strip-4.png") top left / auto 100% repeat-x;
+  opacity: 0.85;
+}
+.card:hover .cardLace {
+  background-color: var(--wine);
+  opacity: 1;
+}
+.card:hover {
+  border-color: var(--wine);
+  transform: translateY(-2px);
+}
+.cardTitle {
+  margin-top: 8px;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--espresso);
+}
+.cardNote {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13.5px;
+  color: var(--espresso-dim);
+}
+.cardArrow {
+  position: absolute;
+  right: 22px;
+  top: 34px;
+  color: var(--wine);
+  font-size: 18px;
+}
+
+/* ============ PALETTE SAMPLER ============ */
+.sampler {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+  text-align: center;
+}
+.samplerRow {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.btnPrimary {
+  padding: 13px 30px;
+  border-radius: 999px;
+  background: var(--wine);
+  color: #fff;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.btnOutline {
+  padding: 12px 28px;
+  border-radius: 999px;
+  border: 1.5px solid var(--olive);
+  color: var(--olive);
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.tag {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--mauve);
+  color: #3b2a1e;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.chip {
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  text-align: center;
+  padding: 48px 24px 68px;
+  border-top: 1px solid var(--line);
+}
+.footerSwan {
+  width: clamp(140px, 18vw, 200px);
+  height: clamp(72px, 9vw, 102px);
+  margin: 0 auto 10px;
+  background: url("/assets/motifs/swans-together.png") center / contain no-repeat;
+  filter: drop-shadow(0 4px 10px rgba(59, 42, 30, 0.18));
+}
+.sign {
+  font-family: var(--sc-script, var(--font-script, cursive));
+  font-size: clamp(42px, 5vw, 66px);
+  line-height: 1;
+  color: var(--wine);
+  margin: 0;
+}
+.signSub {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin: 8px 0 0;
+}
+
+@media (max-width: 860px) {
+  .nav {
+    display: none;
+  }
+  .topbar {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .heroInner {
+    padding: 32px 20px;
+  }
+}

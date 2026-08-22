@@ -1,21 +1,9 @@
-import HomeMobile from "@/components/mobileproto/HomeMobile";
-import HomeDesktop from "@/components/mobileproto/HomeDesktop";
-import rt from "@/components/mobileproto/ResponsiveTab.module.css";
+import HomeHero from "@/components/mobileproto/HomeHero";
 
 /*
- * Homepage — the "fluid" hero. Phone gets the scrolling mobile home with the
- * sticky bottom nav; wider viewports get the one-screen desktop home with the
- * top nav. Same 768px breakpoint toggle as the content tabs.
+ * Homepage — the locked one-screen hero (new brand direction). Responsive:
+ * desktop top nav, mobile ☰ menu + sticky bottom bar. See HomeHero.
  */
 export default function Home() {
-  return (
-    <>
-      <div className={rt.mobile}>
-        <HomeMobile />
-      </div>
-      <div className={rt.desktop}>
-        <HomeDesktop />
-      </div>
-    </>
-  );
+  return <HomeHero />;
 }

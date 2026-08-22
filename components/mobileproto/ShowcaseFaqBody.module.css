@@ -1,0 +1,110 @@
+/* PREVIEW ONLY — card-based FAQ in the new skin. Palette vars inherit from
+   ShowcaseTab's .page (--ivory-panel/--espresso/--wine/--line…). */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.group {
+  background: var(--ivory-panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 24px 12px;
+}
+.groupTitle {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--espresso);
+  margin: 16px 0 4px;
+}
+
+.item {
+  border-top: 1px solid var(--line);
+}
+.item:first-of-type {
+  border-top: none;
+}
+
+.q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--espresso);
+}
+.q::-webkit-details-marker {
+  display: none;
+}
+
+/* wine +/− toggle (built from two bars so it animates cleanly) */
+.plus {
+  position: relative;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+}
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--wine);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.plus::before {
+  width: 14px;
+  height: 2px;
+}
+.plus::after {
+  width: 2px;
+  height: 14px;
+}
+.item[open] .plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  opacity: 0;
+}
+
+.a {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--espresso-dim);
+  margin: 0 0 15px;
+  max-width: 90%;
+}
+
+.sign {
+  font-family: var(--font-script, cursive);
+  font-size: clamp(40px, 5vw, 60px);
+  line-height: 1;
+  color: var(--wine);
+  text-align: center;
+  margin: 34px 0 0;
+}
+.signSub {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  text-align: center;
+  margin: 8px 0 0;
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

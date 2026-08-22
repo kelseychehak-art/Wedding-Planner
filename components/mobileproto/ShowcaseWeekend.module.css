@@ -1,0 +1,189 @@
+/* PREVIEW ONLY — Weekend timeline (enriched) in the new skin.
+   Palette vars (--ivory/--espresso/--wine/--olive…) inherit from ShowcaseTab's
+   .page wrapper. */
+
+.timeline {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 6px clamp(20px, 4vw, 36px) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ---- one day row ---- */
+.day {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 32px;
+  padding: 26px 30px;
+  background: var(--ivory-panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.date {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  margin: 0;
+}
+.dayName {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 500;
+  font-size: 27px;
+  line-height: 1.05;
+  color: var(--espresso);
+  margin: 0;
+}
+.icon {
+  width: 26px;
+  height: 26px;
+  margin-top: 4px;
+  background-color: var(--espresso-dim);
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+  opacity: 0.9;
+}
+
+/* ---- events ---- */
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 2px;
+}
+.event {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.evtTitle {
+  font-family: var(--font-serif, Georgia, serif);
+  font-weight: 600;
+  font-size: 21px;
+  color: var(--espresso);
+  margin: 0;
+}
+.evtMeta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+.evtTime {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+.evtDot {
+  color: var(--espresso-dim);
+}
+.evtLoc {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--espresso-dim);
+}
+.evtDesc {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--espresso-dim);
+  margin: 2px 0 0;
+  max-width: 56ch;
+}
+
+/* ---- the wedding day: elevated ---- */
+.dayWed {
+  position: relative;
+  border-left: 3px solid var(--wine);
+}
+.dayWed .events {
+  gap: 20px;
+}
+.dayWed .event + .event {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+.wedTag {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--wine);
+  color: var(--ivory);
+  font-family: var(--font-sans, sans-serif);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ---- footer ---- */
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 46px 24px 8px;
+}
+.note {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--espresso-dim);
+  margin: 0 0 26px;
+}
+.sign {
+  font-family: var(--font-script, cursive);
+  font-size: clamp(40px, 5vw, 60px);
+  line-height: 1;
+  color: var(--wine);
+  margin: 0;
+}
+.signSub {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  margin: 8px 0 0;
+}
+
+/* ---- mobile ---- */
+@media (max-width: 640px) {
+  .day {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 20px 20px;
+  }
+  .rail {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .dayName {
+    font-size: 24px;
+  }
+  .icon {
+    margin: 0;
+  }
+  .dayWed .events {
+    padding: 18px 18px;
+  }
+}

@@ -1,0 +1,72 @@
+/* Mobile ☰ menu. Hidden ≥ 681px (desktop uses the top nav). */
+
+.trigger {
+  display: none;
+}
+
+@media (max-width: 680px) {
+  .trigger {
+    position: absolute;
+    top: 20px;
+    right: 18px;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 34px;
+    height: 34px;
+    padding: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .trigger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    border-radius: 2px;
+    background: var(--espresso, #3b2a1e);
+  }
+}
+
+/* full-screen menu */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(245, 239, 227, 0.98);
+  backdrop-filter: blur(4px);
+}
+.close {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--espresso, #3b2a1e);
+  cursor: pointer;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.link {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 30px;
+  color: var(--espresso, #3b2a1e);
+  text-decoration: none;
+  padding: 8px 0;
+}
+.link:active {
+  color: var(--wine, #6e2438);
+}

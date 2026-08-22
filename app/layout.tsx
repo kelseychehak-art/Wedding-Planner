@@ -5,6 +5,7 @@ import {
   Cormorant_Garamond,
   Fraunces,
   Great_Vibes,
+  Gwendolyn,
   Instrument_Sans,
   Luxurious_Script,
   Parisienne,
@@ -113,6 +114,14 @@ const luxurious = Luxurious_Script({
   display: "swap",
 });
 
+// Flourished calligraphy for page titles + the hero script line (new direction).
+const gwendolyn = Gwendolyn({
+  variable: "--font-gwendolyn",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Kelsey & Andrew's Wedding Week",
   description: "Join us for a week in Italy — Kelsey & Andrew's Wedding Week.",
@@ -130,7 +139,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable} ${allura.variable} ${greatVibes.variable} ${tangerine.variable} ${parisienne.variable} ${windsong.variable} ${luxurious.variable}`}
+      className={`${cormorant.variable} ${fraunces.variable} ${instrumentSans.variable} ${pinyonScript.variable} ${playfair.variable} ${caveat.variable} ${sacramento.variable} ${allura.variable} ${greatVibes.variable} ${tangerine.variable} ${parisienne.variable} ${windsong.variable} ${luxurious.variable} ${gwendolyn.variable}`}
     >
       <body>{children}</body>
     </html>

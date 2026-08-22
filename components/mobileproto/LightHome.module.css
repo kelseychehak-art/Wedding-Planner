@@ -186,11 +186,66 @@
 }
 
 /* ---- Lace + kicker ---- */
-.lace {
-  color: var(--olive);
+.dividerWrap {
   display: flex;
   justify-content: center;
   padding: 44px 0 6px;
+}
+.laceDivider {
+  color: var(--olive);
+  width: min(300px, 70vw);
+  height: auto;
+}
+/* lace showcase */
+.laceShow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 30px;
+}
+.laceOlive { color: var(--olive); width: 300px; height: auto; }
+.laceWine { color: var(--wine); width: 300px; height: auto; }
+.laceMauve { color: var(--mauve); width: 300px; height: auto; }
+.laceFrame {
+  position: relative;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 34px 30px;
+  background: var(--ivory-panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.corner {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  color: var(--wine);
+}
+.cTL { top: 8px; left: 8px; }
+.cTR { top: 8px; right: 8px; transform: scaleX(-1); }
+.cBL { bottom: 8px; left: 8px; transform: scaleY(-1); }
+.cBR { bottom: 8px; right: 8px; transform: scale(-1, -1); }
+.frameTitle {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 30px;
+  color: var(--espresso);
+  margin: 0;
+}
+.frameNote {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin: 8px 0 0;
+}
+/* repeating lace edge (mask so it recolors via background-color) */
+.laceEdge {
+  height: 12px;
+  background-color: var(--olive);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Cpath d='M0 2 A12 8 0 0 0 24 2' fill='none' stroke='black' stroke-width='1.6'/%3E%3Ccircle cx='12' cy='7' r='1.6'/%3E%3Ccircle cx='0' cy='3' r='1'/%3E%3C/svg%3E") repeat-x top left;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Cpath d='M0 2 A12 8 0 0 0 24 2' fill='none' stroke='black' stroke-width='1.6'/%3E%3Ccircle cx='12' cy='7' r='1.6'/%3E%3Ccircle cx='0' cy='3' r='1'/%3E%3C/svg%3E") repeat-x top left;
 }
 .kicker {
   font-family: var(--font-sans, sans-serif);
@@ -313,13 +368,27 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding: 26px 46px 26px 24px;
+  padding: 30px 46px 26px 24px;
   background: var(--ivory-panel);
   border: 1px solid var(--line);
-  border-top: 2px solid var(--olive);
   border-radius: 12px;
+  overflow: hidden;
   cursor: pointer;
   transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background-color: var(--olive);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Cpath d='M0 2 A12 8 0 0 0 24 2' fill='none' stroke='black' stroke-width='1.6'/%3E%3Ccircle cx='12' cy='7' r='1.6'/%3E%3Ccircle cx='0' cy='3' r='1'/%3E%3C/svg%3E") repeat-x top left;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Cpath d='M0 2 A12 8 0 0 0 24 2' fill='none' stroke='black' stroke-width='1.6'/%3E%3Ccircle cx='12' cy='7' r='1.6'/%3E%3Ccircle cx='0' cy='3' r='1'/%3E%3C/svg%3E") repeat-x top left;
+}
+.card:hover::before {
+  background-color: var(--wine);
 }
 .card:hover {
   border-color: var(--wine);

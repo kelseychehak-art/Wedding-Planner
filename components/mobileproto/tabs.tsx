@@ -27,7 +27,7 @@ export type TabMeta = {
 
 export const travelMeta: TabMeta = {
   title: "Travel",
-  subtitle: "Flights, transfers, and a few tips for the journey to Tuscany.",
+  subtitle: "Flights, transfers, and a few tips for the journey to Umbria.",
   active: "travel",
   art: "/assets/art/tivoli.jpg", // Italianate landscape with ruins — the journey
 };
@@ -69,7 +69,7 @@ export function TravelBody({ rsvpHref = "/rsvp-vintage" }: { rsvpHref?: string }
         </div>
         <div className={d.callout}>
           <span className={d.calloutText}>
-            <strong>Florence (FLR)</strong> is the closest and most convenient to our villa.
+            <strong>Rome (FCO)</strong> is the most convenient — about an hour from the borgo. Florence also works well.
           </span>
         </div>
       </section>
@@ -87,8 +87,8 @@ export function TravelBody({ rsvpHref = "/rsvp-vintage" }: { rsvpHref?: string }
           </div>
           <div className={d.callout}>
             <span className={d.calloutText}>
-              Plan to arrive <strong>Mon, June 16 – Wed, June 18</strong>. Our welcome events begin
-              the afternoon of the 16th.
+              Plan to arrive <strong>Sun, June 11 – Mon, June 12</strong>. Our welcome events begin
+              the evening of the 12th.
             </span>
           </div>
         </section>
@@ -161,9 +161,9 @@ export function StayBody() {
         {/* Villa hero: image-left / text-right on desktop, stacked on a phone. */}
         <article className={d.hCard}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/hero/villa-estate.jpg" alt="The villa estate in the Tuscan countryside" className={d.hCardPhoto} />
+          <img src="/assets/hero/villa-estate.jpg" alt="The estate in the Umbrian countryside" className={d.hCardPhoto} />
           <div className={d.hCardBody}>
-            <p className={d.sectionLabel}>Tuscany, Italy</p>
+            <p className={d.sectionLabel}>Umbria, Italy</p>
             <h2 className={d.imgCardTitle}>Villa di Santa Lucia</h2>
             <p className={d.imgCardText}>
               We have exclusive use of the villa and all of its amenities for the whole week.
@@ -269,12 +269,12 @@ export const faqMeta: TabMeta = {
   art: "/assets/art/sky.jpg", // soft pink cloud study — calm and airy
 };
 
-const GROUPS: { title: string; qa: { q: string; a: string }[] }[] = [
+export const GROUPS: { title: string; qa: { q: string; a: string }[] }[] = [
   {
     title: "The Basics",
     qa: [
-      { q: "What are the dates?", a: "June 16–21, 2027 — a full week of celebrations in the Tuscan countryside." },
-      { q: "Where is the wedding?", a: "Tuscany, Italy. The exact venue is being finalized — we'll share it here as soon as it's set." },
+      { q: "What are the dates?", a: "June 12–15, 2028 — four days of celebrations in the Umbrian countryside." },
+      { q: "Where is the wedding?", a: "SPAO Borgo San Pietro — a private medieval hamlet in Allerona, Umbria, near Orvieto on the Tuscany–Umbria border." },
       { q: "What will the weather be like?", a: "Warm, sunny June days (high 70s–80s°F) and cooler evenings. Pack a layer for after dark." },
       { q: "Is there a website or app?", a: "This site is home base — travel, schedule, where you'll stay, and RSVP all live right here." },
     ],
@@ -282,10 +282,10 @@ const GROUPS: { title: string; qa: { q: string; a: string }[] }[] = [
   {
     title: "Travel",
     qa: [
-      { q: "Which airport should I fly into?", a: "Florence (FLR) is closest and easiest. Pisa (PSA) and Rome (ROM) also work well." },
+      { q: "Which airport should I fly into?", a: "Rome (FCO) is the most convenient and closest to the borgo — about an hour away. Florence (FLR) also works well." },
       { q: "Do you recommend renting a car?", a: "Yes — it's the most flexible way to get around the countryside and nearby towns." },
       { q: "Will transportation be provided?", a: "We'll arrange group transport for the main events. Details closer to the week." },
-      { q: "How do I get to the villa from the airport?", a: "Private transfer, rental car, or train plus a short taxi. See the Travel tab for options." },
+      { q: "How do I get to the venue from the airport?", a: "Private transfer, rental car, or train to Orvieto plus a short taxi. See the Travel tab for options." },
     ],
   },
   {
@@ -347,7 +347,7 @@ export function FaqBody() {
 
 export const weekendMeta: TabMeta = {
   title: "Weekend Schedule",
-  subtitle: "June 16 – 21, 2027 · Tuscany, Italy",
+  subtitle: "June 12 – 15, 2028 · Umbria, Italy",
   active: "weekend",
   art: "/assets/art/vista.jpg", // classic Claude-Lorrain vista — timeless overview
 };
@@ -395,7 +395,7 @@ export function WeekendBody() {
 
 export const rsvpMeta: TabMeta = {
   title: "RSVP",
-  subtitle: "Let us know if you'll be joining us in Tuscany.",
+  subtitle: "Let us know if you'll be joining us in Umbria.",
   titleTone: "coral",
   active: "rsvp",
   art: "/assets/art/dutch-bouquet.jpg", // dramatic dark florals — intimate

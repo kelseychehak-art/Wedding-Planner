@@ -39,10 +39,10 @@
   --radius-button: 2px;
 
   /* ---------- Font families ("Option A" — docs D10) ---------- */
-  --font-display: var(--font-cormorant), Georgia, serif;  /* couple/event, editorial display */
+  --font-display: var(--font-playfair), Georgia, serif;   /* couple names / editorial display (new direction) */
   --font-heading: var(--font-fraunces), Georgia, serif;   /* display titles: "Italy", page titles */
   --font-serif: var(--font-cormorant), Georgia, serif;    /* card titles / H3 */
-  --font-script: var(--font-pinyon), "Parisienne", cursive; /* script accent (footer line) */
+  --font-script: var(--font-gwendolyn), "Great Vibes", cursive; /* flourished script: page titles + hero line */
   --font-sans: var(--font-instrument-sans), Arial, sans-serif; /* UI / body */
 
   /* ---------- Type scale ---------- */
