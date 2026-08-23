@@ -61,3 +61,6 @@ next-env.d.ts
 
 # Purchased font source files (webfont license) — keep out of git & web root
 /licenses/
+
+# stray GitHub Desktop clone (do not track)
+/Wedding-Planner/

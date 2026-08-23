@@ -95,7 +95,7 @@ export function TravelBody({ rsvpHref = "/rsvp-vintage" }: { rsvpHref?: string }
 
         <section className={d.section}>
           <p className={d.sectionLabel}>On the ground</p>
-          <h2 className={d.sectionTitle}>Getting to the villa</h2>
+          <h2 className={d.sectionTitle}>Getting to the borgo</h2>
           <div className={d.card}>
             {TRANSPORT.map((t) => (
               <div key={t.title} className={d.row}>
@@ -140,33 +140,46 @@ export function TravelBody({ rsvpHref = "/rsvp-vintage" }: { rsvpHref?: string }
 /* -------------------------------------------------------------------- Stay */
 
 export const stayMeta: TabMeta = {
-  title: "The Villa",
-  subtitle: "Our home for the week — exclusively ours, all week long.",
+  title: "The Borgo",
+  subtitle: "The whole medieval hamlet, exclusively ours for the week — everyone together, right where it all happens.",
   active: "stay",
-  art: "/assets/art/thanatopsis.jpg", // golden luminous estate landscape — arriving
+  art: "/assets/art/thanatopsis.jpg", // (unused by the new shell) golden estate landscape
 };
 
-const FACTS = ["Sleeps 50 guests", "25 rooms & suites", "Pool, gardens & terraces"];
-const ROOMS = [
-  { name: "Garden Rooms", desc: "A peaceful retreat surrounded by the villa's gardens.", count: "12 Rooms", photo: "/assets/photos/villa-lawn.jpg" },
-  { name: "Olive Grove Rooms", desc: "Near the olive groves, with beautiful views.", count: "8 Rooms", photo: "/assets/photos/olive-hills.jpg" },
-  { name: "Villa Suites", desc: "Spacious suites with separate seating areas.", count: "4 Suites", photo: "/assets/hero/valdorcia.jpg" },
-  { name: "Family Suites", desc: "Ideal for families or groups with extra space.", count: "1 Suite", photo: "/assets/photos/cypress-drive.jpg" },
+const FACTS = ["Sleeps up to 100", "23 independent suites", "Pool, gardens & terraces"];
+const SUITES = [
+  {
+    title: "23 independent suites",
+    body: "One- to three-room apartments, each with its own entrance and a private terrace or garden.",
+  },
+  {
+    title: "Everyone on-site",
+    body: "No transfers or scattered hotels — the whole celebration lives inside the borgo.",
+  },
+  {
+    title: "Handcrafted interiors",
+    body: "Terracotta floors, wooden beams, and warm, historical color palettes.",
+  },
+  {
+    title: "Pool, gardens & an in-house chef",
+    body: "Plus terraces and gathering spaces throughout the medieval hamlet.",
+  },
 ];
 
 export function StayBody() {
   return (
     <>
       <section className={d.section}>
-        {/* Villa hero: image-left / text-right on desktop, stacked on a phone. */}
+        {/* Borgo hero: image-left / text-right on desktop, stacked on a phone. */}
         <article className={d.hCard}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/hero/villa-estate.jpg" alt="The estate in the Umbrian countryside" className={d.hCardPhoto} />
+          <img src="/assets/photos/spao-borgo.webp" alt="Aerial view of SPAO Borgo San Pietro in the Umbrian hills" className={d.hCardPhoto} />
           <div className={d.hCardBody}>
-            <p className={d.sectionLabel}>Umbria, Italy</p>
-            <h2 className={d.imgCardTitle}>Villa di Santa Lucia</h2>
+            <p className={d.sectionLabel}>Allerona, Umbria</p>
+            <h2 className={d.imgCardTitle}>SPAO Borgo San Pietro</h2>
             <p className={d.imgCardText}>
-              We have exclusive use of the villa and all of its amenities for the whole week.
+              A restored medieval hamlet in the wooded Umbrian hills, ours exclusively for the week —
+              so the whole party stays together, right where the celebrations happen.
             </p>
           </div>
         </article>
@@ -182,27 +195,25 @@ export function StayBody() {
       </section>
 
       <section className={d.section}>
-        <p className={d.sectionLabel}>Room categories</p>
-        <h2 className={d.sectionTitle}>Where guests stay</h2>
+        <p className={d.sectionLabel}>The suites</p>
+        <h2 className={d.sectionTitle}>Where you&rsquo;ll stay</h2>
         <div className={d.callout}>
           <span className={d.calloutText}>
-            Room assignments are coordinated with the couple — we&rsquo;ll share yours closer to the week.
+            Room assignments are coordinated with us — we&rsquo;ll share yours closer to the week.
           </span>
         </div>
-        <div className={d.roomGrid} style={{ marginTop: 14 }}>
-          {ROOMS.map((r) => (
-            <article key={r.name} className={d.imgCard}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={r.photo} alt="" className={d.imgCardPhoto} />
-              <div className={d.imgCardBody}>
-                <div className={d.imgCardTop}>
-                  <h3 className={d.imgCardTitle}>{r.name}</h3>
-                  <span className={d.imgCardMeta}>{r.count}</span>
-                </div>
-                <p className={d.imgCardText}>{r.desc}</p>
+        <div className={d.card} style={{ marginTop: 14 }}>
+          <div className={d.rowCols}>
+            {SUITES.map((s) => (
+              <div key={s.title} className={d.row}>
+                <span className={d.rowText}>
+                  <strong>{s.title}</strong>
+                  <br />
+                  <span className={d.rowNote}>{s.body}</span>
+                </span>
               </div>
-            </article>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
@@ -225,7 +236,7 @@ const THINGS = [
   { name: "Explore Local Towns", desc: "Montepulciano, Montalcino, and Pienza are all close by." },
   { name: "Hike & Nature Walks", desc: "Scenic trails and long countryside views everywhere you look." },
   { name: "Wellness & Relaxation", desc: "Book a spa treatment or claim a quiet chair by the pool." },
-  { name: "Golf", desc: "Beautiful courses a short drive from the villa." },
+  { name: "Golf", desc: "Beautiful courses a short drive from the borgo." },
   { name: "Art & Culture", desc: "Museums, galleries, and historic sites to wander." },
   { name: "Shop & Sip", desc: "Boutiques, local markets, and wine bars for a slow afternoon." },
 ];
@@ -291,7 +302,7 @@ export const GROUPS: { title: string; qa: { q: string; a: string }[] }[] = [
   {
     title: "Where You'll Stay",
     qa: [
-      { q: "Where will we be staying?", a: "Most guests stay right at the villa, which we have exclusively for the week. See the Stay tab." },
+      { q: "Where will we be staying?", a: "Everyone stays right at the borgo — SPAO Borgo San Pietro, which we have exclusively for the week. See the Stay tab." },
       { q: "How do I find out my room?", a: "Room assignments are coordinated with us — we'll let you know yours ahead of time." },
       { q: "What amenities are there?", a: "A pool, gardens, terraces, and lots of gathering spaces to relax between events." },
       { q: "Can I arrive early or stay later?", a: "Absolutely — just let us know your plans so we can help." },
