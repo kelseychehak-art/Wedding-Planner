@@ -150,7 +150,7 @@
 }
 .sign {
   font-family: var(--font-script, cursive);
-  font-size: clamp(40px, 5vw, 60px);
+  font-size: 34px;
   line-height: 1;
   color: var(--wine);
   margin: 0;
