@@ -40,7 +40,6 @@ export type PartyDraft = {
   arrival_date: string;
   departure_date: string;
   flight_info: string;
-  room_assignment: string;
   needs_shuttle: boolean;
   removedGuestIds: string[];
 };
@@ -88,7 +87,6 @@ export function emptyPartyDraft(): PartyDraft {
     arrival_date: "",
     departure_date: "",
     flight_info: "",
-    room_assignment: "",
     needs_shuttle: false,
     removedGuestIds: [],
   };
@@ -464,14 +462,6 @@ export default function PartyForm({
             className={styles.input}
             value={draft.flight_info}
             onChange={(e) => set("flight_info", e.target.value)}
-          />
-        </div>
-        <div className={styles.field}>
-          <label className={styles.label}>Room Assignment</label>
-          <input
-            className={styles.input}
-            value={draft.room_assignment}
-            onChange={(e) => set("room_assignment", e.target.value)}
           />
         </div>
         <div className={styles.checkboxRow}>

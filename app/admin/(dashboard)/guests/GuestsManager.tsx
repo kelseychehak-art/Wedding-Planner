@@ -297,7 +297,6 @@ function partyToDraft(p: Party): PartyDraft {
     arrival_date: p.travel?.arrival_date ?? "",
     departure_date: p.travel?.departure_date ?? "",
     flight_info: p.travel?.flight_info ?? "",
-    room_assignment: p.travel?.room_assignment ?? "",
     needs_shuttle: p.travel?.needs_shuttle ?? false,
     removedGuestIds: [],
   };
@@ -557,7 +556,7 @@ export default function GuestsManager({
     if (activityFilter === "Booked" && !booked) return false;
     if (activityFilter === "None" && booked) return false;
 
-    const hasRoom = (p.lodging?.length ?? 0) > 0 || Boolean(p.travel?.room_assignment);
+    const hasRoom = (p.lodging?.length ?? 0) > 0;
     if (lodgingFilter === "Assigned" && !hasRoom) return false;
     if (lodgingFilter === "Unassigned" && hasRoom) return false;
     if (search.trim()) {
@@ -746,7 +745,6 @@ export default function GuestsManager({
         draft.arrival_date ||
         draft.departure_date ||
         draft.flight_info ||
-        draft.room_assignment ||
         draft.needs_shuttle;
       if (hasTravel) {
         const tRes = await fetch("/api/admin/travel", {
@@ -757,7 +755,6 @@ export default function GuestsManager({
             arrival_date: draft.arrival_date,
             departure_date: draft.departure_date,
             flight_info: draft.flight_info,
-            room_assignment: draft.room_assignment,
             needs_shuttle: draft.needs_shuttle,
           }),
         });
@@ -1116,10 +1113,6 @@ function LodgingCell({ party }: { party: Party }) {
     );
   }
 
-  /* Fall back to the free-text room on travel_info for parties assigned before
-     the Lodging module existed. */
-  const legacy = party.travel?.room_assignment;
-  if (legacy) return <span className={styles.lodgingCell}>{legacy}</span>;
   return <span className={styles.dim}>—</span>;
 }
 

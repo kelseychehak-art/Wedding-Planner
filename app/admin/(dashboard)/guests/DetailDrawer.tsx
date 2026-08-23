@@ -207,7 +207,16 @@ export default function DetailDrawer({
               </Section>
 
               <Section title="Lodging">
-                <Row label="Room" value={t?.room_assignment} />
+                <Row
+                  label="Room"
+                  value={(() => {
+                    const a = party.lodging?.[0];
+                    if (!a) return null;
+                    return [a.property_name, a.room_name, a.room_type]
+                      .filter(Boolean)
+                      .join(" · ");
+                  })()}
+                />
               </Section>
 
               <Section title="Notes">
