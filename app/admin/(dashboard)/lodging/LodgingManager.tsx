@@ -728,17 +728,11 @@ function PropertyForm({ onClose, onSaved }: { onClose: () => void; onSaved: () =
 }
 
 /*
- * Rooms/suites for a property. The borgo is a set of 1–3 room suites, so
- * room_type doubles as the suite category; the datalist offers those without
+ * Rooms/suites for a property. The borgo's suites are sized by bedroom count,
+ * so room_type doubles as the suite category; the datalist offers those without
  * locking you out of a custom name.
  */
-const ROOM_TYPES = [
-  "One-room suite",
-  "Two-room suite",
-  "Three-room suite",
-  "Standard room",
-  "Suite",
-];
+const ROOM_TYPES = ["1-bedroom", "2-bedroom", "3-bedroom", "Studio", "Suite"];
 
 function RoomForm({
   properties,
