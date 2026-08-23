@@ -4,12 +4,11 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/admin/PageHeader";
 import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
-import Pagination from "@/components/admin/Pagination";
 import {
   IconHome,
   IconUsers,
   IconBuilding,
-  IconAlert,
+  IconWallet,
   IconCalendar,
   IconSearch,
   IconPlus,
@@ -18,9 +17,10 @@ import { useConfirm } from "@/components/admin/useConfirm";
 import styles from "./lodging.module.css";
 
 /*
- * Admin Lodging — docs/admin/lodging.md, adapted to this repo's stack.
- * Assignments are party-level (that's how guests are invited here); the
- * spec's per-guest link table exists in the schema for when guests are named.
+ * Admin Lodging — property + room inventory, per-household room assignment, and
+ * per-person accommodation pricing. Assignments are party-level (a party = one
+ * household/invite group); two households can share one room (doubling up), so
+ * a room simply gathers every assignment that points at it.
  */
 
 export type Property = {
@@ -53,6 +53,7 @@ export type Room = {
   nightly_rate: number | null;
   currency_code: string | null;
   inventory_status: string;
+  notes?: string | null;
 };
 
 export type Assignment = {
@@ -90,9 +91,13 @@ export type LodgingData = {
   requests: LodgingRequest[];
 };
 
-export type PartyOption = { id: string; name: string; guestCount: number };
+export type Person = { id: string; firstName: string; isChild: boolean; age: number | null };
+export type Household = { id: string; name: string; people: Person[] };
 
-type Tab = "properties" | "rooms" | "assignments" | "requests" | "summary";
+export type ChildBracket = { label: string; maxAge: number | null; price: number | null };
+export type Pricing = { adultPrice: number | null; brackets: ChildBracket[] };
+
+type Tab = "assign" | "rooms" | "pricing" | "properties" | "requests";
 
 const STATUS_LABEL: Record<string, string> = {
   assigned: "Assigned",
@@ -100,6 +105,12 @@ const STATUS_LABEL: Record<string, string> = {
   needs_room: "Needs room",
   cancelled: "Cancelled",
 };
+
+const eur = new Intl.NumberFormat("en-IE", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
 
 function fmtDate(iso: string | null): string {
   if (!iso) return "—";
@@ -109,98 +120,137 @@ function fmtDate(iso: string | null): string {
   });
 }
 
+/* Per-person price: adults pay the flat rate; a child pays the first bracket
+ * whose max age covers them (children older than every bracket fall back to the
+ * adult rate). A child with no age yet is flagged so it can be filled in. */
+function personPrice(p: Person, pricing: Pricing): { amount: number; needsAge: boolean } {
+  const adult = pricing.adultPrice ?? 0;
+  if (!p.isChild) return { amount: adult, needsAge: false };
+  if (p.age == null) return { amount: 0, needsAge: true };
+  const sorted = pricing.brackets
+    .filter((b) => b.maxAge != null)
+    .sort((a, b) => (a.maxAge as number) - (b.maxAge as number));
+  for (const b of sorted) {
+    if (p.age <= (b.maxAge as number)) return { amount: b.price ?? 0, needsAge: false };
+  }
+  return { amount: adult, needsAge: false };
+}
+
+function householdCost(h: Household, pricing: Pricing): number {
+  return h.people.reduce((s, p) => s + personPrice(p, pricing).amount, 0);
+}
+
+function countAdultsChildren(h: Household): { adults: number; children: number } {
+  let adults = 0;
+  let children = 0;
+  for (const p of h.people) p.isChild ? children++ : adults++;
+  return { adults, children };
+}
+
 export default function LodgingManager({
   data,
-  parties,
+  households,
+  pricing,
 }: {
   data: LodgingData;
-  parties: PartyOption[];
+  households: Household[];
+  pricing: Pricing;
 }) {
   const { confirm, dialog } = useConfirm();
   const router = useRouter();
-  const [tab, setTab] = useState<Tab>("assignments");
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(25);
+  const [tab, setTab] = useState<Tab>("assign");
   const [search, setSearch] = useState("");
-  const [propertyFilter, setPropertyFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [editing, setEditing] = useState<"property" | "room" | "assignment" | null>(null);
+  const [editing, setEditing] = useState<"property" | "room" | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
 
   const { properties, rooms, assignments, requests } = data;
 
+  // party_id -> its (single) assignment
+  const assignmentByParty = useMemo(() => {
+    const m = new Map<string, Assignment>();
+    for (const a of assignments) if (a.party_id) m.set(a.party_id, a);
+    return m;
+  }, [assignments]);
+
+  const householdById = useMemo(() => {
+    const m = new Map<string, Household>();
+    for (const h of households) m.set(h.id, h);
+    return m;
+  }, [households]);
+
+  const defaultDates = useMemo(() => {
+    const ci = properties.find((p) => p.default_check_in_date)?.default_check_in_date ?? "";
+    const co = properties.find((p) => p.default_check_out_date)?.default_check_out_date ?? "";
+    return { ci, co };
+  }, [properties]);
+
+  const grandTotal = useMemo(
+    () => households.reduce((s, h) => s + householdCost(h, pricing), 0),
+    [households, pricing]
+  );
+  const childrenMissingAge = useMemo(
+    () =>
+      households.reduce(
+        (s, h) => s + h.people.filter((p) => p.isChild && p.age == null).length,
+        0
+      ),
+    [households]
+  );
+
   const metrics: Metric[] = useMemo(() => {
-    const totalRooms = rooms.length;
-    const assignedRooms = new Set(
-      assignments.filter((a) => a.room_id).map((a) => a.room_id)
-    ).size;
+    const assignedRooms = new Set(assignments.filter((a) => a.room_id).map((a) => a.room_id)).size;
+    const assignedHouseholds = assignments.filter((a) => a.room_id).length;
     const guestsStaying = assignments
-      .filter((a) => a.status === "assigned")
-      .reduce((s, a) => s + (a.party_guest_count || 0), 0);
-    const checkIn = properties.find((p) => p.default_check_in_date)?.default_check_in_date ?? null;
-    const checkOut =
-      properties.find((p) => p.default_check_out_date)?.default_check_out_date ?? null;
+      .filter((a) => a.room_id)
+      .reduce((s, a) => {
+        const h = a.party_id ? householdById.get(a.party_id) : undefined;
+        return s + (h ? h.people.length : a.party_guest_count || 0);
+      }, 0);
 
     return [
       {
-        key: "properties",
+        key: "rooms",
+        icon: <IconBuilding size={22} />,
+        value: `${assignedRooms}`,
+        label: "Rooms Filled",
+        sub: `of ${rooms.length}`,
+        tone: "info",
+      },
+      {
+        key: "households",
         icon: <IconHome size={22} />,
-        value: String(properties.length),
-        label: "Properties",
+        value: String(assignedHouseholds),
+        label: "Households Placed",
+        sub: `${households.length} total`,
       },
       {
         key: "guests",
         icon: <IconUsers size={22} />,
         value: String(guestsStaying),
         label: "Guests Staying",
-        sub: assignments.length ? `${assignments.length} assignments` : "None yet",
       },
       {
-        key: "rooms",
-        icon: <IconBuilding size={22} />,
-        value: String(assignedRooms),
-        label: "Rooms Assigned",
-        sub: `of ${totalRooms} available`,
-        tone: "info",
-      },
-      {
-        key: "requests",
-        icon: <IconAlert size={22} />,
-        value: String(requests.filter((r) => r.status === "open").length),
-        label: "Room Requests",
-        sub: "Need review",
-        tone: requests.some((r) => r.status === "open") ? "warn" : "default",
+        key: "total",
+        icon: <IconWallet size={22} />,
+        value: eur.format(grandTotal),
+        label: "Accommodation Total",
+        sub: childrenMissingAge > 0 ? `${childrenMissingAge} child age(s) missing` : "All priced",
+        tone: childrenMissingAge > 0 ? "warn" : "good",
       },
       {
         key: "checkin",
         icon: <IconCalendar size={22} />,
-        value: checkIn ? fmtDate(checkIn) : "—",
+        value: defaultDates.ci ? fmtDate(defaultDates.ci) : "—",
         label: "Check-in",
       },
       {
         key: "checkout",
         icon: <IconCalendar size={22} />,
-        value: checkOut ? fmtDate(checkOut) : "—",
+        value: defaultDates.co ? fmtDate(defaultDates.co) : "—",
         label: "Check-out",
       },
     ];
-  }, [properties, rooms, assignments, requests]);
-
-  const filteredAssignments = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return assignments.filter((a) => {
-      if (propertyFilter && a.property_name !== propertyFilter) return false;
-      if (statusFilter && a.status !== statusFilter) return false;
-      if (q && !(a.party_name ?? "").toLowerCase().includes(q)) return false;
-      return true;
-    });
-  }, [assignments, search, propertyFilter, statusFilter]);
-
-  const pageCount = Math.max(1, Math.ceil(filteredAssignments.length / pageSize));
-  const clampedPage = Math.min(page, pageCount);
-  const visibleAssignments = filteredAssignments.slice(
-    (clampedPage - 1) * pageSize,
-    clampedPage * pageSize
-  );
+  }, [assignments, rooms, households, householdById, grandTotal, childrenMissingAge, defaultDates]);
 
   async function removeRecord(kind: string, id: string, label: string) {
     if (!(await confirm({ title: `Delete ${label}?` }))) return;
@@ -208,30 +258,44 @@ export default function LodgingManager({
     if (res.ok) router.refresh();
   }
 
+  async function assignRoom(household: Household, roomId: string) {
+    setBusy(household.id);
+    const existing = assignmentByParty.get(household.id);
+    try {
+      const res = await fetch("/api/admin/lodging", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          kind: "assignment",
+          id: existing?.id ?? "",
+          party_id: household.id,
+          room_id: roomId,
+          check_in_date: existing?.check_in_date ?? (roomId ? defaultDates.ci : ""),
+          check_out_date: existing?.check_out_date ?? (roomId ? defaultDates.co : ""),
+          status: roomId ? "assigned" : "needs_room",
+        }),
+      });
+      if (res.ok) router.refresh();
+    } finally {
+      setBusy(null);
+    }
+  }
+
   const tabs: { key: Tab; label: string; count?: number }[] = [
-    { key: "properties", label: "Properties", count: properties.length },
+    { key: "assign", label: "Assign Rooms", count: households.length },
     { key: "rooms", label: "Rooms", count: rooms.length },
-    { key: "assignments", label: "Room Assignments", count: assignments.length },
-    { key: "requests", label: "Room Requests", count: requests.length },
-    { key: "summary", label: "Lodging Summary" },
+    { key: "pricing", label: "Pricing" },
+    { key: "properties", label: "Properties", count: properties.length },
+    { key: "requests", label: "Requests", count: requests.length },
   ];
 
   return (
     <div>
       <PageHeader
         title="Lodging"
-        subtitle="Manage properties, room assignments, and guest lodging details."
+        subtitle="Assign each household to a room, and price the stay per person."
         action={
           <div className={styles.headerActions}>
-            <button
-              type="button"
-              className="btn-outline"
-              onClick={() => setEditing("assignment")}
-              disabled={rooms.length === 0}
-              title={rooms.length === 0 ? "Add a property and rooms first" : undefined}
-            >
-              Assign Room
-            </button>
             <button
               type="button"
               className="btn-outline"
@@ -243,7 +307,7 @@ export default function LodgingManager({
             </button>
             <button type="button" className="btn-primary" onClick={() => setEditing("property")}>
               <IconPlus size={15} className={styles.btnIcon} />
-            Add Property
+              Add Property
             </button>
           </div>
         }
@@ -275,11 +339,171 @@ export default function LodgingManager({
           onSaved={() => router.refresh()}
         />
       )}
-      {editing === "assignment" && (
-        <AssignmentForm
-          rooms={rooms}
-          parties={parties}
-          onClose={() => setEditing(null)}
+
+      {/* ---- Assign rooms (household-centric) ---- */}
+      {tab === "assign" && (
+        <>
+          <div className={styles.toolbar}>
+            <span className={styles.searchWrap}>
+              <IconSearch size={15} className={styles.searchIcon} />
+              <input
+                className={styles.search}
+                type="search"
+                placeholder="Search household…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </span>
+          </div>
+
+          {households.length === 0 ? (
+            <Empty text="No households yet. Add them in the Guest List, then assign rooms here." />
+          ) : rooms.length === 0 ? (
+            <Empty text="No rooms yet. Add a property and its rooms first, then assign households here." />
+          ) : (
+            <div className={styles.tableWrap}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Household</th>
+                    <th>People</th>
+                    <th>Room</th>
+                    <th>Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {households
+                    .filter((h) =>
+                      search.trim()
+                        ? h.name.toLowerCase().includes(search.trim().toLowerCase())
+                        : true
+                    )
+                    .map((h) => {
+                      const a = assignmentByParty.get(h.id);
+                      const { adults, children } = countAdultsChildren(h);
+                      return (
+                        <tr key={h.id}>
+                          <td>
+                            <div className={styles.strong}>{h.name}</div>
+                          </td>
+                          <td>
+                            {adults} adult{adults === 1 ? "" : "s"}
+                            {children > 0 && (
+                              <span className={styles.sub}>
+                                {" "}
+                                · {children} child{children === 1 ? "" : "ren"}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <select
+                              className={styles.select}
+                              value={a?.room_id ?? ""}
+                              disabled={busy === h.id}
+                              onChange={(e) => assignRoom(h, e.target.value)}
+                            >
+                              <option value="">— Unassigned —</option>
+                              {rooms.map((r) => (
+                                <option key={r.id} value={r.id}>
+                                  {r.room_name} (sleeps {r.total_capacity})
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                          <td>{eur.format(householdCost(h, pricing))}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ---- Rooms roster ---- */}
+      {tab === "rooms" &&
+        (rooms.length === 0 ? (
+          <Empty
+            text={
+              properties.length === 0
+                ? "No rooms yet. Add a property first, then add its rooms or suites here."
+                : "No rooms yet. Use “Add Room” to enter each room or suite from the venue."
+            }
+          />
+        ) : (
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Room / Suite</th>
+                  <th>Type</th>
+                  <th>Who&rsquo;s assigned</th>
+                  <th>Occupancy</th>
+                  <th>Cost</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {rooms.map((r) => {
+                  const roomAssignments = assignments.filter((a) => a.room_id === r.id);
+                  const occupants = roomAssignments
+                    .map((a) => (a.party_id ? householdById.get(a.party_id) : undefined))
+                    .filter(Boolean) as Household[];
+                  const people = occupants.reduce((s, h) => s + h.people.length, 0);
+                  const cost = occupants.reduce((s, h) => s + householdCost(h, pricing), 0);
+                  const over = people > r.total_capacity;
+                  return (
+                    <tr key={r.id}>
+                      <td>
+                        <div className={styles.strong}>{r.room_name}</div>
+                        {r.notes && <div className={styles.sub}>{r.notes}</div>}
+                      </td>
+                      <td>{r.room_type ?? "—"}</td>
+                      <td>
+                        {occupants.length === 0 ? (
+                          <span className={styles.sub}>Empty</span>
+                        ) : (
+                          occupants.map((h) => <div key={h.id}>{h.name}</div>)
+                        )}
+                      </td>
+                      <td>
+                        <span className={over ? styles.over : undefined}>
+                          {people} / {r.total_capacity}
+                        </span>
+                      </td>
+                      <td>{occupants.length ? eur.format(cost) : "—"}</td>
+                      <td>
+                        <button
+                          type="button"
+                          className={styles.deleteLink}
+                          onClick={() => removeRecord("room", r.id, `“${r.room_name}”`)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colSpan={4} className={styles.strong}>
+                    Accommodation total
+                  </td>
+                  <td className={styles.strong}>{eur.format(grandTotal)}</td>
+                  <td />
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        ))}
+
+      {/* ---- Pricing ---- */}
+      {tab === "pricing" && (
+        <PricingPanel
+          pricing={pricing}
+          households={households}
           onSaved={() => router.refresh()}
         />
       )}
@@ -287,7 +511,7 @@ export default function LodgingManager({
       {/* ---- Properties ---- */}
       {tab === "properties" &&
         (properties.length === 0 ? (
-          <Empty text="No properties yet. Add the villa or hotel your block is held at." />
+          <Empty text="No properties yet. Add the borgo or hotel your block is held at." />
         ) : (
           <div className={styles.propertyGrid}>
             {properties.map((p) => (
@@ -331,197 +555,6 @@ export default function LodgingManager({
           </div>
         ))}
 
-      {/* ---- Rooms ---- */}
-      {tab === "rooms" &&
-        (rooms.length === 0 ? (
-          <Empty
-            text={
-              properties.length === 0
-                ? "No rooms yet. Add a property first, then add its rooms or suites here."
-                : "No rooms yet. Use “Add Room” to enter each room name or suite type from the venue."
-            }
-          />
-        ) : (
-          <div className={styles.tableWrap}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Room / Suite</th>
-                  <th>Property</th>
-                  <th>Type</th>
-                  <th>Beds</th>
-                  <th>Sleeps</th>
-                  <th>Nightly</th>
-                  <th>Status</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {rooms.map((r) => (
-                  <tr key={r.id}>
-                    <td>
-                      <div className={styles.strong}>{r.room_name}</div>
-                      {r.accessible && <span className={styles.sub}>Accessible</span>}
-                    </td>
-                    <td>{r.property_name}</td>
-                    <td>{r.room_type ?? "—"}</td>
-                    <td>{r.bed_configuration ?? "—"}</td>
-                    <td>
-                      {r.total_capacity}
-                      <div className={styles.sub}>
-                        {r.adult_capacity} adult{r.adult_capacity === 1 ? "" : "s"}
-                        {r.child_capacity > 0 && `, ${r.child_capacity} child`}
-                      </div>
-                    </td>
-                    <td>
-                      {r.nightly_rate != null
-                        ? new Intl.NumberFormat("en-IE", {
-                            style: "currency",
-                            currency: r.currency_code || "EUR",
-                            maximumFractionDigits: 0,
-                          }).format(r.nightly_rate)
-                        : "—"}
-                    </td>
-                    <td>{r.inventory_status}</td>
-                    <td>
-                      <button
-                        type="button"
-                        className={styles.deleteLink}
-                        onClick={() => removeRecord("room", r.id, `“${r.room_name}”`)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
-
-      {/* ---- Room assignments ---- */}
-      {tab === "assignments" && (
-        <>
-          <div className={styles.toolbar}>
-            <span className={styles.searchWrap}>
-              <IconSearch size={15} className={styles.searchIcon} />
-              <input
-                className={styles.search}
-                type="search"
-                placeholder="Search guest or party…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </span>
-            <select
-              className={styles.select}
-              value={propertyFilter}
-              onChange={(e) => setPropertyFilter(e.target.value)}
-            >
-              <option value="">All Properties</option>
-              {properties.map((p) => (
-                <option key={p.id} value={p.name}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
-            <select
-              className={styles.select}
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="">All Statuses</option>
-              {Object.entries(STATUS_LABEL).map(([k, v]) => (
-                <option key={k} value={k}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {assignments.length === 0 ? (
-            <Empty text="No room assignments yet. Add a property with rooms, then assign parties to them." />
-          ) : (
-            <div className={styles.tableWrap}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Guest / Party</th>
-                    <th>Property</th>
-                    <th>Room</th>
-                    <th>Room Type</th>
-                    <th>Check-in</th>
-                    <th>Check-out</th>
-                    <th>Occupancy</th>
-                    <th>Status</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {visibleAssignments.map((a) => (
-                    <tr key={a.id}>
-                      <td>
-                        <div className={styles.strong}>
-                          {a.party_name ?? "Unassigned"}
-                          {a.party_guest_count > 0 && ` (${a.party_guest_count})`}
-                        </div>
-                      </td>
-                      <td>{a.property_name ?? "TBD"}</td>
-                      <td>{a.room_name ?? "—"}</td>
-                      <td>{a.room_type ?? "—"}</td>
-                      <td>{fmtDate(a.check_in_date)}</td>
-                      <td>{fmtDate(a.check_out_date)}</td>
-                      <td>
-                        {a.party_guest_count > 0
-                          ? `${a.party_guest_count} ${a.party_guest_count === 1 ? "guest" : "guests"}`
-                          : "—"}
-                        {a.total_capacity != null && (
-                          <div className={styles.sub}>sleeps {a.total_capacity}</div>
-                        )}
-                      </td>
-                      <td>
-                        <span
-                          className={`${styles.status} ${
-                            a.status === "assigned"
-                              ? styles.statusAssigned
-                              : a.status === "pending"
-                                ? styles.statusPending
-                                : styles.statusNeeds
-                          }`}
-                        >
-                          {STATUS_LABEL[a.status] ?? a.status}
-                        </span>
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          className={styles.deleteLink}
-                          onClick={() =>
-                            removeRecord("assignment", a.id, `the ${a.party_name} assignment`)
-                          }
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-          {/* Outside .tableWrap — that scrolls horizontally, and pagination
-              must stay put when the table is scrolled sideways. */}
-          <Pagination
-            total={filteredAssignments.length}
-            page={clampedPage}
-            pageSize={pageSize}
-            onPage={setPage}
-            onPageSize={setPageSize}
-            noun="assignments"
-          />
-        </>
-      )}
-
       {/* ---- Requests ---- */}
       {tab === "requests" &&
         (requests.length === 0 ? (
@@ -560,50 +593,6 @@ export default function LodgingManager({
             </table>
           </div>
         ))}
-
-      {/* ---- Summary ---- */}
-      {tab === "summary" && (
-        <div className={styles.summaryGrid}>
-          <div className={styles.summaryCard}>
-            <p className={styles.summaryLabel}>Room inventory</p>
-            {properties.length === 0 ? (
-              <p className={styles.summaryEmpty}>No properties yet.</p>
-            ) : (
-              <ul className={styles.summaryList}>
-                {properties.map((p) => (
-                  <li key={p.id}>
-                    <span>{p.name}</span>
-                    <strong>
-                      {p.room_count} {p.room_count === 1 ? "room" : "rooms"} · sleeps {p.capacity}
-                    </strong>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <div className={styles.summaryCard}>
-            <p className={styles.summaryLabel}>Assignment status</p>
-            <ul className={styles.summaryList}>
-              {Object.entries(STATUS_LABEL).map(([k, v]) => (
-                <li key={k}>
-                  <span>{v}</span>
-                  <strong>{assignments.filter((a) => a.status === k).length}</strong>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className={styles.summaryCard}>
-            <p className={styles.summaryLabel}>Unassigned parties</p>
-            <p className={styles.summaryEmpty}>
-              {(() => {
-                const assigned = new Set(assignments.map((a) => a.party_id));
-                const n = parties.filter((p) => !assigned.has(p.id)).length;
-                return `${n} ${n === 1 ? "party has" : "parties have"} no room yet.`;
-              })()}
-            </p>
-          </div>
-        </div>
-      )}
       {dialog}
     </div>
   );
@@ -613,12 +602,208 @@ function Empty({ text }: { text: string }) {
   return <p className={styles.empty}>{text}</p>;
 }
 
+/* ---------- Pricing panel ---------- */
+
+function PricingPanel({
+  pricing,
+  households,
+  onSaved,
+}: {
+  pricing: Pricing;
+  households: Household[];
+  onSaved: () => void;
+}) {
+  const [adult, setAdult] = useState(pricing.adultPrice != null ? String(pricing.adultPrice) : "");
+  const [brackets, setBrackets] = useState<ChildBracket[]>(
+    pricing.brackets.length
+      ? pricing.brackets
+      : [{ label: "Under 2", maxAge: 1, price: null }]
+  );
+  const [savingRates, setSavingRates] = useState(false);
+  const [savedTick, setSavedTick] = useState(false);
+
+  const children = useMemo(
+    () =>
+      households
+        .flatMap((h) => h.people.map((p) => ({ ...p, household: h.name })))
+        .filter((p) => p.isChild),
+    [households]
+  );
+
+  function setBracket(i: number, patch: Partial<ChildBracket>) {
+    setBrackets((prev) => prev.map((b, j) => (j === i ? { ...b, ...patch } : b)));
+  }
+
+  async function saveRates() {
+    setSavingRates(true);
+    setSavedTick(false);
+    try {
+      const res = await fetch("/api/admin/lodging/pricing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          adultPrice: adult === "" ? null : Number(adult),
+          brackets: brackets
+            .filter((b) => b.label.trim() || b.maxAge != null || b.price != null)
+            .map((b) => ({ label: b.label, max_age: b.maxAge, price: b.price })),
+        }),
+      });
+      if (res.ok) {
+        setSavedTick(true);
+        onSaved();
+      }
+    } finally {
+      setSavingRates(false);
+    }
+  }
+
+  async function saveAge(personId: string, ageStr: string) {
+    await fetch("/api/admin/guests/age", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: personId, age: ageStr }),
+    });
+    onSaved();
+  }
+
+  return (
+    <div className={styles.pricingWrap}>
+      <section className={styles.pricingCard}>
+        <h3 className={styles.pricingTitle}>Rates</h3>
+        <p className={styles.pricingHelp}>
+          Everyone is charged the adult price unless they&rsquo;re marked as a child with an age
+          that falls in a bracket below. All amounts in euros.
+        </p>
+        <label className={styles.field} style={{ maxWidth: 220 }}>
+          <span className={styles.fieldLabel}>Adult (per person)</span>
+          <input
+            className={styles.input}
+            type="number"
+            min="0"
+            step="1"
+            value={adult}
+            onChange={(e) => setAdult(e.target.value)}
+          />
+        </label>
+
+        <p className={styles.pricingSub}>Child brackets</p>
+        <div className={styles.bracketRows}>
+          {brackets.map((b, i) => (
+            <div className={styles.bracketRow} key={i}>
+              <input
+                className={styles.input}
+                placeholder="Label (e.g. Under 2)"
+                value={b.label}
+                onChange={(e) => setBracket(i, { label: e.target.value })}
+              />
+              <input
+                className={styles.input}
+                type="number"
+                min="0"
+                placeholder="Up to age"
+                value={b.maxAge ?? ""}
+                onChange={(e) =>
+                  setBracket(i, { maxAge: e.target.value === "" ? null : Number(e.target.value) })
+                }
+              />
+              <input
+                className={styles.input}
+                type="number"
+                min="0"
+                placeholder="Price €"
+                value={b.price ?? ""}
+                onChange={(e) =>
+                  setBracket(i, { price: e.target.value === "" ? null : Number(e.target.value) })
+                }
+              />
+              <button
+                type="button"
+                className={styles.deleteLink}
+                onClick={() => setBrackets((prev) => prev.filter((_, j) => j !== i))}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          className={styles.linkBtn}
+          onClick={() =>
+            setBrackets((prev) => [...prev, { label: "", maxAge: null, price: null }])
+          }
+        >
+          + Add bracket
+        </button>
+
+        <div className={styles.formActions}>
+          <button type="button" className="btn-primary" onClick={saveRates} disabled={savingRates}>
+            {savingRates ? "Saving…" : "Save rates"}
+          </button>
+          {savedTick && <span className={styles.savedNote}>Saved ✓</span>}
+        </div>
+      </section>
+
+      <section className={styles.pricingCard}>
+        <h3 className={styles.pricingTitle}>Children&rsquo;s ages</h3>
+        {children.length === 0 ? (
+          <p className={styles.pricingHelp}>
+            No children yet. Mark a guest as a child in the Guest List and they&rsquo;ll appear here
+            to price by age.
+          </p>
+        ) : (
+          <>
+            <p className={styles.pricingHelp}>
+              Enter each child&rsquo;s age so they&rsquo;re priced by the right bracket.
+            </p>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Child</th>
+                  <th>Household</th>
+                  <th>Age</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {children.map((c) => {
+                  const pr = personPrice(c, {
+                    adultPrice: adult === "" ? null : Number(adult),
+                    brackets,
+                  });
+                  return (
+                    <tr key={c.id}>
+                      <td className={styles.strong}>{c.firstName}</td>
+                      <td>{c.household}</td>
+                      <td>
+                        <input
+                          className={styles.input}
+                          style={{ maxWidth: 90 }}
+                          type="number"
+                          min="0"
+                          defaultValue={c.age ?? ""}
+                          onBlur={(e) => saveAge(c.id, e.target.value)}
+                        />
+                      </td>
+                      <td>{pr.needsAge ? <span className={styles.over}>age needed</span> : eur.format(pr.amount)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </>
+        )}
+      </section>
+    </div>
+  );
+}
+
 /* ---------- Forms ---------- */
 
 function PropertyForm({ onClose, onSaved }: { onClose: () => void; onSaved: () => void }) {
   const [form, setForm] = useState({
     name: "",
-    property_type: "Villa",
+    property_type: "Borgo",
     city: "",
     region: "",
     default_check_in_date: "",
@@ -654,7 +839,7 @@ function PropertyForm({ onClose, onSaved }: { onClose: () => void; onSaved: () =
           <input
             className={styles.input}
             value={form.name}
-            placeholder="Villa di Torre"
+            placeholder="SPAO Borgo San Pietro"
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
         </Field>
@@ -664,6 +849,7 @@ function PropertyForm({ onClose, onSaved }: { onClose: () => void; onSaved: () =
             value={form.property_type}
             onChange={(e) => setForm({ ...form, property_type: e.target.value })}
           >
+            <option>Borgo</option>
             <option>Villa</option>
             <option>Hotel</option>
             <option>Agriturismo</option>
@@ -765,7 +951,6 @@ function RoomForm({
     if (!form.property_id || !form.room_name.trim()) return;
     setSaving(true);
     try {
-      // Default total capacity to adults + children when left blank.
       const total =
         form.total_capacity ||
         String((Number(form.adult_capacity) || 0) + (Number(form.child_capacity) || 0));
@@ -804,7 +989,7 @@ function RoomForm({
           <input
             className={styles.input}
             value={form.room_name}
-            placeholder="Suite 1"
+            placeholder="Il Frantoio"
             onChange={(e) => set("room_name", e.target.value)}
           />
         </Field>
@@ -813,7 +998,7 @@ function RoomForm({
             className={styles.input}
             list="room-types"
             value={form.room_type}
-            placeholder="Two-room suite"
+            placeholder="2-bedroom"
             onChange={(e) => set("room_type", e.target.value)}
           />
           <datalist id="room-types">
@@ -826,7 +1011,7 @@ function RoomForm({
           <input
             className={styles.input}
             value={form.bed_configuration}
-            placeholder="1 king + 1 twin"
+            placeholder="1 bedroom, 1 bath"
             onChange={(e) => set("bed_configuration", e.target.value)}
           />
         </Field>
@@ -876,9 +1061,7 @@ function RoomForm({
           />
         </Field>
       </div>
-      <label
-        style={{ display: "flex", alignItems: "center", gap: 8, margin: "4px 0 12px" }}
-      >
+      <label style={{ display: "flex", alignItems: "center", gap: 8, margin: "4px 0 12px" }}>
         <input
           type="checkbox"
           checked={form.accessible}
@@ -894,131 +1077,6 @@ function RoomForm({
           disabled={saving || !form.property_id || !form.room_name.trim()}
         >
           {saving ? "Saving…" : "Save room"}
-        </button>
-        <button type="button" className={styles.linkBtn} onClick={onClose}>
-          Cancel
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function AssignmentForm({
-  rooms,
-  parties,
-  onClose,
-  onSaved,
-}: {
-  rooms: Room[];
-  parties: PartyOption[];
-  onClose: () => void;
-  onSaved: () => void;
-}) {
-  const [form, setForm] = useState({
-    party_id: "",
-    room_id: "",
-    check_in_date: "",
-    check_out_date: "",
-    status: "assigned",
-    guest_notes: "",
-  });
-  const [saving, setSaving] = useState(false);
-
-  async function save() {
-    if (!form.party_id) return;
-    setSaving(true);
-    try {
-      const res = await fetch("/api/admin/lodging", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kind: "assignment", ...form }),
-      });
-      if (res.ok) {
-        onClose();
-        onSaved();
-      }
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  return (
-    <div className={styles.formCard}>
-      <h2 className={styles.formTitle}>Assign a room</h2>
-      <div className={styles.formGrid}>
-        <Field label="Party">
-          <select
-            className={styles.input}
-            value={form.party_id}
-            onChange={(e) => setForm({ ...form, party_id: e.target.value })}
-          >
-            <option value="">Choose a party…</option>
-            {parties.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Room">
-          <select
-            className={styles.input}
-            value={form.room_id}
-            onChange={(e) => setForm({ ...form, room_id: e.target.value })}
-          >
-            <option value="">Unassigned (needs room)</option>
-            {rooms.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.property_name} — {r.room_name} (sleeps {r.total_capacity})
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Status">
-          <select
-            className={styles.input}
-            value={form.status}
-            onChange={(e) => setForm({ ...form, status: e.target.value })}
-          >
-            {Object.entries(STATUS_LABEL).map(([k, v]) => (
-              <option key={k} value={k}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Check-in">
-          <input
-            className={styles.input}
-            type="date"
-            value={form.check_in_date}
-            onChange={(e) => setForm({ ...form, check_in_date: e.target.value })}
-          />
-        </Field>
-        <Field label="Check-out">
-          <input
-            className={styles.input}
-            type="date"
-            value={form.check_out_date}
-            onChange={(e) => setForm({ ...form, check_out_date: e.target.value })}
-          />
-        </Field>
-        <Field label="Notes" wide>
-          <input
-            className={styles.input}
-            value={form.guest_notes}
-            onChange={(e) => setForm({ ...form, guest_notes: e.target.value })}
-          />
-        </Field>
-      </div>
-      <div className={styles.formActions}>
-        <button
-          type="button"
-          className="btn-primary"
-          onClick={save}
-          disabled={saving || !form.party_id}
-        >
-          {saving ? "Saving…" : "Save assignment"}
         </button>
         <button type="button" className={styles.linkBtn} onClick={onClose}>
           Cancel

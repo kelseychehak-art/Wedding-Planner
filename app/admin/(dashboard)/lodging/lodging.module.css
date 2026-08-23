@@ -420,3 +420,64 @@
   margin-right: 8px;
   vertical-align: -2px;
 }
+
+/* ---- Pricing panel ---- */
+.pricingWrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.pricingCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+.pricingTitle {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 18px;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.pricingHelp {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--olive-muted, #6e5b46);
+  margin: 0 0 16px;
+}
+.pricingSub {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--olive-muted, #6e5b46);
+  margin: 18px 0 8px;
+}
+.bracketRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bracketRow {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.savedNote {
+  align-self: center;
+  color: var(--olive, #575c36);
+  font-size: 13px;
+  font-weight: 600;
+}
+.over {
+  color: var(--terracotta, #6e2438);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .pricingWrap {
+    grid-template-columns: 1fr;
+  }
+}
