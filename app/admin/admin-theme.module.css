@@ -1,35 +1,38 @@
-/* Brand alignment (Tier 1): remap the palette to the guest site's "Dolce Vita"
-   values for the WHOLE back-office (login + dashboard). Components read the
-   ALIASES (--terracotta, --page-bg, --ink, …), and those were already resolved
-   at :root, so we must re-declare the aliases here (not just the --color-* base)
-   for the override to take effect. Scoped to /admin, so the live guest site —
-   which hardcodes its own colours — is untouched. */
+/* Brand alignment: remap the palette to the NEW guest-site direction
+   (wine / olive / mauve / espresso / ivory) for the WHOLE back-office (login +
+   dashboard). Components read the ALIASES (--terracotta, --page-bg, --ink, …),
+   which were resolved at :root, so we re-declare the aliases here for the
+   override to take effect. Scoped to /admin — the guest site is untouched.
+   Functional skin only: new colors + Playfair headers, no painting/script. */
 .theme {
   /* base palette (in case anything reads --color-* directly) */
-  --color-ivory: #faf6ec;
-  --color-paper: #fdfaf3;
-  --color-sand: #f3ede1;
-  --color-ink: #2f2a24;
-  --color-muted-ink: #8a8175;
-  --color-olive: #6e8b3d;
-  --color-olive-dark: #3f4a36;
-  --color-terracotta: #d96b3f;
-  --color-terracotta-dark: #c15a34;
-  --color-sky-blue: #6f9fce;
-  --color-border: rgba(47, 42, 36, 0.16);
-  --color-border-soft: rgba(47, 42, 36, 0.1);
+  --color-ivory: #f5efe3;
+  --color-paper: #fbf7ee;
+  --color-sand: #efe7d6;
+  --color-ink: #3b2a1e;
+  --color-muted-ink: #6e5b46;
+  --color-olive: #575c36;
+  --color-olive-dark: #3f4528;
+  --color-terracotta: #6e2438; /* now WINE — the primary action/accent */
+  --color-terracotta-dark: #5c1e30;
+  --color-sky-blue: #be8e90; /* now MAUVE — the soft accent */
+  --color-border: rgba(59, 42, 30, 0.16);
+  --color-border-soft: rgba(59, 42, 30, 0.1);
 
   /* aliases (what components actually use) */
-  --page-bg: #faf6ec;
-  --surface: #fdfaf3;
-  --surface-soft: #f3ede1;
-  --ink: #2f2a24;
-  --olive: #6e8b3d;
-  --olive-dark: #3f4a36;
-  --olive-muted: #8a8175;
-  --terracotta: #d96b3f;
-  --terracotta-dark: #c15a34;
-  --blue-soft: #6f9fce;
-  --border: rgba(47, 42, 36, 0.16);
-  --border-soft: rgba(47, 42, 36, 0.1);
+  --page-bg: #f5efe3;
+  --surface: #fbf7ee;
+  --surface-soft: #efe7d6;
+  --ink: #3b2a1e;
+  --olive: #575c36;
+  --olive-dark: #3f4528;
+  --olive-muted: #6e5b46;
+  --terracotta: #6e2438; /* wine */
+  --terracotta-dark: #5c1e30;
+  --blue-soft: #be8e90; /* mauve */
+  --border: rgba(59, 42, 30, 0.16);
+  --border-soft: rgba(59, 42, 30, 0.1);
+
+  /* brand type: Playfair for headers (matches the guest site); UI stays sans */
+  --font-heading: var(--font-playfair), Georgia, serif;
 }
