@@ -174,7 +174,7 @@ export default function ItineraryManager({
         icon: <IconBuilding size={22} />,
         value: String(locations.length),
         label: "Locations",
-        sub: locations.length ? "Across Tuscany" : "None yet",
+        sub: locations.length ? "Across Umbria" : "None yet",
       },
       {
         key: "tasks",

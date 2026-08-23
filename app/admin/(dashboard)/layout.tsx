@@ -13,7 +13,7 @@ export default function AdminDashboardLayout({
       <aside className={styles.sidebar}>
         <div className={styles.wordmark}>
           <p className={styles.wordmarkNames}>Kelsey &amp; Andrew</p>
-          <p className={styles.wordmarkEyebrow}>Tuscany 2027</p>
+          <p className={styles.wordmarkEyebrow}>Umbria 2028</p>
         </div>
         <AdminSidebarNav />
         <div className={styles.sidebarFooter}>

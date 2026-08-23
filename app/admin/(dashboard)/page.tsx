@@ -595,7 +595,7 @@ export default async function AdminDashboardPage() {
           <div className={styles.headerActions}>
             <span className={styles.datesChip}>
               <span className={styles.datesLabel}>Wedding</span>
-              <span className={styles.datesValue}>Jun 16 – 21, 2027</span>
+              <span className={styles.datesValue}>Jun 12 – 15, 2028</span>
             </span>
             <Link href="/admin/guests" className="btn-primary">
               <IconPlus size={15} className={styles.btnIcon} />
