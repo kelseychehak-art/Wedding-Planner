@@ -69,16 +69,16 @@ function fmtTimeRange(start: string | null, end: string | null, tz: string): str
   return end ? `${t(start)} – ${t(end)}` : t(start);
 }
 
-/* Per-person costs are held in euros (the wedding is in Italy). */
-const eur = new Intl.NumberFormat("en-IE", {
+/* Per-person costs are shown in US dollars (how the couple budgets). */
+const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "EUR",
+  currency: "USD",
   maximumFractionDigits: 2,
 });
 
 function money(n: number | null): string | null {
   if (n == null) return null;
-  return eur.format(n);
+  return usd.format(n);
 }
 
 function ageLabel(a: Activity): string {
@@ -415,7 +415,7 @@ function ActivityForm({
             onChange={(e) => set("ends_at", e.target.value)}
           />
         </Field>
-        <Field label="Cost per adult (€)">
+        <Field label="Cost per adult ($)">
           <input
             className={styles.input}
             type="number"
@@ -426,7 +426,7 @@ function ActivityForm({
             onChange={(e) => set("cost_per_adult", e.target.value)}
           />
         </Field>
-        <Field label="Cost per child (€)">
+        <Field label="Cost per child ($)">
           <input
             className={styles.input}
             type="number"

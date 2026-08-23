@@ -106,9 +106,9 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: "Cancelled",
 };
 
-const eur = new Intl.NumberFormat("en-IE", {
+const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "EUR",
+  currency: "USD",
   maximumFractionDigits: 0,
 });
 
@@ -232,7 +232,7 @@ export default function LodgingManager({
       {
         key: "total",
         icon: <IconWallet size={22} />,
-        value: eur.format(grandTotal),
+        value: usd.format(grandTotal),
         label: "Accommodation Total",
         sub: childrenMissingAge > 0 ? `${childrenMissingAge} child age(s) missing` : "All priced",
         tone: childrenMissingAge > 0 ? "warn" : "good",
@@ -410,7 +410,7 @@ export default function LodgingManager({
                               ))}
                             </select>
                           </td>
-                          <td>{eur.format(householdCost(h, pricing))}</td>
+                          <td>{usd.format(householdCost(h, pricing))}</td>
                         </tr>
                       );
                     })}
@@ -472,7 +472,7 @@ export default function LodgingManager({
                           {people} / {r.total_capacity}
                         </span>
                       </td>
-                      <td>{occupants.length ? eur.format(cost) : "—"}</td>
+                      <td>{occupants.length ? usd.format(cost) : "—"}</td>
                       <td>
                         <button
                           type="button"
@@ -491,7 +491,7 @@ export default function LodgingManager({
                   <td colSpan={4} className={styles.strong}>
                     Accommodation total
                   </td>
-                  <td className={styles.strong}>{eur.format(grandTotal)}</td>
+                  <td className={styles.strong}>{usd.format(grandTotal)}</td>
                   <td />
                 </tr>
               </tfoot>
@@ -672,7 +672,7 @@ function PricingPanel({
         <h3 className={styles.pricingTitle}>Rates</h3>
         <p className={styles.pricingHelp}>
           Everyone is charged the adult price unless they&rsquo;re marked as a child with an age
-          that falls in a bracket below. All amounts in euros.
+          that falls in a bracket below. All amounts in US dollars.
         </p>
         <label className={styles.field} style={{ maxWidth: 220 }}>
           <span className={styles.fieldLabel}>Adult (per person)</span>
@@ -710,7 +710,7 @@ function PricingPanel({
                 className={styles.input}
                 type="number"
                 min="0"
-                placeholder="Price €"
+                placeholder="Price $"
                 value={b.price ?? ""}
                 onChange={(e) =>
                   setBracket(i, { price: e.target.value === "" ? null : Number(e.target.value) })
@@ -785,7 +785,7 @@ function PricingPanel({
                           onBlur={(e) => saveAge(c.id, e.target.value)}
                         />
                       </td>
-                      <td>{pr.needsAge ? <span className={styles.over}>age needed</span> : eur.format(pr.amount)}</td>
+                      <td>{pr.needsAge ? <span className={styles.over}>age needed</span> : usd.format(pr.amount)}</td>
                     </tr>
                   );
                 })}
@@ -1043,7 +1043,7 @@ function RoomForm({
             onChange={(e) => set("total_capacity", e.target.value)}
           />
         </Field>
-        <Field label="Nightly rate (€)">
+        <Field label="Nightly rate ($)">
           <input
             className={styles.input}
             type="number"
