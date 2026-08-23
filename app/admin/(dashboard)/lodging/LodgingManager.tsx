@@ -50,6 +50,8 @@ export type Room = {
   total_capacity: number;
   accessible: boolean;
   crib_available: boolean;
+  nightly_rate: number | null;
+  currency_code: string | null;
   inventory_status: string;
 };
 
@@ -90,7 +92,7 @@ export type LodgingData = {
 
 export type PartyOption = { id: string; name: string; guestCount: number };
 
-type Tab = "properties" | "assignments" | "requests" | "summary";
+type Tab = "properties" | "rooms" | "assignments" | "requests" | "summary";
 
 const STATUS_LABEL: Record<string, string> = {
   assigned: "Assigned",
@@ -122,7 +124,7 @@ export default function LodgingManager({
   const [search, setSearch] = useState("");
   const [propertyFilter, setPropertyFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [editing, setEditing] = useState<"property" | "assignment" | null>(null);
+  const [editing, setEditing] = useState<"property" | "room" | "assignment" | null>(null);
 
   const { properties, rooms, assignments, requests } = data;
 
@@ -208,6 +210,7 @@ export default function LodgingManager({
 
   const tabs: { key: Tab; label: string; count?: number }[] = [
     { key: "properties", label: "Properties", count: properties.length },
+    { key: "rooms", label: "Rooms", count: rooms.length },
     { key: "assignments", label: "Room Assignments", count: assignments.length },
     { key: "requests", label: "Room Requests", count: requests.length },
     { key: "summary", label: "Lodging Summary" },
@@ -228,6 +231,15 @@ export default function LodgingManager({
               title={rooms.length === 0 ? "Add a property and rooms first" : undefined}
             >
               Assign Room
+            </button>
+            <button
+              type="button"
+              className="btn-outline"
+              onClick={() => setEditing("room")}
+              disabled={properties.length === 0}
+              title={properties.length === 0 ? "Add a property first" : undefined}
+            >
+              Add Room
             </button>
             <button type="button" className="btn-primary" onClick={() => setEditing("property")}>
               <IconPlus size={15} className={styles.btnIcon} />
@@ -255,6 +267,13 @@ export default function LodgingManager({
 
       {editing === "property" && (
         <PropertyForm onClose={() => setEditing(null)} onSaved={() => router.refresh()} />
+      )}
+      {editing === "room" && (
+        <RoomForm
+          properties={properties}
+          onClose={() => setEditing(null)}
+          onSaved={() => router.refresh()}
+        />
       )}
       {editing === "assignment" && (
         <AssignmentForm
@@ -309,6 +328,74 @@ export default function LodgingManager({
                 </button>
               </div>
             ))}
+          </div>
+        ))}
+
+      {/* ---- Rooms ---- */}
+      {tab === "rooms" &&
+        (rooms.length === 0 ? (
+          <Empty
+            text={
+              properties.length === 0
+                ? "No rooms yet. Add a property first, then add its rooms or suites here."
+                : "No rooms yet. Use “Add Room” to enter each room name or suite type from the venue."
+            }
+          />
+        ) : (
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Room / Suite</th>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Beds</th>
+                  <th>Sleeps</th>
+                  <th>Nightly</th>
+                  <th>Status</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {rooms.map((r) => (
+                  <tr key={r.id}>
+                    <td>
+                      <div className={styles.strong}>{r.room_name}</div>
+                      {r.accessible && <span className={styles.sub}>Accessible</span>}
+                    </td>
+                    <td>{r.property_name}</td>
+                    <td>{r.room_type ?? "—"}</td>
+                    <td>{r.bed_configuration ?? "—"}</td>
+                    <td>
+                      {r.total_capacity}
+                      <div className={styles.sub}>
+                        {r.adult_capacity} adult{r.adult_capacity === 1 ? "" : "s"}
+                        {r.child_capacity > 0 && `, ${r.child_capacity} child`}
+                      </div>
+                    </td>
+                    <td>
+                      {r.nightly_rate != null
+                        ? new Intl.NumberFormat("en-IE", {
+                            style: "currency",
+                            currency: r.currency_code || "EUR",
+                            maximumFractionDigits: 0,
+                          }).format(r.nightly_rate)
+                        : "—"}
+                    </td>
+                    <td>{r.inventory_status}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className={styles.deleteLink}
+                        onClick={() => removeRecord("room", r.id, `“${r.room_name}”`)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ))}
 
@@ -631,6 +718,188 @@ function PropertyForm({ onClose, onSaved }: { onClose: () => void; onSaved: () =
           disabled={saving || !form.name.trim()}
         >
           {saving ? "Saving…" : "Save property"}
+        </button>
+        <button type="button" className={styles.linkBtn} onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/*
+ * Rooms/suites for a property. The borgo is a set of 1–3 room suites, so
+ * room_type doubles as the suite category; the datalist offers those without
+ * locking you out of a custom name.
+ */
+const ROOM_TYPES = [
+  "One-room suite",
+  "Two-room suite",
+  "Three-room suite",
+  "Standard room",
+  "Suite",
+];
+
+function RoomForm({
+  properties,
+  onClose,
+  onSaved,
+}: {
+  properties: Property[];
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const [form, setForm] = useState({
+    property_id: properties[0]?.id ?? "",
+    room_name: "",
+    room_type: "",
+    bed_configuration: "",
+    adult_capacity: "2",
+    child_capacity: "0",
+    total_capacity: "",
+    nightly_rate: "",
+    accessible: false,
+    notes: "",
+  });
+  const [saving, setSaving] = useState(false);
+
+  function set<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  async function save() {
+    if (!form.property_id || !form.room_name.trim()) return;
+    setSaving(true);
+    try {
+      // Default total capacity to adults + children when left blank.
+      const total =
+        form.total_capacity ||
+        String((Number(form.adult_capacity) || 0) + (Number(form.child_capacity) || 0));
+      const res = await fetch("/api/admin/lodging", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "room", ...form, total_capacity: total }),
+      });
+      if (res.ok) {
+        onClose();
+        onSaved();
+      }
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className={styles.formCard}>
+      <h2 className={styles.formTitle}>Add room</h2>
+      <div className={styles.formGrid}>
+        <Field label="Property">
+          <select
+            className={styles.input}
+            value={form.property_id}
+            onChange={(e) => set("property_id", e.target.value)}
+          >
+            {properties.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Room / suite name">
+          <input
+            className={styles.input}
+            value={form.room_name}
+            placeholder="Suite 1"
+            onChange={(e) => set("room_name", e.target.value)}
+          />
+        </Field>
+        <Field label="Type">
+          <input
+            className={styles.input}
+            list="room-types"
+            value={form.room_type}
+            placeholder="Two-room suite"
+            onChange={(e) => set("room_type", e.target.value)}
+          />
+          <datalist id="room-types">
+            {ROOM_TYPES.map((t) => (
+              <option key={t} value={t} />
+            ))}
+          </datalist>
+        </Field>
+        <Field label="Beds">
+          <input
+            className={styles.input}
+            value={form.bed_configuration}
+            placeholder="1 king + 1 twin"
+            onChange={(e) => set("bed_configuration", e.target.value)}
+          />
+        </Field>
+        <Field label="Adults">
+          <input
+            className={styles.input}
+            type="number"
+            min="0"
+            value={form.adult_capacity}
+            onChange={(e) => set("adult_capacity", e.target.value)}
+          />
+        </Field>
+        <Field label="Children">
+          <input
+            className={styles.input}
+            type="number"
+            min="0"
+            value={form.child_capacity}
+            onChange={(e) => set("child_capacity", e.target.value)}
+          />
+        </Field>
+        <Field label="Sleeps (total)">
+          <input
+            className={styles.input}
+            type="number"
+            min="0"
+            placeholder="auto"
+            value={form.total_capacity}
+            onChange={(e) => set("total_capacity", e.target.value)}
+          />
+        </Field>
+        <Field label="Nightly rate (€)">
+          <input
+            className={styles.input}
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.nightly_rate}
+            onChange={(e) => set("nightly_rate", e.target.value)}
+          />
+        </Field>
+        <Field label="Notes" wide>
+          <input
+            className={styles.input}
+            value={form.notes}
+            onChange={(e) => set("notes", e.target.value)}
+          />
+        </Field>
+      </div>
+      <label
+        style={{ display: "flex", alignItems: "center", gap: 8, margin: "4px 0 12px" }}
+      >
+        <input
+          type="checkbox"
+          checked={form.accessible}
+          onChange={(e) => set("accessible", e.target.checked)}
+        />
+        Accessible room
+      </label>
+      <div className={styles.formActions}>
+        <button
+          type="button"
+          className="btn-primary"
+          onClick={save}
+          disabled={saving || !form.property_id || !form.room_name.trim()}
+        >
+          {saving ? "Saving…" : "Save room"}
         </button>
         <button type="button" className={styles.linkBtn} onClick={onClose}>
           Cancel

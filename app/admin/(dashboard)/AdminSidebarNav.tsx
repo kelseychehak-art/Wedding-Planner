@@ -6,7 +6,6 @@ import styles from "./AdminNav.module.css";
 import {
   IconHome,
   IconUsers,
-  IconBuilding,
   IconStore,
   IconWallet,
   IconCalendar,
@@ -52,7 +51,6 @@ const NAV_GROUPS: {
   {
     label: "Planning",
     items: [
-      { label: "Venues", href: "/admin/venues", Icon: IconBuilding },
       { label: "Vendors", href: "/admin/vendors", Icon: IconStore },
       { label: "Budget", href: "/admin/budget", Icon: IconWallet },
       { label: "Timeline", href: "/admin/timeline", Icon: IconCalendar },

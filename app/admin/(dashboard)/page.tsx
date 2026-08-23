@@ -824,7 +824,7 @@ export default async function AdminDashboardPage() {
           <CardHead icon={<IconClock size={15} />} title="Planning Reminders" />
           {data.planning.length === 0 ? (
             <p className={styles.cardEmpty}>
-              No pressing deadlines. Add due dates and next actions in Budget, Venues, and Vendors.
+              No pressing deadlines. Add due dates and next actions in Budget and Vendors.
             </p>
           ) : (
             <ul className={styles.issueList}>

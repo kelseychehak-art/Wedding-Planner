@@ -7,10 +7,7 @@ import MetricStrip, { type Metric } from "@/components/admin/MetricStrip";
 import Pagination from "@/components/admin/Pagination";
 import {
   IconCalendar,
-  IconUsers,
   IconBasket,
-  IconClock,
-  IconAlert,
   IconSearch,
   IconPlus,
 } from "@/components/admin/icons";
@@ -32,13 +29,13 @@ export type Activity = {
   starts_at: string | null;
   ends_at: string | null;
   capacity: number | null;
+  cost_per_adult: number | null;
+  cost_per_child: number | null;
   status: string;
   age_rule_type: string;
   minimum_age: number | null;
   adult_accompaniment_required: boolean;
   transportation_required: boolean;
-  booked_count: number;
-  waitlist_count: number;
 };
 
 const CATEGORIES = [
@@ -49,11 +46,6 @@ const CATEGORIES = [
   "Scenic",
   "Wellness",
   "Other",
-];
-
-const MONTHS = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
 function fmtDate(iso: string | null, tz: string): string {
@@ -77,30 +69,16 @@ function fmtTimeRange(start: string | null, end: string | null, tz: string): str
   return end ? `${t(start)} – ${t(end)}` : t(start);
 }
 
-/*
- * The sign-up window from Settings, read as plain dates. Compared against
- * today's calendar date rather than a timestamp, so "closes Jul 15" means the
- * whole of the 15th — and no timezone can shift the boundary by a day.
- */
-function describeSignupWindow(opens: string, closes: string) {
-  const label = (iso: string) => {
-    const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    return m ? `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}` : iso;
-  };
-  if (!opens && !closes) {
-    return { value: "Not set", sub: "Set it in Settings", tone: "default" as const };
-  }
+/* Per-person costs are held in euros (the wedding is in Italy). */
+const eur = new Intl.NumberFormat("en-IE", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 2,
+});
 
-  const today = new Date().toISOString().slice(0, 10);
-  const range = [opens && label(opens), closes && label(closes)].filter(Boolean).join(" – ");
-
-  if (opens && today < opens) {
-    return { value: "Opens soon", sub: range, tone: "info" as const };
-  }
-  if (closes && today > closes) {
-    return { value: "Closed", sub: range, tone: "bad" as const };
-  }
-  return { value: "Open", sub: range, tone: "good" as const };
+function money(n: number | null): string | null {
+  if (n == null) return null;
+  return eur.format(n);
 }
 
 function ageLabel(a: Activity): string {
@@ -112,14 +90,9 @@ function ageLabel(a: Activity): string {
 export default function ActivitiesManager({
   initialActivities,
   timezone,
-  signupOpens,
-  signupCloses,
 }: {
   initialActivities: Activity[];
   timezone: string;
-  /* Set under Settings → Events & Activities. */
-  signupOpens: string;
-  signupCloses: string;
 }) {
   const { confirm, dialog } = useConfirm();
   const router = useRouter();
@@ -131,16 +104,9 @@ export default function ActivitiesManager({
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
 
-  const signupWindow = useMemo(
-    () => describeSignupWindow(signupOpens, signupCloses),
-    [signupOpens, signupCloses]
-  );
-
   const metrics: Metric[] = useMemo(() => {
-    const totalCapacity = activities.reduce((s, a) => s + (a.capacity ?? 0), 0);
-    const signedUp = activities.reduce((s, a) => s + a.booked_count, 0);
-    const waitlisted = activities.reduce((s, a) => s + a.waitlist_count, 0);
-    const spacesLeft = Math.max(0, totalCapacity - signedUp);
+    const published = activities.filter((a) => a.status === "published").length;
+    const priced = activities.filter((a) => a.cost_per_adult != null).length;
 
     return [
       {
@@ -148,42 +114,18 @@ export default function ActivitiesManager({
         icon: <IconCalendar size={22} />,
         value: String(activities.length),
         label: "Total Activities",
-        sub: `${activities.filter((a) => a.status === "published").length} published`,
+        sub: `${published} published`,
       },
       {
-        key: "signed",
-        icon: <IconUsers size={22} />,
-        value: String(signedUp),
-        label: "Signed Up",
-        sub: totalCapacity ? `${Math.round((signedUp / totalCapacity) * 100)}% of capacity` : "—",
-        tone: "good",
-      },
-      {
-        key: "spaces",
+        key: "priced",
         icon: <IconBasket size={22} />,
-        value: String(spacesLeft),
-        label: "Spaces Left",
-        sub: "Across all activities",
+        value: String(priced),
+        label: "With a Cost",
+        sub: "Have a per-person price",
         tone: "info",
       },
-      {
-        key: "waitlist",
-        icon: <IconAlert size={22} />,
-        value: String(waitlisted),
-        label: "Waitlisted",
-        sub: "Across all activities",
-        tone: waitlisted > 0 ? "warn" : "default",
-      },
-      {
-        key: "window",
-        icon: <IconClock size={22} />,
-        value: signupWindow.value,
-        label: "Sign-up Window",
-        sub: signupWindow.sub,
-        tone: signupWindow.tone,
-      },
     ];
-  }, [activities, signupWindow]);
+  }, [activities]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -200,7 +142,7 @@ export default function ActivitiesManager({
   const visible = filtered.slice((clampedPage - 1) * pageSize, clampedPage * pageSize);
 
   async function remove(a: Activity) {
-    if (!(await confirm({ title: `Delete “${a.title}”?`, body: "Any sign-ups and waitlist places for this activity go with it." }))) return;
+    if (!(await confirm({ title: `Delete “${a.title}”?`, body: "This removes the activity for good." }))) return;
     const res = await fetch(`/api/admin/activities?id=${a.id}`, { method: "DELETE" });
     if (res.ok) {
       setActivities((prev) => prev.filter((x) => x.id !== a.id));
@@ -212,7 +154,7 @@ export default function ActivitiesManager({
     <div>
       <PageHeader
         title="Activities"
-        subtitle="Manage optional experiences, sign-ups, capacity, and logistics."
+        subtitle="Manage optional experiences, pricing, and logistics."
         action={
           <button type="button" className="btn-primary" onClick={() => setEditing("new")}>
             <IconPlus size={15} className={styles.btnIcon} />
@@ -272,7 +214,7 @@ export default function ActivitiesManager({
       {activities.length === 0 ? (
         <p className={styles.empty}>
           No activities yet. Add the wine tasting, cooking class, or pool day — each one becomes
-          a card guests can sign up for once the guest-facing flow is built.
+          a card guests can see, with its per-person cost.
         </p>
       ) : (
         <div className={styles.tableWrap}>
@@ -284,9 +226,7 @@ export default function ActivitiesManager({
                 <th>Time</th>
                 <th>Location</th>
                 <th>Category</th>
-                <th>Capacity</th>
-                <th>Signed Up</th>
-                <th>Waitlist</th>
+                <th>Cost / person</th>
                 <th>Age Rules</th>
                 <th>Status</th>
                 <th />
@@ -294,7 +234,8 @@ export default function ActivitiesManager({
             </thead>
             <tbody>
               {visible.map((a) => {
-                const pct = a.capacity ? Math.round((a.booked_count / a.capacity) * 100) : null;
+                const adult = money(a.cost_per_adult);
+                const child = money(a.cost_per_child);
                 return (
                   <tr key={a.id}>
                     <td>
@@ -305,12 +246,16 @@ export default function ActivitiesManager({
                     <td>{fmtTimeRange(a.starts_at, a.ends_at, timezone)}</td>
                     <td>{a.location_name ?? "—"}</td>
                     <td>{a.category ?? "—"}</td>
-                    <td>{a.capacity ?? "—"}</td>
                     <td>
-                      {a.booked_count}
-                      {pct !== null && <span className={styles.sub}> ({pct}%)</span>}
+                      {adult ? (
+                        <>
+                          {adult}
+                          {child && <span className={styles.sub}> · {child} child</span>}
+                        </>
+                      ) : (
+                        "Free"
+                      )}
                     </td>
-                    <td>{a.waitlist_count}</td>
                     <td>{ageLabel(a)}</td>
                     <td>
                       <span
@@ -352,10 +297,6 @@ export default function ActivitiesManager({
         noun="activities"
       />
 
-      <p className={styles.footNote}>
-        Sign-up counts come from real bookings. Guests can&rsquo;t book yet — the guest-facing
-        activity sign-up flow is still to build, so these will read zero until then.
-      </p>
       {dialog}
     </div>
   );
@@ -387,7 +328,8 @@ function ActivityForm({
     location_name: activity?.location_name ?? "",
     starts_at: toLocalInput(activity?.starts_at ?? null),
     ends_at: toLocalInput(activity?.ends_at ?? null),
-    capacity: activity?.capacity != null ? String(activity.capacity) : "",
+    cost_per_adult: activity?.cost_per_adult != null ? String(activity.cost_per_adult) : "",
+    cost_per_child: activity?.cost_per_child != null ? String(activity.cost_per_child) : "",
     status: activity?.status ?? "draft",
     age_rule_type: activity?.age_rule_type ?? "all_ages",
     minimum_age: activity?.minimum_age != null ? String(activity.minimum_age) : "",
@@ -473,13 +415,26 @@ function ActivityForm({
             onChange={(e) => set("ends_at", e.target.value)}
           />
         </Field>
-        <Field label="Capacity">
+        <Field label="Cost per adult (€)">
           <input
             className={styles.input}
             type="number"
             min="0"
-            value={form.capacity}
-            onChange={(e) => set("capacity", e.target.value)}
+            step="0.01"
+            placeholder="0"
+            value={form.cost_per_adult}
+            onChange={(e) => set("cost_per_adult", e.target.value)}
+          />
+        </Field>
+        <Field label="Cost per child (€)">
+          <input
+            className={styles.input}
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+            value={form.cost_per_child}
+            onChange={(e) => set("cost_per_child", e.target.value)}
           />
         </Field>
         <Field label="Status">
